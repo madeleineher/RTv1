@@ -35,53 +35,97 @@ typedef struct			s_ll
 	struct s_ll		*next;
 }				t_ll;
 
+typedef struct			s_pos
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_pos;
+
 typedef struct			s_light
 {
-	int			position[4];
-	int			intesity[4];
+	t_pos			*lipos;
+	int			intesity;
 }				t_light;
+
+typedef struct			s_dir
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_dir;
+
+typedef struct			s_center
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_center;
 
 typedef struct			s_camera
 {
-	int			position[4];
-	int			direction[4];
+	t_pos			*campos;
+	t_dir			*camdir;
 }				t_camera;
 
 typedef struct			s_cone
 {
-	int			direction[4];
-	int			center[4];
+	t_pos			*conedir;
+	t_center		*conecen;
 	int			angle;
 	int			ambient;
 }				t_cone;
 
 typedef struct			s_sphere
 {
-	int			center[4];
+	t_center		*spherecen;
 	int			radius;
 	int			ambient;
 }				t_sphere;
 
 typedef struct			s_cyn
 {
-	int			direction[4];
+	t_dir			*cyndir;
 	int			axispoint;
 	int			radius;
 	int			ambient;
 }				t_cyn;
 
+typedef struct			s_normal
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_normal;
+
 typedef struct			s_plane
 {
-	int			normal[4];
+	t_normal		*norplane;
 	int			ambient;
 	int			d;
 }				t_plane;
 
-typedef struct			s_shape
+typedef struct			s_diff
 {
-	char			*shape;
-	char			**params;
-}				t_shape;
+	int			x;
+	int			y;
+	int			z;
+}				t_diff;
+
+typedef struct			s_ref
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_ref;
+
+typedef struct			s_amb
+{
+	t_diff			*diff;
+	t_ref			*ref;
+	int			specvalue;
+	int			specpower;
+}				t_amb;
 
 typedef struct			s_mlx
 {
@@ -96,16 +140,25 @@ typedef struct			s_mlx
 typedef struct			s_env
 {
 	char			**line;
+	char			*data;
 	char			parser[5];
 	int			k[300];
-	char			**f_lines;
+	char			*verify;
+	int			ret_ver;
 	t_mlx			w;
-	t_shape			s;
-	t_ll			ll;
-	char			*data;
+	t_ll			*ll;
+	t_amb			amb;
+	t_camera		cam;
+	t_cone			cone;
+	t_cyn			cyn;
+	t_light			light;
+	t_plane			plane;
+	t_sphere		sphere;
 }				t_env;
 
 void				setup_rtv1(t_env *e);
+int				parser(t_env *e, int fd);
+int				verify(t_env *e, char *whatami);
 void				start_rtv1(t_env *e);
 int				touch(t_env *e);
 int				key_press(int key, t_env *e);

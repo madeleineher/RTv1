@@ -12,28 +12,33 @@
 
 #include "includes/rtv1.h"
 
-int	whatami(t_env *e, char *)
+int	whatami(t_env *e, char *whatami)
 {
-	if (ft_strcmp(e->whatami, AMB"))
-		setupambience(e);
-	else if (ft_strcmp(e->whatami, "CAM"))
-		setupcam(e);
-	else if (ft_strcmp(e->whatami, "CONE"))
-		setupcone(e);
-	else if (ft_strcmp(e->whatami, "CYLINDER"))
-		setupcyn(e);
-	else if (ft_strcmp(e->whatami, "LIGHT"))
-		setuplight(e);
-	else if (ft_strcmp(e->whatami, "PLANE"))
-		setuplane(e);
-	else if (ft_strcmp(e->whatami, "SPHERE"))
-		setupsphere(e);
+	int	ret;
+
+	ret = 0;
+	if (ft_strcmp(whatami, "AMB") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "CAM") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "CONE") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "CYLINDER") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "LIGHT") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "PLANE") == 0)
+		ret = verify(e, whatami);
+	else if (ft_strcmp(whatami, "SPHERE") == 0)
+		ret = verify(e, whatami);
 	else
+		return (-1);
+	if (ret == -1)
 		return (-1);
 	return (0);
 }
 
-int	add_link(char **line, t_ll *head)
+int	add_link(char **line, t_ll **head)
 {
 	t_ll	*new;
 	t_ll	*last;
@@ -44,7 +49,7 @@ int	add_link(char **line, t_ll *head)
 		return (-1);
 	new->content = line;
 	new->next = NULL;
-	if (*head != NULL)
+	if (*head == NULL)
 		*head = new;
 	else
 	{
@@ -55,17 +60,20 @@ int	add_link(char **line, t_ll *head)
 	return (0);
 }
 
-int	parser(t_env *e)
+int	parser(t_env *e, int fd)
 {
 	int	ret;
 	char	*gnl_line;
+	t_ll	*head;
 
 	ret = 0;
 	gnl_line = NULL;
 	while ((ret = get_next_line(fd, &gnl_line)) > 0)
 	{
-		e->lines = ft_strsplit(gnl_line, ':');
-		if ((add_link(e->lines, &head)) == -1)
+		e->line = ft_strsplit(gnl_line, ':');
+		if (whatami(e, e->line[0]) == -1)
+			return (-1);
+		if ((add_link(e->line, &head)) == -1)
 			return (-1);
 		if (gnl_line)
 		{
@@ -75,5 +83,7 @@ int	parser(t_env *e)
 	}
 	if (ret == -1)
 		return (-1);
+	e->ll = head;
+	printf("VALID!\n");
 	return (0);
 }

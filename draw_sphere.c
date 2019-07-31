@@ -14,8 +14,5 @@
 
 void    draw_sphere(t_env *e)
 {
-    int     px = ft_atoi(e->s.params[0]);
-    int     py = ft_atoi(e->s.params[1]);
-    double  rad = (double)ft_atoi(e->s.params[2]);
-    (void)e, (void)px, (void)py, (void)rad;
+    (void)e;
 }

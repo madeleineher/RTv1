@@ -1,1 +1,7 @@
-sphere {400, 400, 100};
+AMB:{diffusion (102, 803, 904); reflection (300, 200, 400); specvalue (200); specpower (600)}
+CAM:{position (100, 100, 100); direction (100, 100, 100)}
+CONE:{direction (100, 100, 100); center (100, 100, 100); angle (100); amb (100)}
+CYLINDER:{direction (100, 100, 100); axis (100); radius (100)}
+LIGHT:{position (100, 100, 100); intensity (100, 100, 100)}
+PLANE:{normal (100, 100, 100); d (100); mat (100)}
+SPHERE:{center (100, 100, 100); radius (100); amb (100)}
