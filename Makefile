@@ -18,7 +18,8 @@ CFLAGS = -Wall -Werror -Wextra
 
 CC = gcc
 
-SRCS = main.c parser.c verify.c start_rtv1.c touch.c draw_sphere.c
+SRCS = main.c parser.c verify.c start_rtv1.c touch.c draw_sphere.c verifycamera.c\
+verifyambiance.c verifylight.c verifycone.c verifycyn.c verifyplane.c verifysphere.c
 
 OBJS = $(SRCS:.c=.o)
 

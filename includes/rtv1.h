@@ -42,10 +42,17 @@ typedef struct			s_pos
 	int			z;
 }				t_pos;
 
+typedef struct			s_int
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_int;
+
 typedef struct			s_light
 {
 	t_pos			*lipos;
-	int			intesity;
+	t_int			*inten;
 }				t_light;
 
 typedef struct			s_dir
@@ -55,12 +62,12 @@ typedef struct			s_dir
 	int			z;
 }				t_dir;
 
-typedef struct			s_center
+typedef struct			s_cen
 {
 	int			x;
 	int			y;
 	int			z;
-}				t_center;
+}				t_cen;
 
 typedef struct			s_camera
 {
@@ -70,23 +77,23 @@ typedef struct			s_camera
 
 typedef struct			s_cone
 {
-	t_pos			*conedir;
-	t_center		*conecen;
+	t_dir			*dir;
+	t_cen			*cen;
 	int			angle;
 	int			ambient;
 }				t_cone;
 
 typedef struct			s_sphere
 {
-	t_center		*spherecen;
+	t_cen			*cen;
 	int			radius;
 	int			ambient;
 }				t_sphere;
 
 typedef struct			s_cyn
 {
-	t_dir			*cyndir;
-	int			axispoint;
+	t_dir			*dir;
+	int			axis;
 	int			radius;
 	int			ambient;
 }				t_cyn;
@@ -100,8 +107,8 @@ typedef struct			s_normal
 
 typedef struct			s_plane
 {
-	t_normal		*norplane;
-	int			ambient;
+	t_normal		*nor;
+	int			mat;
 	int			d;
 }				t_plane;
 
@@ -145,6 +152,7 @@ typedef struct			s_env
 	int			k[300];
 	char			*verify;
 	int			ret_ver;
+	int			i;
 	t_mlx			w;
 	t_ll			*ll;
 	t_amb			amb;
@@ -159,6 +167,15 @@ typedef struct			s_env
 void				setup_rtv1(t_env *e);
 int				parser(t_env *e, int fd);
 int				verify(t_env *e, char *whatami);
+int				verifycam(t_env *e, char **splits);
+int				verifyamb(t_env *e, char **splits);
+int				verifylight(t_env *e, char **splits);
+int				verifycone(t_env *e, char **splits);
+int				verifycyn(t_env *e, char **splits);
+int				verifyplane(t_env *e, char **splits);
+int				verifysphere(t_env *e, char **splits);
+int				howmanystrings(char **splits);
+char				*getnumber(char *split);
 void				start_rtv1(t_env *e);
 int				touch(t_env *e);
 int				key_press(int key, t_env *e);
