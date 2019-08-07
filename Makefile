@@ -14,12 +14,11 @@ NAME = RTv1
 
 INC = includes/rtv1.h
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3 # remove g3 flag
 
 CC = gcc
 
-SRCS = main.c parser.c verify.c start_rtv1.c touch.c draw_sphere.c verifycamera.c\
-verifyambiance.c verifylight.c verifycone.c verifycyn.c verifyplane.c verifysphere.c
+SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c
 
 OBJS = $(SRCS:.c=.o)
 

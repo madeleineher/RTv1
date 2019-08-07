@@ -6,7 +6,7 @@
 #    By: mhernand <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 20:04:08 by mhernand          #+#    #+#              #
-#    Updated: 2019/07/25 13:34:43 by mhernand         ###   ########.fr        #
+#    Updated: 2019/08/07 19:17:19 by mhernand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c \
 	 ft_putstr.c ft_putendl.c ft_putnbr.c ft_putchar_fd.c \
 	 ft_putstr_fd.c ft_itoa.c ft_strjoin.c ft_strsplit.c ft_strsub.c \
 	 ft_strtrim.c ft_putchar.c ft_putnbr_fd.c \
-	 ft_strclen.c get_next_line.c ft_delsplit.c
+	 ft_strclen.c get_next_line.c ft_delsplit.c ft_charfreq.c ft_countstrings.c
 
 OBJECTS = $(SRCS:.c=.o)
 

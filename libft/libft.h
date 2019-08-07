@@ -6,7 +6,7 @@
 /*   By: mhernand <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 19:55:00 by mhernand          #+#    #+#             */
-/*   Updated: 2019/07/25 13:38:06 by mhernand         ###   ########.fr       */
+/*   Updated: 2019/08/07 19:18:56 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,7 @@ void				ft_putstr_fd(char const *s, int fd);
 void				ft_putendl_fd(char const *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_delsplit(char **tab);
+int					ft_charfreq(char *str, int c);
+int					ft_countstrings(char **strings);
 
 #endif

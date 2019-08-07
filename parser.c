@@ -12,34 +12,9 @@
 
 #include "includes/rtv1.h"
 
-int	whatami(t_env *e, char *whatami)
+int	add_link(char *line, t_ll **head, t_env *e, int i)
 {
-	int	ret;
-
-	ret = 0;
-	if (ft_strcmp(whatami, "AMB") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "CAM") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "CONE") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "CYLINDER") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "LIGHT") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "PLANE") == 0)
-		ret = verify(e, whatami);
-	else if (ft_strcmp(whatami, "SPHERE") == 0)
-		ret = verify(e, whatami);
-	else
-		return (-1);
-	if (ret == -1)
-		return (-1);
-	return (0);
-}
-
-int	add_link(char **line, t_ll **head)
-{
+	(void)i;
 	t_ll	*new;
 	t_ll	*last;
 
@@ -57,33 +32,130 @@ int	add_link(char **line, t_ll **head)
 			last = last->next;
 		last->next = new;
 	}
+	e->lenfile++;
 	return (0);
 }
 
-int	parser(t_env *e, int fd)
+int		check_vocab(t_env *e, char *line)
 {
-	int	ret;
-	char	*gnl_line;
+	(void)e;
+	(void)line;
+	// int i = 0;
+
+	// while (e->vocab[i] != '\0')
+	// 	printf("[%s]\n", e->vocab[i++]);
+
+	return (0);
+}
+
+int		check_tag_uniform(t_env *e, char *line)
+{
+	char	**split_test;
+	int		str_count;
+	
+	str_count = 0;
+	split_test = ft_strsplit(line, ' ');
+	if (e->specs == 1 && e->scene == 1 && e->objects == 0)
+	{
+		if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
+			return (5);
+		if (ft_charfreq(line, '\t') == 2)
+		{
+			str_count = ft_countstrings(split_test);
+			printf("[%d]", str_count);
+			while (*split_test)
+			{
+				if (str_count == 1) // pick up here ! 
+					printf("---> [%s] ", *split_test++);
+				else if (str_count == 4)
+					printf("[%s] ", *split_test++);				
+			}
+			printf("\n");
+		}
+
+	}
+	else if (e->specs == 1 && (e->scene != 1 || e->objects != 0))
+		return (4);
+	if (e->objects == 1 && e->specs == 2 && e->scene == 1)
+	{
+		//printf("--->[%s]\n", split_test[0]);
+	}
+	else if (e->objects == 1 && (e->scene != 1 || e->specs != 2))
+		return (4);
+	return (0);
+}
+
+int		one_tab_parse(int *check_me)
+{
+	if (*check_me == 0)
+		return (7);
+	*check_me = 2;
+	return (0);
+}
+
+int		globals(t_env *e, char *gnl_line)
+{
+	int ret_tmp = 0;
+
+	e->skip = 0;
+	if ((ft_strcmp("<scene>", gnl_line) == 0))
+		e->scene = 1;
+	if (ft_strcmp("</scene>", gnl_line) == 0)
+		e->scene = 2;
+	if (ft_strcmp("\t<specs>", gnl_line) == 0)
+	{
+		e->specs = 1;
+		e->skip = 1;
+	}
+	if (ft_strcmp("\t</specs>", gnl_line) == 0)
+		if ((ret_tmp = one_tab_parse(&e->specs)) != 0)
+			return (ret_tmp);
+	if (ft_strcmp("\t<objects>", gnl_line) == 0)
+	{
+		e->objects = 1;
+		e->skip = 1;
+	}
+	if (ft_strcmp("\t</objects>", gnl_line) == 0)
+		if ((ret_tmp = one_tab_parse(&e->objects)) != 0)
+			return (ret_tmp);
+	return (0);
+}
+
+int		last_checks(t_env *e)
+{
+	if (e->objects != 2 || e->specs != 2)
+		return (8);
+	if (e->scene != 2)
+		return (6);
+	if (e->ret.gnl == -1)
+		return (1);
+	return (0);
+}
+
+int		parser(t_env *e, int fd)
+{
 	t_ll	*head;
 
-	ret = 0;
-	gnl_line = NULL;
-	while ((ret = get_next_line(fd, &gnl_line)) > 0)
+	head = NULL;
+	while ((e->ret.gnl = get_next_line(fd, &e->gnl_line)) > 0)
 	{
-		e->line = ft_strsplit(gnl_line, ':');
-		if (whatami(e, e->line[0]) == -1)
-			return (-1);
-		if ((add_link(e->line, &head)) == -1)
-			return (-1);
-		if (gnl_line)
+		if ((e->ret.glo = globals(e, e->gnl_line)) != 0)
+			return (e->ret.glo);
+		if ((e->objects == 1 || e->specs == 1) && !e->skip && ((e->ret.tag = check_tag_uniform(e, e->gnl_line)) != 0))
+			return (e->ret.tag);
+		if ((e->objects == 1 || e->specs == 1) && !e->skip && (e->ret.voc = check_vocab(e, e->gnl_line)) != 0)
+			return (e->ret.voc);
+
+		if (e->gnl_line)
 		{
-			free(gnl_line);
-			gnl_line = NULL;
+			free(e->gnl_line);
+			e->gnl_line = NULL;
 		}
+		e->gnl_i++;
 	}
-	if (ret == -1)
-		return (-1);
 	e->ll = head;
-	printf("VALID!\n");
-	return (0);
+	return (last_checks(e));
 }
+
+//	if ((add_link(gnl_line, &head, e, i)) == -1)
+//		return (-1);
