@@ -35,7 +35,7 @@ int			error(t_env *e, int i)
 		ft_putendl("error: mlx init error.");
 	if (i == 3)
 		ft_putendl("error: not a valid parameter.");
-	if (i > 3)
+	if (i > 3 && i < 20)
 	{
 		if (i == 4)
 			ft_putendl("Oops ! Looks like <scene>/<objects>/<specs> tag was not opened/closed/formatted properly.");
@@ -46,10 +46,37 @@ int			error(t_env *e, int i)
 		if (i == 7)
 			ft_putendl("Oops ! Looks like the start and end tags don't correspond.");
 		if (i == 8)
-			ft_putendl("Oops ! Looks like you misspelled a tag name.");
+			ft_putendl("Oops ! Looks like you misspelled/missing tags.");
+		if (i == 9)
+			ft_putendl("Oops ! Looks angle brackets are not implemented correctly.");
+		if (i == 10)
+			ft_putendl("Oops ! Looks like <cam> is not properly opened/closed.");
+		if (i == 11)
+			ft_putendl("Oops ! Looks like <amb> is not properly opened/closed.");
+		if (i == 12)
+			ft_putendl("Oops ! Looks like <light> is not properly opened/closed.");
+		if (i == 13)
+			ft_putendl("Oops ! Looks like the tag is this line is not properly formatted.");
+		if (i == 14)
+			ft_putendl("Oops ! Looks like something is missing/mispelled.");
+		if (i == 15)
+			ft_putendl("something is wrong.");
+		if (i == 16)
+			ft_putendl("Oops ! Looks like status is not properly indicated.");
 		ft_putstr("The problem lies in line : ");
 		ft_putnbr(e->gnl_i);
 		ft_putchar('\n');
+	}
+	if (i > 19)
+	{
+		if (i == 20)
+			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is missing.");
+		if (i == 21)
+			ft_putendl("Oops ! Looks like there are conflicting light tags.");
+		if (i == 22)
+			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is/are not closed properly.");
+		if (i == 23)
+			ft_putendl("Oops ! Looks like there are conflicting <light> tags.");
 	}
 	quit(e);
 	return (0);

@@ -89,10 +89,27 @@ typedef struct		s_normal
 	int				z;
 }					t_normal; // normal
 
+typedef struct		s_rot
+{
+	int				x;
+	int				y;
+	int				z;
+}					t_rot; // rotate
+
+typedef struct		s_tra
+{
+	int				x;
+	int				y;
+	int				z;
+}					t_tra; // translate
+
 typedef struct		s_amb
 {
 	t_diff			*diff;
 	t_ref			*ref;
+	t_tra			*tra;
+	t_rot			*rot;
+	int				status;
 	int				specvalue;
 	int				specpower;
 }					t_amb;
@@ -107,6 +124,9 @@ typedef struct		s_camera
 {
 	t_pos			*campos;
 	t_dir			*camdir;
+	t_tra			*tra;
+	t_rot			*rot;
+	int				status;
 }					t_camera;
 
 typedef struct		s_obj
@@ -114,6 +134,9 @@ typedef struct		s_obj
 	t_dir			*dir;
 	t_cen			*cen;
 	t_normal		*nor;
+	t_rot			*rot;
+	t_tra			*tra;
+	int				sta;
 	int				mat;
 	int				d;
 	int				type;
@@ -141,6 +164,13 @@ typedef struct		s_ret
 	int				gnl;
 }					t_ret;
 
+typedef struct		s_spec
+{
+	int				cam;
+	int				amb;
+	int				light;
+}					t_spec;
+
 typedef struct		s_env
 {
 	char			**line;
@@ -151,13 +181,17 @@ typedef struct		s_env
 	char			*gnl_line;
 	int				ret_ver;
 	int				i;
+	int				skips;
 	int				lenfile;
 	int				scene;
 	int				specs;
+	int				spec_order;
 	int				skip;
 	int				objects;
 	char			*vocab_one[15];
 	char			*vocab_two[18];
+	int				status;
+	t_spec			spcs;
 	t_ret 			ret;
 	t_mlx			w;
 	t_ll			*ll;
