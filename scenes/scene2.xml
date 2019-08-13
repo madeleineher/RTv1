@@ -1,39 +1,39 @@
 <scene>
 	<specs>
-		<cam status = "normal">
-			<position>10</position>
-			<direction>20</direction>
+		<cam status = "basic">
+			<position>100, 400, 50</position>
+			<direction>20, 60, 30</direction>
 		</cam>
-		<amb status = "normal">
-			<diffusion>30</diffusion>
-			<reflection>40</reflection>
+		<amb status = "basic">
+			<diffusion>30, 34, 69</diffusion>
+			<reflection>40, 42, 45</reflection>
 			<specvalue>50</specvalue>
-			<specpower></specpower>
+			<specpower>82</specpower>
 		</amb>
-		<light status = "normal">
-			<position>60</position>
-			<intensity>70</intensity>
+		<light status = "basic">
+			<position>60, 52, 55</position>
+			<intensity>70, 75, 80</intensity>
 		</light>
 	</specs>
 	<objects>
-		<sphere status = "normal">
+		<sphere status = "basic">
 			<center>80</center>
 			<radius>90</radius>
 			<amb>100</amb>
 		</sphere>
-		<cylinder status = "normal">
+		<cylinder status = "basic">
 			<direction>110</direction>
 			<radius>120</radius>
 			<amb>130</amb>
 			<axis>140</axis>
 		</cylinder>
-		<cone status = "normal">
+		<cone status = "extra">
 			<direction>150</direction>
 			<center>160</center>
 			<angle>170</angle>
 			<amb>180</amb>
 		</cone>
-		<plane status = "normal">
+		<plane status = "extra">
 			<normal>190</normal>
 			<d>200</d>
 			<mat>210</mat>

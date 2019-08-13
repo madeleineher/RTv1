@@ -112,6 +112,73 @@ void	skip_tabs(char **split_test, t_env *e)
 	}
 }
 
+
+int		verifyvocab(t_env *e, char **split_test)
+{
+	e->voc_i = -1;
+	e->voc_check = -1;
+	while (split_test[2][++e->voc_i] != '>')
+		;
+	e->strone = ft_strsub(split_test[2], 0, e->voc_i);
+	e->strtwo = ft_strsub(e->strone, ft_strclen(e->strone, '/') + 1, ft_strlen(e->strone));
+	free(e->strone);
+	e->strone = NULL;
+	e->voc_i = -1;
+	while (split_test[0][++e->voc_i] != '>')
+		;
+	e->strone = ft_strsub(split_test[0], 1, --e->voc_i);
+	e->voc_i = 0;
+	if (ft_strcmp(e->strone, e->strtwo) != 0)
+		return (-1);
+	else
+	{
+		while (e->voc_i < 15)
+			if (ft_strcmp(e->strone, e->vocab_two[e->voc_i++]) == 0)
+				e->voc_check++;
+	}
+	free(e->strone);
+	e->strone = NULL;
+	free(e->strtwo);
+	e->strtwo = NULL;
+	return (e->voc_check);
+}
+
+int		verifyanglebrackets(char **split_test)
+{
+	int		i;
+	int		set_one;
+	int		set_two;
+
+	i = -1;
+	set_one = 0;
+	set_two = 0;
+	while (split_test[0][++i])
+	{
+		if (split_test[0][i] == '<')
+			set_one++;
+		if (split_test[0][i] == '>')
+			set_one++;
+	}
+	i = -1;
+	while (split_test[2][++i])
+	{
+		if (split_test[2][i] == '<' && split_test[2][i + 1] == '/')
+			set_two++;
+		if (split_test[2][i] == '>')
+			set_two++;
+	}
+	if (set_one != 2 || set_two != 2)
+		return (-1);
+	return (0);
+}
+
+int		verifyargs(t_env *e, char **split_test)
+{
+	(void)e;
+	(void)split_test;
+	return (0);
+}
+
 int		check_tag_uniform(t_env *e, char *line)
 {
 	char	**split_test;
@@ -161,7 +228,7 @@ int		check_tag_uniform(t_env *e, char *line)
 					e->spcs.light += 1;
 					if (ft_iseven(e->spcs.light) == 0)
 						return (23);
-					printf("light increase open ==> [%d]\n", e->spcs.light);
+					// printf("light increase open ==> [%d]\n", e->spcs.light);
 					if ((ret_tmp = extract_status(e, split_test)) != 0)
 						return (ret_tmp);
 				}
@@ -187,7 +254,7 @@ int		check_tag_uniform(t_env *e, char *line)
 					open_close(&e->spcs.light);
 					if (ft_iseven(e->spcs.light) == -1)
 						return (23);
-					printf("light increase close : [%d]\n", e->spcs.light);
+					// printf("light increase close : [%d]\n", e->spcs.light);
 				}
 			}
 			else if (str_count != 1 || str_count != 4)
@@ -196,8 +263,24 @@ int		check_tag_uniform(t_env *e, char *line)
 		}
 		if (ft_charfreq(line, '\t') == 3)
 		{
+			str_count = ft_countstrings(split_test);
 			skip_tabs(split_test, e); // pick up here ~*
-			//printf("--->[%s]\n", split_test[0]);
+			if (str_count == 3)
+			{
+				if ((ret_tmp = verifyanglebrackets(split_test)) == -1)
+					return (17);
+				if ((ret_tmp = verifyvocab(e, split_test)) == -1)
+					return (14);
+				verifyargs(e, split_test);
+			}
+			else if (str_count == 1)
+			{
+				// printf("--->[%s]\n", split_test[0]);	
+				// printf("\n");
+			}
+			else
+				return (17);
+			// printf("\n");
 		}
 	}
 	else if (e->specs == 1 && (e->scene != 1 || e->objects != 0))
@@ -245,9 +328,8 @@ int		globals(t_env *e, char *gnl_line)
 
 int		last_checks(t_env *e)
 {
-	printf("light : [%d]\n", e->spcs.light);	
 	if (e->objects != 2 || e->specs != 2) // change the error number
-		return (8); // change error message ??
+		return (8); // change error message
 	if (e->scene != 2)
 		return (6);
 	if (e->spec_order < 3)

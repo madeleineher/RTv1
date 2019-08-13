@@ -63,6 +63,8 @@ int			error(t_env *e, int i)
 			ft_putendl("something is wrong.");
 		if (i == 16)
 			ft_putendl("Oops ! Looks like status is not properly indicated.");
+		if (i == 17)
+			ft_putendl("Oops ! Looks like this line has poor formatting.");
 		ft_putstr("The problem lies in line : ");
 		ft_putnbr(e->gnl_i);
 		ft_putchar('\n');
@@ -84,40 +86,28 @@ int			error(t_env *e, int i)
 
 void		set_vocab(t_env *e)
 {
-	e->vocab_one[0] = "cam";
-	e->vocab_one[1] = "amb";
-	e->vocab_one[2] = "basic";
-	e->vocab_one[3] = "status";
-	e->vocab_one[4] = "position";
-	e->vocab_one[5] = "direction";
-	e->vocab_one[6] = "diffusion";
-	e->vocab_one[7] = "reflection";
-	e->vocab_one[8] = "specvalue";
-	e->vocab_one[9] = "specpower";
-	e->vocab_one[10] = "light";
-	e->vocab_one[11] = "intensity";
-	e->vocab_one[12] = "extra";
-	e->vocab_one[13] = "translate";
-	e->vocab_one[14] = "rotate";
+	e->vocab_one[0] = "sphere";
+	e->vocab_one[1] = "cylinder";
+	e->vocab_one[2] = "cone";
+	e->vocab_one[3] = "plane";
 
-	e->vocab_two[0] = "objects";
-	e->vocab_two[1] = "status";
-	e->vocab_two[2] = "basic";
-	e->vocab_two[3] = "sphere";
-	e->vocab_two[4] = "cylinder";
-	e->vocab_two[5] = "cone";
-	e->vocab_two[6] = "plane";
-	e->vocab_two[7] = "angle";
-	e->vocab_two[8] = "axis";
-	e->vocab_two[9] = "center";
-	e->vocab_two[10] = "d";
-	e->vocab_two[11] = "direction";
-	e->vocab_two[12] = "extra";
+	e->vocab_two[0] = "position";
+	e->vocab_two[1] = "direction";
+	e->vocab_two[2] = "diffusion";
+	e->vocab_two[3] = "reflection";
+	e->vocab_two[4] = "specvalue";
+	e->vocab_two[5] = "specpower";
+	e->vocab_two[6] = "intensity";
+	e->vocab_two[7] = "translate";
+	e->vocab_two[8] = "rotate";
+	e->vocab_two[9] = "angle";
+	e->vocab_two[10] = "axis";
+	e->vocab_two[11] = "center";
+	e->vocab_two[12] = "d";
 	e->vocab_two[13] = "mat";
-	e->vocab_two[14] = "normal";
-	e->vocab_two[15] = "rotate";
-	e->vocab_two[16] = "radius";
-	e->vocab_two[17] = "translate";
+	e->vocab_two[14] = "radius";
+
+	
 }
 
 int			main(int argc, char **argv)

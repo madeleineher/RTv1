@@ -174,6 +174,8 @@ typedef struct		s_spec
 typedef struct		s_env
 {
 	char			**line;
+	char			*strone;
+	char			*strtwo;
 	char			*data;
 	int				gnl_i;
 	char			parser[5];
@@ -188,8 +190,11 @@ typedef struct		s_env
 	int				spec_order;
 	int				skip;
 	int				objects;
-	char			*vocab_one[15];
-	char			*vocab_two[18];
+	char			*vocab_one[4];
+	char			*vocab_two[15];
+	int				voc_counter;
+	int 			voc_i;
+	int 			voc_check;
 	int				status;
 	t_spec			spcs;
 	t_ret 			ret;
