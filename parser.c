@@ -46,7 +46,7 @@ int		open_close(int *check_me)
 
 int		two_angle_brackets(t_env *e)
 {
-	// checks that there is a pair of brackets for a line with a single tag
+	// checks that there is a pair of brackets for a line with a single tag, ex "<specs>"
 	int	brackets;
 	int	bad_brackets;
 	int	i;
@@ -218,7 +218,7 @@ int		verify_cam_amb(t_env *e, char **split_test, char *split_tabless)
 		e->amb.status = e->p.status;
 		e->p.current_tag = "amb";
 	}
-	return (0);
+	return (ret);
 }
 
 int		verify_light(t_env *e, char **split_test, char *split_tabless)
@@ -238,7 +238,7 @@ int		verify_light(t_env *e, char **split_test, char *split_tabless)
 	return (ret);
 }
 
-int		closing_tags_specs(t_env *e, char *split_tabless)
+int		verify_closing_tags_specs(t_env *e, char *split_tabless)
 {
 	int		ret;
 
@@ -285,7 +285,7 @@ int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
 	}
 	else if (e->str_count == 1)
 	{
-		if ((ret_tmp = closing_tags_specs(e, split_tabless)) != 0)
+		if ((ret_tmp = verify_closing_tags_specs(e, split_tabless)) != 0)
 			return (ret_tmp);
 	}			
 	else if (e->str_count != 1 || e->str_count != 4)
@@ -294,7 +294,43 @@ int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
 	return (0);
 }
 
-int		check_tag_uniform(t_env *e, char *line)
+
+// verifying three tab , one argument tags here ~~~~
+int		verifyanglebrackets_one(t_env *e)
+{
+	int		endone;
+	int		endtwo;
+	int		i;
+
+	i = -1;
+	endone = 0;
+	endtwo = 0;
+	e->p.tmp = ft_strtrim(e->p.gnl_line);
+	printf("[%s] == [%c]\n", e->p.tmp, e->p.tmp[ft_strlen(e->p.tmp) - 1]);
+	if (e->p.tmp[0] != '<' || e->p.tmp[ft_strlen(e->p.tmp) - 1] != '>')
+		return (-1);
+	while (e->p.tmp[++i])
+	{
+		if (e->p.tmp[i] == '<' && i == 0)
+			endone++;
+		if (e->p.tmp[i] == '>' && e->p.tmp[i + 1] != '\0' && endone == 1)
+			endone++;
+		if (e->p.tmp[i] == '<' && e->p.tmp[i + 1] == '/')
+			endtwo++;
+		if (e->p.tmp[i] == '>' && e->p.tmp[i + 1] == '\0' && endtwo == 1)
+			endtwo++;
+	}
+	printf("endone : [%d] | endtwo : [%d]\n", endone, endtwo);
+	if (endone != 2 || endtwo != 2)
+		return (-1);
+	// e->p.strtwo = ft_strsub();
+	return (0);
+}
+
+
+// ~~~~~~~~~~ end of verifying three tab , one argument tags ! 
+
+int		verify_line(t_env *e, char *line)
 {
 	char	**split_test;
 	char	*split_tabless;
@@ -325,9 +361,9 @@ int		check_tag_uniform(t_env *e, char *line)
 			}
 			else if (e->str_count == 1)
 			{
-				// if ((ret_tmp = verifyanglebrackets_one(split_test)) == -1)
-				// 	return (17);
-				// if ((ret_tmp = verifyvocab_one(e, split_test)) == -1)
+				if ((ret_tmp = verifyanglebrackets_one(e)) == -1)
+					return (17); // this is done ~
+				// if ((ret_tmp = verifyvocab_one(e, split_test)) == -1) // pick up here ~*
 				// 	return (14);
 				// if ((ret_tmp = verifyargs_one(e, split_test)) == -1)
 				// 	return (18);
@@ -344,9 +380,9 @@ int		check_tag_uniform(t_env *e, char *line)
 	}
 	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
 		return (4);
-	// ft_delsplit(split_test);
-	// free(split_tabless);
-	// split_tabless = NULL;
+	ft_delsplit(split_test);
+	free(split_tabless);
+	split_tabless = NULL;
 	return (0);
 }
 
@@ -410,7 +446,7 @@ int		parser(t_env *e, int fd)
 		e->p.gnl_i++;
 		if ((e->ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->ret.glo);
-		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->ret.tag = check_tag_uniform(e, e->p.gnl_line)) != 0))
+		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->ret.tag = verify_line(e, e->p.gnl_line)) != 0))
 			return (e->ret.tag);
 		if (e->p.gnl_line)
 		{

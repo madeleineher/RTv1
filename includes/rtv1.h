@@ -178,6 +178,7 @@ typedef struct		s_parser
 	char			*strtwo;
 	int				gnl_i;
 	char			*gnl_line;
+	char			*tmp;
 	char			*current_tag;
 	int				skips;
 	int				scene;
