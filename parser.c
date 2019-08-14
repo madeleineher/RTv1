@@ -44,9 +44,9 @@ int		open_close(int *check_me)
 	return (0);
 }
 
-int		two_angle_brackets(t_env *e, char *line)
+int		two_angle_brackets(t_env *e)
 {
-	(void)e;
+	// checks that there is a pair of brackets for a line with a single tag
 	int	brackets;
 	int	bad_brackets;
 	int	i;
@@ -56,16 +56,16 @@ int		two_angle_brackets(t_env *e, char *line)
 	bad_brackets = 0;
 	i = 0;
 	j = -1;
-	while (line[i] == '\t')
+	while (e->p.gnl_line[i] == '\t')
 		i++;
 	j = i;
-	while (line[j])
+	while (e->p.gnl_line[j])
 	{
-		if (j == i && line[j] == '<')
+		if (j == i && e->p.gnl_line[j] == '<')
 			brackets++;
-		if (line[j] == '>' && line[j + 1] == '\0')
+		if (e->p.gnl_line[j] == '>' && e->p.gnl_line[j + 1] == '\0')
 			brackets++;
-		if (j != i && line[j + 1] != '\0' && (line[j] == '<' || line[j] == '>'))
+		if (j != i && e->p.gnl_line[j + 1] != '\0' && (e->p.gnl_line[j] == '<' || e->p.gnl_line[j] == '>'))
 			bad_brackets++;
 		j++;
 	}
@@ -74,6 +74,7 @@ int		two_angle_brackets(t_env *e, char *line)
 
 int		extract_status(t_env *e, char **strings)
 {
+	// checks the status of the spec/object
 	int	i;
 
 	i = 0;
@@ -82,71 +83,113 @@ int		extract_status(t_env *e, char **strings)
 	if (ft_strcmp("=", strings[2]) != 0)
 		return (14);
 	if (ft_strcmp("\"basic\">", strings[3]) == 0)
-		e->status = 1;
+		e->p.status = 1;
 	else if (ft_strcmp("\"extra\">", strings[3]) == 0)
-		e->status = 2;
+		e->p.status = 2;
 	else
 		return (16);
 	return (0);
 }
 
-int		verifyvocab_three(t_env *e, char **split_test)
+int		verifyvocab_three(t_env *e, char **split)
 {
+	// makes sure that the vocan in a string split with three strings has matching
+	// and valid vocabulary in the xml tags
 	int		end1;
 	int		end2;
 
-	e->voc_i = -1;
-	e->voc_check = -1;
-	end1 = (ft_strclen(split_test[0], '>') - ft_strclen(split_test[0], '<')) - 1;
-	end2 = (ft_strclen(split_test[2], '>') - ft_strclen(split_test[2], '/')) - 1;
-	e->strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '<') + 1, end1);
-	e->strtwo = ft_strsub(split_test[2], ft_strclen(split_test[2], '/') + 1, end2);
-	if (ft_strcmp(e->strone, e->strtwo) != 0)
+	e->p.voc_i = -1;
+	e->p.voc_check = -1;
+	end1 = (ft_strclen(split[0], '>') - ft_strclen(split[0], '<')) - 1;
+	end2 = (ft_strclen(split[2], '>') - ft_strclen(split[2], '/')) - 1;
+	e->p.strone = ft_strsub(split[0], ft_strclen(split[0], '<') + 1, end1);
+	e->p.strtwo = ft_strsub(split[2], ft_strclen(split[2], '/') + 1, end2);
+	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->voc_i < 15)
-			if (ft_strcmp(e->strone, e->vocab_two[e->voc_i]) == 0)
-				e->voc_check++;
-	free(e->strone);
-	e->strone = NULL;
-	free(e->strtwo);
-	e->strtwo = NULL;
-	return (e->voc_check);
+		while (++e->p.voc_i < 15)
+			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
+				e->p.voc_check++;
+	free(e->p.strone);
+	e->p.strone = NULL;
+	free(e->p.strtwo);
+	e->p.strtwo = NULL;
+	return (e->p.voc_check);
 }
 
-int		verifyanglebrackets_three(char **split_test)
+int		verifyanglebrackets_three(t_env *e, char **split_test)
 {
+	// makes sure that there are two pairs of brackets in 
+	//a string split into three strings (0, 1, 2)
 	int		i;
-	int		set_one;
-	int		set_two;
 
 	i = -1;
-	set_one = 0;
-	set_two = 0;
+	e->p.set_one = 0;
+	e->p.set_two = 0;
 	while (split_test[0][++i])
 	{
 		if (split_test[0][i] == '<')
-			set_one++;
+			e->p.set_one++;
 		if (split_test[0][i] == '>')
-			set_one++;
+			e->p.set_one++;
 	}
 	i = -1;
 	while (split_test[2][++i])
 	{
 		if (split_test[2][i] == '<' && split_test[2][i + 1] == '/')
-			set_two++;
+			e->p.set_two++;
 		if (split_test[2][i] == '>')
-			set_two++;
+			e->p.set_two++;
 	}
-	if (set_one != 2 || set_two != 2)
+	if (e->p.set_one != 2 || e->p.set_two != 2)
 		return (-1);
 	return (0);
 }
 
-int		verifyargs_three(t_env *e, char **split_test)
+int		verifyendings_three(char **split_test)
 {
+	// checks that the endings for the first two values in a characteristic with three 
+	// values end with commas
+
+	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
+		return (-1);
+	if ((ft_strclen(split_test[1], ',') + 1) != ft_strlen(split_test[1]))
+		return (-1);
+	return (0);
+}
+
+int		verifyargs_three(t_env *e, char **split_test) 
+{
+	/* checks the vaidity of arguments for those with three given characteristics
+		for example : <position>10, 30, 40</position
+		position has three values	
+	*/
 	(void)e;
-	(void)split_test;
+	int		comma; // ?
+	int		len1;
+	int		num_check;
+
+	num_check = 0;
+	if (verifyendings_three(split_test) == -1)
+		return (18);
+	len1 = ft_strclen(split_test[0], '>') + 1;
+	comma = 0;
+	comma += ft_charfreq(split_test[0], ',');
+	comma += ft_charfreq(split_test[1], ',');
+	comma += ft_charfreq(split_test[2], ',');
+	if (comma != 2)
+		return (19);
+	while (split_test[0][len1] != ',')
+		num_check += (ft_isdigit(split_test[0][len1++]) == 1 ? 0 : 1);
+	len1 = -1;
+	while (split_test[1][++len1] != ',')
+		num_check += (ft_isdigit(split_test[1][len1]) == 1 ? 0 : 1);
+	len1 = -1;
+	while (split_test[2][++len1] != '<')
+		num_check += (ft_isdigit(split_test[2][len1]) == 1 ? 0 : 1);
+	if (num_check != 0)
+		return (18);
+	// store_args(e);
 	return (0);
 }
 
@@ -155,23 +198,25 @@ int		verify_cam_amb(t_env *e, char **split_test, char *split_tabless)
 	int	ret;
 
 	ret = 0;
-	if (e->spec_order == 0)
+	if (e->p.spec_order == 0)
 	{
 		if (ft_strcmp("<cam", split_tabless) != 0)
 			return (10);
 		e->spcs.cam = 1;
 		if ((ret = extract_status(e, split_test)) != 0)
 			return (ret);
-		e->cam.status = e->status;
+		e->cam.status = e->p.status;
+		e->p.current_tag = "cam";
 	}
-	if (e->spec_order == 1)
+	if (e->p.spec_order == 1)
 	{	
 		if (ft_strcmp("<amb", split_tabless) != 0)
 			return (11);
 		e->spcs.amb = 1;
 		if ((ret = extract_status(e, split_test)) != 0)
 			return (ret);
-		e->amb.status = e->status;
+		e->amb.status = e->p.status;
+		e->p.current_tag = "amb";
 	}
 	return (0);
 }
@@ -189,6 +234,7 @@ int		verify_light(t_env *e, char **split_test, char *split_tabless)
 	// printf("light increase open ==> [%d]\n", e->spcs.light);
 	if ((ret = extract_status(e, split_test)) != 0)
 		return (ret);
+	e->p.current_tag = "light";
 	return (ret);
 }
 
@@ -197,99 +243,110 @@ int		closing_tags_specs(t_env *e, char *split_tabless)
 	int		ret;
 
 	ret = 0;
-	if (e->spec_order == 1)
+	if (e->p.spec_order == 1)
 	{
 		if ((ret = ft_strcmp("</cam>", split_tabless)) != 0)
 			return (10);
 		open_close(&e->spcs.cam);
 	}
-	if (e->spec_order == 2)
+	if (e->p.spec_order == 2)
 	{
 		if ((ret = ft_strcmp("</amb>", split_tabless)) != 0)
 			return (11);
 		open_close(&e->spcs.amb);
 	}
-	if (e->spec_order >= 3)
+	if (e->p.spec_order >= 3)
 	{
 		if ((ret = ft_strcmp("</light>", split_tabless)) != 0)
 			return (12);
 		open_close(&e->spcs.light);
 		if (ft_iseven(e->spcs.light) == -1)
-			return (23);
+			return (29);
 		// printf("light increase close : [%d]\n", e->spcs.light);
 	}
 	return (0);
 }
 
+int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
+{
+	int	ret_tmp;
 
+	ret_tmp = 0;
+	if ((ret_tmp = two_angle_brackets(e)) != 2)
+		return (9);
+	if (e->str_count == 4)
+	{
+		if (e->p.spec_order == 0 || e->p.spec_order == 1)
+			if ((ret_tmp = verify_cam_amb(e, split_test, split_tabless)) != 0)
+				return (ret_tmp);
+		if (e->p.spec_order >= 2)
+			if ((ret_tmp = verify_light(e, split_test, split_tabless)) != 0)
+				return (ret_tmp);
+	}
+	else if (e->str_count == 1)
+	{
+		if ((ret_tmp = closing_tags_specs(e, split_tabless)) != 0)
+			return (ret_tmp);
+	}			
+	else if (e->str_count != 1 || e->str_count != 4)
+		return (13);
+	e->p.spec_order += (e->str_count == 4 ? 1 : 0);
+	return (0);
+}
 
 int		check_tag_uniform(t_env *e, char *line)
 {
 	char	**split_test;
 	char	*split_tabless;
-	int		str_count;
 	int		ret_tmp;
 
 	ret_tmp = 0;
-	str_count = 0;
 	split_test = ft_strsplit(line, ' ');
 	split_tabless = NULL;
-	if (e->specs == 1 && e->scene == 1 && e->objects == 0)
+	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
 	{
-		str_count = ft_countstrings(split_test);
+		e->str_count = ft_countstrings(split_test);
 		split_tabless = ft_strtrim(split_test[0]);
 		if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 			return (5);
 		if (ft_charfreq(line, '\t') == 2)
-		{
-			if ((ret_tmp = two_angle_brackets(e, line)) != 2)
-				return (9);
-			if (str_count == 4)
-			{
-				if (e->spec_order == 0 || e->spec_order == 1)
-					if ((ret_tmp = verify_cam_amb(e, split_test, split_tabless)) != 0)
-						return (ret_tmp);
-				if (e->spec_order >= 2)
-					if ((ret_tmp = verify_light(e, split_test, split_tabless)) != 0)
-						return (ret_tmp);
-			}
-			else if (str_count == 1)
-			{
-				if ((ret_tmp = closing_tags_specs(e, split_tabless)) != 0)
-					return (ret_tmp);
-			}			
-			else if (str_count != 1 || str_count != 4)
-				return (13);
-			e->spec_order += (str_count == 4 ? 1 : 0);
-		}
+			if ((ret_tmp = two_tabs_specs(e, split_test, split_tabless)) != 0)
+				return (ret_tmp);
 		if (ft_charfreq(line, '\t') == 3)
 		{
-			if (str_count == 3)
+			if (e->str_count == 3)
 			{
-				if ((ret_tmp = verifyanglebrackets_three(split_test)) == -1)
+				if ((ret_tmp = verifyanglebrackets_three(e, split_test)) == -1)
 					return (17);
 				if ((ret_tmp = verifyvocab_three(e, split_test)) == -1)
 					return (14);
-				if ((ret_tmp = verifyargs_three(e, split_test)) == -1)
-					return (18);
+				if ((ret_tmp = verifyargs_three(e, split_test)) != 0)
+					return (ret_tmp);
 			}
-			else if (str_count == 1)
+			else if (e->str_count == 1)
 			{
-				// printf("--->[%s]\n", split_test[0]);	
+				// if ((ret_tmp = verifyanglebrackets_one(split_test)) == -1)
+				// 	return (17);
+				// if ((ret_tmp = verifyvocab_one(e, split_test)) == -1)
+				// 	return (14);
+				// if ((ret_tmp = verifyargs_one(e, split_test)) == -1)
+				// 	return (18);
 			}
 			else
 				return (17);
 		}
 	}
-	else if (e->specs == 1 && (e->scene != 1 || e->objects != 0))
+	else if (e->p.specs == 1 && (e->p.scene != 1 || e->p.objects != 0))
 		return (4);
-	if (e->objects == 1 && e->specs == 2 && e->scene == 1)
+	if (e->p.objects == 1 && e->p.specs == 2 && e->p.scene == 1)
 	{
 		// printf("--->[%s]\n", split_test[0]);
 	}
-	else if (e->objects == 1 && (e->scene != 1 || e->specs != 2))
+	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
 		return (4);
-	// ft_delsplit(split_test); //fix pointer situation from skip tabs;
+	// ft_delsplit(split_test);
+	// free(split_tabless);
+	// split_tabless = NULL;
 	return (0);
 }
 
@@ -299,44 +356,44 @@ int		globals(t_env *e, char *gnl_line)
 	int	ret_tabs = 0;
 	char	*tabless;
 
-	e->skip = 0;
+	e->p.skip = 0;
 	ret_tabs = ft_charfreq(gnl_line, '\t');
 	tabless = ft_strtrim(gnl_line);
 	if ((ft_strcmp("<scene>", tabless) == 0) && ret_tabs == 0)
-		e->scene += 1;
+		e->p.scene += 1;
 	if (ft_strcmp("</scene>", tabless) == 0 && ret_tabs == 0)
-		e->scene += 1;
+		e->p.scene += 1;
 	if (ft_strcmp("<specs>", tabless) == 0 && ret_tabs == 1)
 	{
-		e->specs += 1;
-		e->skip = 1;
+		e->p.specs += 1;
+		e->p.skip = 1;
 	}
 	if (ft_strcmp("</specs>", tabless) == 0 && ret_tabs == 1)
-		if ((ret_tmp = open_close(&e->specs)) != 0)
+		if ((ret_tmp = open_close(&e->p.specs)) != 0)
 			return (ret_tmp);
 	if (ft_strcmp("<objects>", tabless) == 0 && ret_tabs == 1)
 	{
-		e->objects += 1;
-		e->skip = 1;
+		e->p.objects += 1;
+		e->p.skip = 1;
 	}
 	if (ft_strcmp("</objects>", tabless) == 0 && ret_tabs == 1)
-		if ((ret_tmp = open_close(&e->objects)) != 0)
+		if ((ret_tmp = open_close(&e->p.objects)) != 0)
 			return (ret_tmp);
 	return (0);
 }
 
 int		last_checks(t_env *e)
 {
-	if (e->objects != 2 || e->specs != 2) // change the error number
+	if (e->p.objects != 2 || e->p.specs != 2) // change the error number
 		return (8); // change error message
-	if (e->scene != 2)
+	if (e->p.scene != 2)
 		return (6);
-	if (e->spec_order < 3)
-		return(20);
+	if (e->p.spec_order < 3)
+		return(26);
 	if ((ft_iseven(e->spcs.light)) == -1)
-		return(21);
+		return(27);
 	if (e->spcs.cam != 2 || e->spcs.amb != 2)
-		return (22);
+		return (28);
 	if (e->ret.gnl == -1)
 		return (1);
 	printf("VALID!\n");
@@ -348,17 +405,17 @@ int		parser(t_env *e, int fd)
 	t_ll	*head;
 
 	head = NULL;
-	while ((e->ret.gnl = get_next_line(fd, &e->gnl_line)) > 0)
+	while ((e->ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{
-		e->gnl_i++;
-		if ((e->ret.glo = globals(e, e->gnl_line)) != 0)
+		e->p.gnl_i++;
+		if ((e->ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->ret.glo);
-		if ((e->objects == 1 || e->specs == 1) && !e->skip && ((e->ret.tag = check_tag_uniform(e, e->gnl_line)) != 0))
+		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->ret.tag = check_tag_uniform(e, e->p.gnl_line)) != 0))
 			return (e->ret.tag);
-		if (e->gnl_line)
+		if (e->p.gnl_line)
 		{
-			free(e->gnl_line);
-			e->gnl_line = NULL;
+			free(e->p.gnl_line);
+			e->p.gnl_line = NULL;
 		}
 	}
 	e->ll = head;

@@ -171,31 +171,39 @@ typedef struct		s_spec
 	int				light;
 }					t_spec;
 
-typedef struct		s_env
+typedef struct		s_parser
 {
-	char			**line;
+	char			*line;
 	char			*strone;
 	char			*strtwo;
-	char			*data;
 	int				gnl_i;
-	char			parser[5];
-	int				k[300];
 	char			*gnl_line;
-	int				ret_ver;
-	int				i;
+	char			*current_tag;
 	int				skips;
-	int				lenfile;
 	int				scene;
 	int				specs;
 	int				spec_order;
 	int				skip;
 	int				objects;
-	char			*vocab_one[4];
-	char			*vocab_two[15];
-	int				voc_counter;
 	int 			voc_i;
 	int 			voc_check;
 	int				status;
+	int				set_one;
+	int				set_two;
+}					t_parser;
+
+typedef struct		s_env
+{
+	char			*data;
+	char			parser[5];
+	int				str_count;
+	int				k[300];
+	int				i;
+	int				lenfile;
+	char			*vocab_one[4];
+	char			*vocab_two[15];
+	int				voc_counter;
+	t_parser		p;
 	t_spec			spcs;
 	t_ret 			ret;
 	t_mlx			w;

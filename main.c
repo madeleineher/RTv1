@@ -35,7 +35,7 @@ int			error(t_env *e, int i)
 		ft_putendl("error: mlx init error.");
 	if (i == 3)
 		ft_putendl("error: not a valid parameter.");
-	if (i > 3 && i < 20)
+	if (i > 3 && i < 26)
 	{
 		if (i == 4)
 			ft_putendl("Oops ! Looks like <scene>/<objects>/<specs> tag was not opened/closed/formatted properly.");
@@ -67,19 +67,21 @@ int			error(t_env *e, int i)
 			ft_putendl("Oops ! Looks like this line has poor formatting.");
 		if (i == 18)
 			ft_putendl("Oops ! Looks like this line was given poor arguments.");
+		if (i == 19)
+			ft_putendl("Oops ! Looks like there is too many/little commas.");
 		ft_putstr("The problem lies in line : ");
-		ft_putnbr(e->gnl_i);
+		ft_putnbr(e->p.gnl_i);
 		ft_putchar('\n');
 	}
-	if (i > 19)
+	if (i > 25)
 	{
-		if (i == 20)
+		if (i == 26)
 			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is missing.");
-		if (i == 21)
+		if (i == 27)
 			ft_putendl("Oops ! Looks like there are conflicting light tags.");
-		if (i == 22)
+		if (i == 28)
 			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is/are not closed properly.");
-		if (i == 23)
+		if (i == 29)
 			ft_putendl("Oops ! Looks like there are conflicting <light> tags.");
 	}
 	quit(e);
