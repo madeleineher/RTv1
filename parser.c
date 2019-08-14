@@ -40,20 +40,7 @@ int		open_close(int *check_me)
 {
 	if (*check_me == 0)
 		return (7);
-
 	*check_me += 1;
-	return (0);
-}
-
-int		check_vocab(t_env *e, char *line)
-{
-	(void)e;
-	(void)line;
-	// int i = 0;
-
-	// while (e->vocab[i] != '\0')
-	// 	printf("[%s]\n", e->vocab[i++]);
-
 	return (0);
 }
 
@@ -103,39 +90,23 @@ int		extract_status(t_env *e, char **strings)
 	return (0);
 }
 
-void	skip_tabs(char **split_test, t_env *e)
+int		verifyvocab_three(t_env *e, char **split_test)
 {
-	while (*split_test[0] == '\t')
-	{
-		split_test[0]++;
-		e->skips++;
-	}
-}
+	int		end1;
+	int		end2;
 
-
-int		verifyvocab(t_env *e, char **split_test)
-{
 	e->voc_i = -1;
 	e->voc_check = -1;
-	while (split_test[2][++e->voc_i] != '>')
-		;
-	e->strone = ft_strsub(split_test[2], 0, e->voc_i);
-	e->strtwo = ft_strsub(e->strone, ft_strclen(e->strone, '/') + 1, ft_strlen(e->strone));
-	free(e->strone);
-	e->strone = NULL;
-	e->voc_i = -1;
-	while (split_test[0][++e->voc_i] != '>')
-		;
-	e->strone = ft_strsub(split_test[0], 1, --e->voc_i);
-	e->voc_i = 0;
+	end1 = (ft_strclen(split_test[0], '>') - ft_strclen(split_test[0], '<')) - 1;
+	end2 = (ft_strclen(split_test[2], '>') - ft_strclen(split_test[2], '/')) - 1;
+	e->strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '<') + 1, end1);
+	e->strtwo = ft_strsub(split_test[2], ft_strclen(split_test[2], '/') + 1, end2);
 	if (ft_strcmp(e->strone, e->strtwo) != 0)
 		return (-1);
 	else
-	{
-		while (e->voc_i < 15)
-			if (ft_strcmp(e->strone, e->vocab_two[e->voc_i++]) == 0)
+		while (++e->voc_i < 15)
+			if (ft_strcmp(e->strone, e->vocab_two[e->voc_i]) == 0)
 				e->voc_check++;
-	}
 	free(e->strone);
 	e->strone = NULL;
 	free(e->strtwo);
@@ -143,7 +114,7 @@ int		verifyvocab(t_env *e, char **split_test)
 	return (e->voc_check);
 }
 
-int		verifyanglebrackets(char **split_test)
+int		verifyanglebrackets_three(char **split_test)
 {
 	int		i;
 	int		set_one;
@@ -172,115 +143,142 @@ int		verifyanglebrackets(char **split_test)
 	return (0);
 }
 
-int		verifyargs(t_env *e, char **split_test)
+int		verifyargs_three(t_env *e, char **split_test)
 {
 	(void)e;
 	(void)split_test;
 	return (0);
 }
 
+int		verify_cam_amb(t_env *e, char **split_test, char *split_tabless)
+{
+	int	ret;
+
+	ret = 0;
+	if (e->spec_order == 0)
+	{
+		if (ft_strcmp("<cam", split_tabless) != 0)
+			return (10);
+		e->spcs.cam = 1;
+		if ((ret = extract_status(e, split_test)) != 0)
+			return (ret);
+		e->cam.status = e->status;
+	}
+	if (e->spec_order == 1)
+	{	
+		if (ft_strcmp("<amb", split_tabless) != 0)
+			return (11);
+		e->spcs.amb = 1;
+		if ((ret = extract_status(e, split_test)) != 0)
+			return (ret);
+		e->amb.status = e->status;
+	}
+	return (0);
+}
+
+int		verify_light(t_env *e, char **split_test, char *split_tabless)
+{
+	int	ret;
+
+	ret = 0;
+	if (ft_strcmp("<light", split_tabless) != 0)
+		return (12); // fix this tag message !
+	e->spcs.light += 1;
+	if (ft_iseven(e->spcs.light) == 0)
+		return (23);
+	// printf("light increase open ==> [%d]\n", e->spcs.light);
+	if ((ret = extract_status(e, split_test)) != 0)
+		return (ret);
+	return (ret);
+}
+
+int		closing_tags_specs(t_env *e, char *split_tabless)
+{
+	int		ret;
+
+	ret = 0;
+	if (e->spec_order == 1)
+	{
+		if ((ret = ft_strcmp("</cam>", split_tabless)) != 0)
+			return (10);
+		open_close(&e->spcs.cam);
+	}
+	if (e->spec_order == 2)
+	{
+		if ((ret = ft_strcmp("</amb>", split_tabless)) != 0)
+			return (11);
+		open_close(&e->spcs.amb);
+	}
+	if (e->spec_order >= 3)
+	{
+		if ((ret = ft_strcmp("</light>", split_tabless)) != 0)
+			return (12);
+		open_close(&e->spcs.light);
+		if (ft_iseven(e->spcs.light) == -1)
+			return (23);
+		// printf("light increase close : [%d]\n", e->spcs.light);
+	}
+	return (0);
+}
+
+
+
 int		check_tag_uniform(t_env *e, char *line)
 {
 	char	**split_test;
+	char	*split_tabless;
 	int		str_count;
-	int		brackets;
 	int		ret_tmp;
-	int		str_cmp;
 
 	ret_tmp = 0;
-	str_cmp = 0;
 	str_count = 0;
 	split_test = ft_strsplit(line, ' ');
+	split_tabless = NULL;
 	if (e->specs == 1 && e->scene == 1 && e->objects == 0)
 	{
+		str_count = ft_countstrings(split_test);
+		split_tabless = ft_strtrim(split_test[0]);
 		if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 			return (5);
 		if (ft_charfreq(line, '\t') == 2)
 		{
-			if ((brackets = two_angle_brackets(e, line)) != 2)
+			if ((ret_tmp = two_angle_brackets(e, line)) != 2)
 				return (9);
-			str_count = ft_countstrings(split_test);
-			skip_tabs(split_test, e);
 			if (str_count == 4)
 			{
-				if (e->spec_order == 0)
-				{
-					if (ft_strcmp("<cam", split_test[0]) != 0)
-						return (10);
-					e->spcs.cam = 1;
-					if ((ret_tmp = extract_status(e, split_test)) != 0)
+				if (e->spec_order == 0 || e->spec_order == 1)
+					if ((ret_tmp = verify_cam_amb(e, split_test, split_tabless)) != 0)
 						return (ret_tmp);
-					e->cam.status = e->status;
-				}
-				if (e->spec_order == 1)
-				{	
-					if (ft_strcmp("<amb", split_test[0]) != 0)
-						return (11);
-					e->spcs.amb = 1;
-					if ((ret_tmp = extract_status(e, split_test)) != 0)
-						return (ret_tmp);
-					e->amb.status = e->status;
-				}
 				if (e->spec_order >= 2)
-				{
-					if (ft_strcmp("<light", split_test[0]) != 0)
-						return (12); // fix this tag message !
-					e->spcs.light += 1;
-					if (ft_iseven(e->spcs.light) == 0)
-						return (23);
-					// printf("light increase open ==> [%d]\n", e->spcs.light);
-					if ((ret_tmp = extract_status(e, split_test)) != 0)
+					if ((ret_tmp = verify_light(e, split_test, split_tabless)) != 0)
 						return (ret_tmp);
-				}
 			}
 			else if (str_count == 1)
 			{
-				if (e->spec_order == 1)
-				{
-					if ((str_cmp = ft_strcmp("</cam>", split_test[0])) != 0)
-						return (10);
-					open_close(&e->spcs.cam);
-				}
-				if (e->spec_order == 2)
-				{
-					if ((str_cmp = ft_strcmp("</amb>", split_test[0])) != 0)
-						return (11);
-					open_close(&e->spcs.amb);
-				}
-				if (e->spec_order >= 3)
-				{
-					if ((str_cmp = ft_strcmp("</light>", split_test[0])) != 0)
-						return (12);
-					open_close(&e->spcs.light);
-					if (ft_iseven(e->spcs.light) == -1)
-						return (23);
-					// printf("light increase close : [%d]\n", e->spcs.light);
-				}
-			}
+				if ((ret_tmp = closing_tags_specs(e, split_tabless)) != 0)
+					return (ret_tmp);
+			}			
 			else if (str_count != 1 || str_count != 4)
 				return (13);
 			e->spec_order += (str_count == 4 ? 1 : 0);
 		}
 		if (ft_charfreq(line, '\t') == 3)
 		{
-			str_count = ft_countstrings(split_test);
-			skip_tabs(split_test, e); // pick up here ~*
 			if (str_count == 3)
 			{
-				if ((ret_tmp = verifyanglebrackets(split_test)) == -1)
+				if ((ret_tmp = verifyanglebrackets_three(split_test)) == -1)
 					return (17);
-				if ((ret_tmp = verifyvocab(e, split_test)) == -1)
+				if ((ret_tmp = verifyvocab_three(e, split_test)) == -1)
 					return (14);
-				verifyargs(e, split_test);
+				if ((ret_tmp = verifyargs_three(e, split_test)) == -1)
+					return (18);
 			}
 			else if (str_count == 1)
 			{
 				// printf("--->[%s]\n", split_test[0]);	
-				// printf("\n");
 			}
 			else
 				return (17);
-			// printf("\n");
 		}
 	}
 	else if (e->specs == 1 && (e->scene != 1 || e->objects != 0))
@@ -299,28 +297,29 @@ int		globals(t_env *e, char *gnl_line)
 {
 	int ret_tmp = 0;
 	int	ret_tabs = 0;
+	char	*tabless;
 
 	e->skip = 0;
 	ret_tabs = ft_charfreq(gnl_line, '\t');
-	skip_tabs(&gnl_line, e);
-	if ((ft_strcmp("<scene>", gnl_line) == 0) && ret_tabs == 0)
+	tabless = ft_strtrim(gnl_line);
+	if ((ft_strcmp("<scene>", tabless) == 0) && ret_tabs == 0)
 		e->scene += 1;
-	if (ft_strcmp("</scene>", gnl_line) == 0 && ret_tabs == 0)
+	if (ft_strcmp("</scene>", tabless) == 0 && ret_tabs == 0)
 		e->scene += 1;
-	if (ft_strcmp("<specs>", gnl_line) == 0 && ret_tabs == 1)
+	if (ft_strcmp("<specs>", tabless) == 0 && ret_tabs == 1)
 	{
 		e->specs += 1;
 		e->skip = 1;
 	}
-	if (ft_strcmp("</specs>", gnl_line) == 0 && ret_tabs == 1)
+	if (ft_strcmp("</specs>", tabless) == 0 && ret_tabs == 1)
 		if ((ret_tmp = open_close(&e->specs)) != 0)
 			return (ret_tmp);
-	if (ft_strcmp("<objects>", gnl_line) == 0 && ret_tabs == 1)
+	if (ft_strcmp("<objects>", tabless) == 0 && ret_tabs == 1)
 	{
 		e->objects += 1;
 		e->skip = 1;
 	}
-	if (ft_strcmp("</objects>", gnl_line) == 0 && ret_tabs == 1)
+	if (ft_strcmp("</objects>", tabless) == 0 && ret_tabs == 1)
 		if ((ret_tmp = open_close(&e->objects)) != 0)
 			return (ret_tmp);
 	return (0);
@@ -340,7 +339,6 @@ int		last_checks(t_env *e)
 		return (22);
 	if (e->ret.gnl == -1)
 		return (1);
-	// printf("cam status : [%d] --- amb status : [%d]!\n", e->cam.status, e->amb.status);	
 	printf("VALID!\n");
 	return (0);
 }
@@ -357,8 +355,6 @@ int		parser(t_env *e, int fd)
 			return (e->ret.glo);
 		if ((e->objects == 1 || e->specs == 1) && !e->skip && ((e->ret.tag = check_tag_uniform(e, e->gnl_line)) != 0))
 			return (e->ret.tag);
-		if ((e->objects == 1 || e->specs == 1) && !e->skip && (e->ret.voc = check_vocab(e, e->gnl_line)) != 0)
-			return (e->ret.voc);
 		if (e->gnl_line)
 		{
 			free(e->gnl_line);

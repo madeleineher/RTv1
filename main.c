@@ -58,13 +58,15 @@ int			error(t_env *e, int i)
 		if (i == 13)
 			ft_putendl("Oops ! Looks like the tag is this line is not properly formatted.");
 		if (i == 14)
-			ft_putendl("Oops ! Looks like something is missing/mispelled.");
+			ft_putendl("Oops ! Looks like something is missing/mispelled ~~~~~~*.");
 		if (i == 15)
 			ft_putendl("something is wrong.");
 		if (i == 16)
 			ft_putendl("Oops ! Looks like status is not properly indicated.");
 		if (i == 17)
 			ft_putendl("Oops ! Looks like this line has poor formatting.");
+		if (i == 18)
+			ft_putendl("Oops ! Looks like this line was given poor arguments.");
 		ft_putstr("The problem lies in line : ");
 		ft_putnbr(e->gnl_i);
 		ft_putchar('\n');
@@ -106,8 +108,6 @@ void		set_vocab(t_env *e)
 	e->vocab_two[12] = "d";
 	e->vocab_two[13] = "mat";
 	e->vocab_two[14] = "radius";
-
-	
 }
 
 int			main(int argc, char **argv)
