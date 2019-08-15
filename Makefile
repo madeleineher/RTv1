@@ -16,6 +16,8 @@ INC = includes/rtv1.h
 
 CFLAGS = -Wall -Werror -Wextra -g3 # remove g3 flag
 
+#  -fsanitize=address
+
 CC = gcc
 
 SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c
@@ -37,7 +39,7 @@ all:
 	@make $(NAME)
 
 $(NAME):$(OBJS) | $(L_TARG)
-	$(CC) $(CFLAGS) $(OBJS) libft/libft.a $(LIBMLX) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) libft/libft.a $(LIBMLX) -fsanitize=address -o $(NAME)
 	@touch .gitignore
 	@echo "*.o" > .gitignore
 	@echo "*.a" >> .gitignore

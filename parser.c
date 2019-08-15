@@ -93,8 +93,10 @@ int		extract_status(t_env *e, char **strings)
 
 int		verifyvocab_three(t_env *e, char **split)
 {
-	// makes sure that the vocan in a string split with three strings has matching
-	// and valid vocabulary in the xml tags
+	/*
+		makes sure that the vocan in a string split with three strings has matching
+		and valid vocabulary in the xml tags
+	*/
 	int		end1;
 	int		end2;
 
@@ -119,8 +121,10 @@ int		verifyvocab_three(t_env *e, char **split)
 
 int		verifyanglebrackets_three(t_env *e, char **split_test)
 {
-	// makes sure that there are two pairs of brackets in 
-	//a string split into three strings (0, 1, 2)
+	/*
+		makes sure that there are two pairs of brackets in 
+		a string split into three strings (0, 1, 2)
+	*/
 	int		i;
 
 	i = -1;
@@ -148,8 +152,10 @@ int		verifyanglebrackets_three(t_env *e, char **split_test)
 
 int		verifyendings_three(char **split_test)
 {
-	// checks that the endings for the first two values in a characteristic with three 
-	// values end with commas
+	/*
+		checks that the endings for the first two values in a characteristic with three 
+		values end with commas
+	*/
 
 	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
 		return (-1);
@@ -158,9 +164,37 @@ int		verifyendings_three(char **split_test)
 	return (0);
 }
 
+int		verifyargs_three_numbers(char *string, int letter)
+{
+	/*
+		verifies that there is a valid number + also that there is a numbers
+	*/
+	int		num_check;
+	int		fake_check;
+	int		i;
+
+	i = -1;
+	num_check = 0;
+	fake_check = 0;
+	while (string[++i] != letter)
+	{
+		if (ft_isdigit(string[i]) == 1)
+			num_check++;
+		if (ft_isdigit(string[i]) == 0)
+			fake_check++;
+	}
+	printf("fake : [%d] - num : [%d]\n", fake_check, num_check);
+	if (fake_check > 0 || num_check == 0)
+		return (-1);
+	if (num_check > 0)
+		return (0);
+	return (0);
+}
+
 int		verifyargs_three(t_env *e, char **split_test) 
 {
-	/* checks the vaidity of arguments for those with three given characteristics
+	/* 
+		checks the vaidity of arguments for those with three given characteristics
 		for example : <position>10, 30, 40</position
 		position has three values	
 	*/
@@ -179,15 +213,14 @@ int		verifyargs_three(t_env *e, char **split_test)
 	comma += ft_charfreq(split_test[2], ',');
 	if (comma != 2)
 		return (19);
-	while (split_test[0][len1] != ',')
-		num_check += (ft_isdigit(split_test[0][len1++]) == 1 ? 0 : 1);
-	len1 = -1;
-	while (split_test[1][++len1] != ',')
-		num_check += (ft_isdigit(split_test[1][len1]) == 1 ? 0 : 1);
-	len1 = -1;
-	while (split_test[2][++len1] != '<')
-		num_check += (ft_isdigit(split_test[2][len1]) == 1 ? 0 : 1);
-	if (num_check != 0)
+	e->p.strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '>') + 1, \
+		(ft_strclen(split_test[0], ',') - ft_strclen(split_test[0], '>')));
+	printf("string : [%s]\n", e->p.strone);
+	if ((verifyargs_three_numbers(e->p.strone, ',') != 0))
+		return (18);
+	if ((verifyargs_three_numbers(split_test[1], ',') != 0))
+		return (18);
+	if ((verifyargs_three_numbers(split_test[2], '<') != 0))
 		return (18);
 	// store_args(e);
 	return (0);
@@ -294,7 +327,6 @@ int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
 	return (0);
 }
 
-
 // verifying three tab , one argument tags here ~~~~
 int		verifyanglebrackets_one(t_env *e)
 {
@@ -306,7 +338,6 @@ int		verifyanglebrackets_one(t_env *e)
 	endone = 0;
 	endtwo = 0;
 	e->p.tmp = ft_strtrim(e->p.gnl_line);
-	printf("[%s] == [%c]\n", e->p.tmp, e->p.tmp[ft_strlen(e->p.tmp) - 1]);
 	if (e->p.tmp[0] != '<' || e->p.tmp[ft_strlen(e->p.tmp) - 1] != '>')
 		return (-1);
 	while (e->p.tmp[++i])
@@ -320,14 +351,61 @@ int		verifyanglebrackets_one(t_env *e)
 		if (e->p.tmp[i] == '>' && e->p.tmp[i + 1] == '\0' && endtwo == 1)
 			endtwo++;
 	}
-	printf("endone : [%d] | endtwo : [%d]\n", endone, endtwo);
 	if (endone != 2 || endtwo != 2)
 		return (-1);
-	// e->p.strtwo = ft_strsub();
 	return (0);
 }
 
+int		verifyvocab_one(t_env *e)
+{
+	e->p.voc_i = -1;
+	e->p.voc_check = -1;
+	e->p.i = ft_strclen(e->p.gnl_line, '<') + 1;
+	e->p.j = ft_strclen(e->p.gnl_line, '>');
+	e->p.k = ft_strclen(e->p.gnl_line, '/') + 1;
+	e->p.strone = ft_strsub(e->p.gnl_line, e->p.i, (e->p.j - e->p.i));
+	e->p.i = ft_strlen(e->p.gnl_line) - 1;
+	if (e->p.gnl_line[e->p.i] != '>')
+		return (-1);
+	e->p.strtwo = ft_strsub(e->p.gnl_line, e->p.k, (e->p.i - e->p.k));
+	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
+		return (-1);
+	else
+		while (++e->p.voc_i < 15) // could be seg faulting here ...
+			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
+				e->p.voc_check++;
+	free(e->p.strone);
+	e->p.strone = NULL;
+	free(e->p.strtwo);
+	e->p.strtwo = NULL;
+	return (e->p.voc_check);
+}
 
+int		verifyargs_one(t_env *e)
+{
+	int		i;
+	int		num_check;
+	int		fake_check;
+
+	i = -1;
+	num_check = 0;
+	fake_check = 0;
+	e->p.strone = ft_strsub(e->p.gnl_line, e->p.j + 1, ((e->p.k - 3) - e->p.j));
+	while (e->p.strone[++i])
+	{
+		if (ft_isdigit(e->p.strone[i]) == 1)
+			num_check++;
+		if (ft_isdigit(e->p.strone[i]) == 0)
+			fake_check++;
+	}
+	free(e->p.strone);
+	e->p.strone = NULL;
+	if (fake_check > 0 || num_check == 0)
+		return (-1);
+	if (num_check > 0)
+		return (0);
+	return (0);
+}
 // ~~~~~~~~~~ end of verifying three tab , one argument tags ! 
 
 int		verify_line(t_env *e, char *line)
@@ -362,11 +440,11 @@ int		verify_line(t_env *e, char *line)
 			else if (e->str_count == 1)
 			{
 				if ((ret_tmp = verifyanglebrackets_one(e)) == -1)
-					return (17); // this is done ~
-				// if ((ret_tmp = verifyvocab_one(e, split_test)) == -1) // pick up here ~*
-				// 	return (14);
-				// if ((ret_tmp = verifyargs_one(e, split_test)) == -1)
-				// 	return (18);
+					return (17);
+				if ((ret_tmp = verifyvocab_one(e)) == -1) // pick up here ~*
+					return (14);
+				if ((ret_tmp = verifyargs_one(e)) != 0)
+					return (18);
 			}
 			else
 				return (17);

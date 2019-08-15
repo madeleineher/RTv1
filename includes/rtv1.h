@@ -191,6 +191,9 @@ typedef struct		s_parser
 	int				status;
 	int				set_one;
 	int				set_two;
+	int				i;
+	int				j;
+	int				k;
 }					t_parser;
 
 typedef struct		s_env
