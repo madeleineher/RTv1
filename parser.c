@@ -81,7 +81,7 @@ int		extract_status(t_env *e, char **strings)
 	if (ft_strcmp("status", strings[1]) != 0)
 		return (14);
 	if (ft_strcmp("=", strings[2]) != 0)
-		return (14);
+		return (15);
 	if (ft_strcmp("\"basic\">", strings[3]) == 0)
 		e->p.status = 1;
 	else if (ft_strcmp("\"extra\">", strings[3]) == 0)
@@ -94,7 +94,7 @@ int		extract_status(t_env *e, char **strings)
 int		verifyvocab_three(t_env *e, char **split)
 {
 	/*
-		makes sure that the vocan in a string split with three strings has matching
+		makes sure that the vocab in a string split with three strings has matching
 		and valid vocabulary in the xml tags
 	*/
 	int		end1;
@@ -109,7 +109,7 @@ int		verifyvocab_three(t_env *e, char **split)
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 15)
+		while (++e->p.voc_i < 17)
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
 	free(e->p.strone);
@@ -156,7 +156,6 @@ int		verifyendings_three(char **split_test)
 		checks that the endings for the first two values in a characteristic with three 
 		values end with commas
 	*/
-
 	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
 		return (-1);
 	if ((ft_strclen(split_test[1], ',') + 1) != ft_strlen(split_test[1]))
@@ -183,7 +182,7 @@ int		verifyargs_three_numbers(char *string, int letter)
 		if (ft_isdigit(string[i]) == 0)
 			fake_check++;
 	}
-	printf("fake : [%d] - num : [%d]\n", fake_check, num_check);
+	// printf("fake : [%d] - num : [%d]\n", fake_check, num_check);
 	if (fake_check > 0 || num_check == 0)
 		return (-1);
 	if (num_check > 0)
@@ -198,7 +197,6 @@ int		verifyargs_three(t_env *e, char **split_test)
 		for example : <position>10, 30, 40</position
 		position has three values	
 	*/
-	(void)e;
 	int		comma; // ?
 	int		len1;
 	int		num_check;
@@ -215,7 +213,7 @@ int		verifyargs_three(t_env *e, char **split_test)
 		return (19);
 	e->p.strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '>') + 1, \
 		(ft_strclen(split_test[0], ',') - ft_strclen(split_test[0], '>')));
-	printf("string : [%s]\n", e->p.strone);
+	// printf("string : [%s]\n", e->p.strone);
 	if ((verifyargs_three_numbers(e->p.strone, ',') != 0))
 		return (18);
 	if ((verifyargs_three_numbers(split_test[1], ',') != 0))
@@ -327,7 +325,7 @@ int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
 	return (0);
 }
 
-// verifying three tab , one argument tags here ~~~~
+// verifying three tab , one argument tags here ~~~~~~~~~~~~~~
 int		verifyanglebrackets_one(t_env *e)
 {
 	int		endone;
@@ -353,6 +351,8 @@ int		verifyanglebrackets_one(t_env *e)
 	}
 	if (endone != 2 || endtwo != 2)
 		return (-1);
+	free(e->p.tmp);
+	e->p.tmp = NULL;
 	return (0);
 }
 
@@ -371,7 +371,7 @@ int		verifyvocab_one(t_env *e)
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 15) // could be seg faulting here ...
+		while (++e->p.voc_i < 17) // could be seg faulting here ...
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
 	free(e->p.strone);
@@ -408,6 +408,160 @@ int		verifyargs_one(t_env *e)
 }
 // ~~~~~~~~~~ end of verifying three tab , one argument tags ! 
 
+// VERIFICATION OF SPHERE, CONE, CYLINDER, PLANE ++++++++++++++++++++++
+
+int		verifyobjecttags_openings(t_env *e, char **split)
+{
+	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
+	// printf("objects OPENING ++++> [%s]\n", e->p.tmp);
+	if (ft_strcmp("sphere", e->p.tmp) == 0)
+	{
+		e->p_obj.sphere += 1;
+		e->p.current_shape = 0;
+		if (ft_iseven(e->p_obj.sphere) == 0)
+			return (30);
+	}
+	else if (ft_strcmp("cone", e->p.tmp) == 0)
+	{
+		e->p_obj.cone += 1;
+		e->p.current_shape = 1;
+		if (ft_iseven(e->p_obj.cone) == 0)
+			return (31);
+	}
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+	{
+		e->p_obj.cylinder += 1;
+		e->p.current_shape = 2;
+		if (ft_iseven(e->p_obj.cylinder) == 0)
+			return (32);
+	}
+	else if (ft_strcmp("plane", e->p.tmp) == 0)
+	{
+		e->p_obj.plane += 1;
+		e->p.current_shape = 3;
+		if (ft_iseven(e->p_obj.plane) == 0)
+			return (33);
+	}
+	else
+		return (20);
+	return (0);
+}
+
+int		checkforopenobjecttags(t_env *e)
+{
+	/*
+		checks to see if there is conflicting object tags
+		for example if a cone is interferring with a sylinder tag.
+	*/
+	if (ft_strcmp("sphere", e->p.tmp) == 0)
+	{
+		if ((ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.cylinder) == -1 || ft_iseven(e->p_obj.plane) == -1) \
+			&& (e->p_obj.plane != 0 && e->p_obj.cylinder != 0 && e->p_obj.cone != 0))
+			return (-1);
+	}
+	else if (ft_strcmp("cone", e->p.tmp) == 0)
+	{
+		if ((ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cylinder) == -1 || ft_iseven(e->p_obj.plane) == -1) \
+			&& (e->p_obj.plane != 0 && e->p_obj.cylinder != 0 && e->p_obj.sphere != 0))
+			return (-1);
+	}
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+	{
+		if ((ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.plane) == -1) \
+			&& (e->p_obj.plane != 0 && e->p_obj.sphere != 0 && e->p_obj.cone != 0))
+			return (-1);
+	}
+	else if (ft_strcmp("plane", e->p.tmp) == 0)
+	{
+		if ((ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.cylinder) == -1) \
+			&& (e->p_obj.sphere != 0 && e->p_obj.cylinder != 0 && e->p_obj.cone != 0))
+			return (-1);
+	}
+	return (0);
+}
+
+int		verifyobjecttags_closings(t_env *e, char *split)
+{
+	e->p.tmp = ft_strsub(split, 4, (ft_strlen(split) - 5));
+	if (ft_strcmp("sphere", e->p.tmp) == 0)
+	{
+		open_close(&e->p_obj.sphere);
+		if (ft_iseven(e->p_obj.sphere) == -1)
+			return (34);
+		if ((checkforopenobjecttags(e)) == -1)
+			return (41);
+	}
+	else if (ft_strcmp("cone", e->p.tmp) == 0)
+	{
+		open_close(&e->p_obj.cone);
+		if (ft_iseven(e->p_obj.cone) == -1)
+			return (35);
+		if ((checkforopenobjecttags(e)) == -1)
+			return (40);
+	}
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+	{
+		open_close(&e->p_obj.cylinder);
+		if (ft_iseven(e->p_obj.cylinder) == -1)
+			return (36);
+		if ((checkforopenobjecttags(e)) == -1)
+			return (39);
+	}
+	else if (ft_strcmp("plane", e->p.tmp) == 0)
+	{
+		open_close(&e->p_obj.plane);
+		printf("hello plane : [%d]\n", e->p_obj.plane);
+		if (ft_iseven(e->p_obj.plane) == -1)
+			return (37);
+		if ((checkforopenobjecttags(e)) == -1)
+			return (38);
+	}
+	else
+		return (20);
+	printf("objects CLOSING int ===> sphere : [%d] cone : [%d] cyn : [%d] plane : [%d]\n", e->p_obj.sphere, e->p_obj.cone, e->p_obj.cylinder, e->p_obj.plane);		
+	return (0);
+}
+
+int		verifyobjecttags_closings_brackets(t_env *e, char *split)
+{
+	if (split[2] != '<' && split[3] != '/' && split[ft_strlen(split) - 1] != '>')
+		return (21);
+	e->p.close_obj_i = -1;
+	e->p.good_obj_brack = 0;
+	e->p.bad_obj_brack = 0;
+	while (split[++e->p.close_obj_i])
+	{
+		if (split[e->p.close_obj_i] == '<' && split[e->p.close_obj_i + 1] == '/')
+			e->p.good_obj_brack++;
+		if (split[e->p.close_obj_i] == '>' && split[e->p.close_obj_i + 1] == '\0')
+			e->p.good_obj_brack++;
+		if (split[e->p.close_obj_i] == '<' && split[e->p.close_obj_i + 1] != '/')
+			e->p.bad_obj_brack++;
+		if (split[e->p.close_obj_i] == '>' && split[e->p.close_obj_i + 1] != '\0')
+			e->p.bad_obj_brack++;
+	}
+	if (e->p.good_obj_brack != 2 || e->p.bad_obj_brack > 0)
+		return (21);
+	return (0);
+}
+
+void	count_shapes(t_env *e, char *split) // just to count my shapes, might not be necessary
+{
+	e->p.tmp = ft_strsub(split, 4, (ft_strlen(split) - 5));
+	if (ft_strcmp("sphere", e->p.tmp) == 0)
+		e->count.spheres++;
+	else if (ft_strcmp("cone", e->p.tmp) == 0)
+		e->count.cones++;
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+		e->count.cylinders++;
+	else if (ft_strcmp("plane", e->p.tmp) == 0)
+		e->count.planes++;
+	free(e->p.tmp);
+	e->p.tmp = NULL;
+}
+
+// +++++++++++++++ END OF VERIFICATION OF SPHERE, CONE, CYLINDER, PLANE
+
 int		verify_line(t_env *e, char *line)
 {
 	char	**split_test;
@@ -416,10 +570,10 @@ int		verify_line(t_env *e, char *line)
 
 	ret_tmp = 0;
 	split_test = ft_strsplit(line, ' ');
+	e->str_count = ft_countstrings(split_test);
 	split_tabless = NULL;
 	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
 	{
-		e->str_count = ft_countstrings(split_test);
 		split_tabless = ft_strtrim(split_test[0]);
 		if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 			return (5);
@@ -441,7 +595,7 @@ int		verify_line(t_env *e, char *line)
 			{
 				if ((ret_tmp = verifyanglebrackets_one(e)) == -1)
 					return (17);
-				if ((ret_tmp = verifyvocab_one(e)) == -1) // pick up here ~*
+				if ((ret_tmp = verifyvocab_one(e)) == -1)
 					return (14);
 				if ((ret_tmp = verifyargs_one(e)) != 0)
 					return (18);
@@ -454,7 +608,54 @@ int		verify_line(t_env *e, char *line)
 		return (4);
 	if (e->p.objects == 1 && e->p.specs == 2 && e->p.scene == 1)
 	{
-		// printf("--->[%s]\n", split_test[0]);
+		split_tabless = ft_strtrim(split_test[0]);
+		if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
+			return (5);
+		if (ft_charfreq(line, '\t') == 2)
+		{
+			if (e->str_count == 4)
+			{
+				if ((ret_tmp = verifyobjecttags_openings(e, split_test)) != 0)//////////// working here !!!!!!!!!!!!!!!!!!!!!!!!!!
+					return (ret_tmp);
+				if ((ret_tmp = two_angle_brackets(e)) != 2) 
+					return (9);
+				if ((ret_tmp = extract_status(e, split_test)) != 0)
+					return (ret_tmp);
+			}
+			else if (e->str_count == 1)
+			{
+				if ((ret_tmp = verifyobjecttags_closings_brackets(e, split_test[0])) != 0)
+					return (ret_tmp);
+				if ((ret_tmp = verifyobjecttags_closings(e, split_test[0])) != 0) // here too !
+					return (ret_tmp);
+				count_shapes(e, split_test[0]);
+			}
+			else if (e->str_count != 1 || e->str_count != 4)
+				return (13);
+		}
+		if (ft_charfreq(line, '\t') == 3)
+		{
+			if (e->str_count == 3)
+			{
+				if ((ret_tmp = verifyanglebrackets_three(e, split_test)) == -1)
+					return (17);
+				if ((ret_tmp = verifyvocab_three(e, split_test)) == -1)
+					return (14);
+				if ((ret_tmp = verifyargs_three(e, split_test)) != 0)
+					return (ret_tmp);
+			}
+			else if (e->str_count == 1)
+			{
+				if ((ret_tmp = verifyanglebrackets_one(e)) == -1)
+					return (17);
+				if ((ret_tmp = verifyvocab_one(e)) == -1)
+					return (14);
+				if ((ret_tmp = verifyargs_one(e)) != 0)
+					return (18);
+			}
+			else
+				return (17);
+		}
 	}
 	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
 		return (4);
@@ -506,8 +707,16 @@ int		last_checks(t_env *e)
 		return(26);
 	if ((ft_iseven(e->spcs.light)) == -1)
 		return(27);
+	if ((ft_iseven(e->p_obj.sphere)) == -1)
+		return(34);
+	if ((ft_iseven(e->p_obj.cone)) == -1)
+		return(35);
+	if ((ft_iseven(e->p_obj.cylinder)) == -1)
+		return(36);
+	if ((ft_iseven(e->p_obj.plane)) == -1)
+		return(37);
 	if (e->spcs.cam != 2 || e->spcs.amb != 2)
-		return (28);
+		return (37);
 	if (e->ret.gnl == -1)
 		return (1);
 	printf("VALID!\n");

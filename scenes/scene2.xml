@@ -5,11 +5,15 @@
 			<direction>20, 60, 30</direction>
 		</cam>
 		<amb status = "basic">
-			<diffusion>30, 34, 69</diffusion>
+			<diffusion>10, 34, 69</diffusion>
 			<reflection>40, 42, 45</reflection>
-			<specvalue>50</specvalue>
-			<specpower>82</specpower>
+			<specvalue>80</specvalue>
+			<specpower>90</specpower>
 		</amb>
+		<light status = "basic">
+			<position>60, 52, 55</position>
+			<intensity>70, 75, 80</intensity>
+		</light>
 		<light status = "basic">
 			<position>60, 52, 55</position>
 			<intensity>70, 75, 80</intensity>
@@ -19,20 +23,37 @@
 		<sphere status = "basic">
 			<center>80</center>
 			<radius>90</radius>
-			<amb>100</amb>
+			<ambient>100</ambient>
 		</sphere>
 		<cylinder status = "basic">
-			<direction>110</direction>
+			<direction>110, 10, 30</direction>
 			<radius>120</radius>
-			<amb>130</amb>
+			<ambient>130</ambient>
 			<axis>140</axis>
 		</cylinder>
 		<cone status = "extra">
 			<direction>150</direction>
 			<center>160</center>
-			<angle>170</angle>
-			<amb>180</amb>
+			<angle>70</angle>
+			<ambient>180</ambient>
 		</cone>
+		<sphere status = "basic">
+			<center>80</center>
+			<radius>90</radius>
+			<ambient>100</ambient>
+		</sphere>
+		<plane status = "extra">
+			<normal>190</normal>
+			<d>200</d>
+			<mat>210</mat>
+		</plane>
+		</plane>
+		</plane>
+		<sphere status = "basic">
+			<center>80</center>
+			<radius>90</radius>
+			<ambient>100</ambient>
+		</sphere>
 		<plane status = "extra">
 			<normal>190</normal>
 			<d>200</d>

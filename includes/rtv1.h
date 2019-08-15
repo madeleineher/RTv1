@@ -171,6 +171,14 @@ typedef struct		s_spec
 	int				light;
 }					t_spec;
 
+typedef struct		s_parseobj // for checking if object shapes are open/closed correctly
+{
+	int				sphere;
+	int				plane;
+	int				cone;
+	int				cylinder;
+}					t_parseobj;
+
 typedef struct		s_parser
 {
 	char			*line;
@@ -194,7 +202,19 @@ typedef struct		s_parser
 	int				i;
 	int				j;
 	int				k;
+	int				close_obj_i;
+	int				good_obj_brack;
+	int				bad_obj_brack;
+	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
 }					t_parser;
+
+typedef struct		s_shape_count // count my shapes
+{
+	int				spheres;
+	int				cones;
+	int				cylinders;
+	int				planes;
+}					t_shape_count;
 
 typedef struct		s_env
 {
@@ -205,9 +225,11 @@ typedef struct		s_env
 	int				i;
 	int				lenfile;
 	char			*vocab_one[4];
-	char			*vocab_two[15];
+	char			*vocab_two[17];
 	int				voc_counter;
+	t_shape_count	count;
 	t_parser		p;
+	t_parseobj		p_obj;
 	t_spec			spcs;
 	t_ret 			ret;
 	t_mlx			w;
