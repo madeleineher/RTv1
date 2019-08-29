@@ -20,7 +20,8 @@ CFLAGS = -Wall -Werror -Wextra -g3 # remove g3 flag
 
 CC = gcc
 
-SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c
+SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c verify_one.c verify_two.c\
+		verify_three.c verify_four.c verify_five.c
 
 OBJS = $(SRCS:.c=.o)
 

@@ -24,6 +24,32 @@ int			quit(t_env *e)
 	return (0);
 }
 
+void		lineless_errors(int i)
+{
+	if (i == 26)
+		ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is missing.");
+	if (i == 27)
+		ft_putendl("Oops ! Looks like there are conflicting light tags.");
+	if (i == 28)
+		ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is/are not closed properly.");
+	if (i == 29)
+		ft_putendl("Oops ! Looks like there are conflicting <light> tags.");
+	if (i == 30)
+		ft_putendl("Oops ! Looks like there are conflicting <sphere> tags.");
+	if (i == 31)
+		ft_putendl("Oops ! Looks like there are conflicting <cone> tags.");
+	if (i == 32)
+		ft_putendl("Oops ! Looks like there are conflicting <cylinder> tags.");
+	if (i == 33)
+		ft_putendl("Oops ! Looks like there are conflicting <plane> tags.");
+	if (i == 34)
+		ft_putendl("Oops ! There are conflicting object closing tags.");
+	if (i == 37)
+		ft_putendl("Oops ! There is a problem with the camera/amb tags.");
+	if (i == 38)
+		ft_putendl("Oops ! There are conflicting object tags.");
+}
+
 int			error(t_env *e, int i)
 {
 	(void)e;
@@ -54,15 +80,15 @@ int			error(t_env *e, int i)
 		if (i == 11)
 			ft_putendl("Oops ! Looks like <amb> is not properly opened/closed.");
 		if (i == 12)
-			ft_putendl("Oops ! Looks like <light> is not properly opened/closed.");
+			ft_putendl("Oops ! Looks like <light> is not properly opened/closed/formatted.");
 		if (i == 13)
 			ft_putendl("Oops ! Looks like the tag is this line is not properly formatted.");
 		if (i == 14)
-			ft_putendl("Oops ! Looks like something is missing/mispelled ~~~~~~*.");
+			ft_putendl("Oops ! Looks like something is missing/mispelled.");
 		if (i == 15)
 			ft_putendl("Oops ! Looks like this line is missing an '=' sign.");
 		if (i == 16)
-			ft_putendl("Oops ! Looks like status is not properly indicated.");
+			ft_putendl("Oops ! Looks like 'status' is not properly indicated.");
 		if (i == 17)
 			ft_putendl("Oops ! Looks like this line has poor formatting.");
 		if (i == 18)
@@ -70,50 +96,15 @@ int			error(t_env *e, int i)
 		if (i == 19)
 			ft_putendl("Oops ! Looks like there is too many/little commas.");
 		if (i == 20)
-			ft_putendl("Oops ! Looks like this object tag is not correct.");
+			ft_putendl("Oops ! Looks like this 'object' tag is not correct.");
 		if (i == 21)
-			ft_putendl("Oops ! Looks like this object tag is not open/closed correctly.");
-		if (i == 22)
-			ft_putendl("Oops ! Looks like this ................");
+			ft_putendl("Oops ! Looks like this 'object' tag is not open/closed correctly.");
 		ft_putstr("The problem lies in line : ");
 		ft_putnbr(e->p.gnl_i);
 		ft_putchar('\n');
 	}
 	if (i > 25)
-	{
-		if (i == 26)
-			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is missing.");
-		if (i == 27)
-			ft_putendl("Oops ! Looks like there are conflicting light tags.");
-		if (i == 28)
-			ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is/are not closed properly.");
-		if (i == 29)
-			ft_putendl("Oops ! Looks like there are conflicting <light> tags.");
-		if (i == 30)
-			ft_putendl("Oops ! Looks like there are conflicting <sphere> tags.");
-		if (i == 31)
-			ft_putendl("Oops ! Looks like there are conflicting <cone> tags.");
-		if (i == 32)
-			ft_putendl("Oops ! Looks like there are conflicting <cylinder> tags.");
-		if (i == 33)
-			ft_putendl("Oops ! Looks like there are conflicting <plane> tags.");
-		if (i == 34)
-			ft_putendl("Oops ! 1");
-		if (i == 35)
-			ft_putendl("Oops ! 2.");
-		if (i == 36)
-			ft_putendl("Oops ! 3");
-		if (i == 37)
-			ft_putendl("Oops ! 4");
-		if (i == 38)
-			ft_putendl("Oops ! i am here 1!");
-		if (i == 39)
-			ft_putendl("Oops ! i am here 2!");
-		if (i == 40)
-			ft_putendl("Oops ! i am here 3!");
-		if (i == 41)
-			ft_putendl("Oops ! i am here 4!");
-	}
+		lineless_errors(i);
 	quit(e);
 	return (0);
 }
@@ -124,7 +115,6 @@ void		set_vocab(t_env *e)
 	e->vocab_one[1] = "cylinder";
 	e->vocab_one[2] = "cone";
 	e->vocab_one[3] = "plane";
-
 	e->vocab_two[0] = "position";
 	e->vocab_two[1] = "direction";
 	e->vocab_two[2] = "diffusion";
@@ -142,6 +132,37 @@ void		set_vocab(t_env *e)
 	e->vocab_two[14] = "radius";
 	e->vocab_two[15] = "ambient"; // correct name ?
 	e->vocab_two[16] = "normal";
+
+	//sphere voc
+	e->sphere_voc[0] = "radius";
+	e->sphere_voc[1] = "center";
+	e->sphere_voc[2] = "diffusion";
+	e->sphere_voc[3] = "reflection";
+	e->sphere_voc[4] = "specpower";
+	e->sphere_voc[5] = "specvalue";
+	//cone voc
+	e->cone_voc[0] = "direction";
+	e->cone_voc[1] = "angle";
+	e->cone_voc[2] = "axispoint";
+	e->cone_voc[3] = "diffusion";
+	e->cone_voc[4] = "reflection";
+	e->cone_voc[5] = "specpower";
+	e->cone_voc[6] = "specvalue";
+	//cyn voc
+	e->cyn_voc[0] = "direction";
+	e->cyn_voc[1] = "angle";
+	e->cyn_voc[2] = "axispoint";
+	e->cyn_voc[3] = "diffusion";
+	e->cyn_voc[4] = "reflection";
+	e->cyn_voc[5] = "specpower";
+	e->cyn_voc[6] = "specvalue";
+	//plane voc
+	e->plane_voc[0] = "normal";
+	e->plane_voc[1] = "d";
+	e->plane_voc[2] = "diffusion";
+	e->plane_voc[3] = "reflection";
+	e->plane_voc[4] = "specpower";
+	e->plane_voc[5] = "specvalue";
 }
 
 int			main(int argc, char **argv)

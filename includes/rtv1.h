@@ -226,7 +226,12 @@ typedef struct		s_env
 	int				lenfile;
 	char			*vocab_one[4];
 	char			*vocab_two[17];
+	char			*sphere_voc[6];
+	char			*plane_voc[6];
+	char			*cone_voc[7];
+	char			*cyn_voc[7];
 	int				voc_counter;
+	int				ret_tmp;
 	t_shape_count	count;
 	t_parser		p;
 	t_parseobj		p_obj;
@@ -248,6 +253,28 @@ int					key_press(int key, t_env *e);
 int					key_release(int key, t_env *e);
 int					quit(t_env *e);
 void				draw_sphere(t_env *e);
+
+//parser for specs
+int				two_tabs_specs(t_env *e, char **split_test, char *split_tabless);
+int				open_close(int *check_me);
+int				extract_status(t_env *e, char **strings);
+int				two_angle_brackets(t_env *e);
+int				twotab_verifications(t_env *e, char **split_test);
+int				globals(t_env *e, char *gnl_line);
+
+
+int		verifyargs_one(t_env *e);
+int		verifyanglebrackets_one(t_env *e);
+int		verifyvocab_one(t_env *e);
+
+int		verifyargs_three(t_env *e, char **split_test);
+int		verifyanglebrackets_three(t_env *e, char **split_test);
+int		verifyvocab_three(t_env *e, char **split);
+
+
+
+// add verify one to makefile and plus 
+
 int					main(int argc, char **argv);
 
 #endif
