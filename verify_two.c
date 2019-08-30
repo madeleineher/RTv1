@@ -36,28 +36,28 @@ int		verifyobjecttags_openings(t_env *e, char **split)
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
 		e->p_obj.sphere += 1;
-		e->p.current_shape = 0;
+		e->p.current_shape = 1;
 		if (ft_iseven(e->p_obj.sphere) == 0)
 			return (30);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
 		e->p_obj.cone += 1;
-		e->p.current_shape = 1;
+		e->p.current_shape = 2;
 		if (ft_iseven(e->p_obj.cone) == 0)
 			return (31);
 	}
 	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		e->p_obj.cylinder += 1;
-		e->p.current_shape = 2;
+		e->p.current_shape = 3;
 		if (ft_iseven(e->p_obj.cylinder) == 0)
 			return (32);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
 		e->p_obj.plane += 1;
-		e->p.current_shape = 3;
+		e->p.current_shape = 4;
 		if (ft_iseven(e->p_obj.plane) == 0)
 			return (33);
 	}
@@ -118,8 +118,55 @@ int		checkforopenobjecttags(t_env *e)
 	return (0);
 }
 
-int		verifyobjecttags_closings(t_env *e, char *split) // ++
+void	reset_shape_atb(t_env *e)
 {
+	e->s_atb.radius = 0;
+	e->s_atb.center = 0;
+	e->s_atb.diffusion = 0;
+	e->s_atb.reflection = 0;
+	e->s_atb.specpower = 0;
+	e->s_atb.specvalue = 0;
+	e->s_atb.rotate = 0;
+	e->s_atb.translate = 0;
+
+	e->c_atb.radius = 0;
+	e->c_atb.center = 0;
+	e->c_atb.diffusion = 0;
+	e->c_atb.reflection = 0;
+	e->c_atb.specpower = 0;
+	e->c_atb.specvalue = 0;
+	e->c_atb.angle = 0;
+	e->c_atb.rotate = 0;
+	e->c_atb.translate = 0;
+	e->c_atb.direction = 0;
+
+	e->y_atb.radius = 0;
+	e->y_atb.center = 0;
+	e->y_atb.diffusion = 0;
+	e->y_atb.reflection = 0;
+	e->y_atb.specpower = 0;
+	e->y_atb.specvalue = 0;
+	e->y_atb.angle = 0;
+	e->y_atb.rotate = 0;
+	e->y_atb.translate = 0;
+	e->y_atb.direction = 0;
+
+	e->p_atb.normal = 0;
+	e->p_atb.d = 0;
+	e->p_atb.diffusion = 0;
+	e->p_atb.reflection = 0;
+	e->p_atb.specpower = 0;
+	e->p_atb.specvalue = 0;
+	e->p_atb.rotate = 0;
+	e->p_atb.translate = 0;
+
+}
+
+int		verifyobjecttags_closings(t_env *e, char *split)
+{
+	int	ret_obj;
+
+	ret_obj = 0;
 	e->p.tmp = ft_strsub(split, 4, (ft_strlen(split) - 5));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
@@ -128,6 +175,9 @@ int		verifyobjecttags_closings(t_env *e, char *split) // ++
 			return (34);
 		if ((checkforopenobjecttags(e)) == -1)
 			return (38);
+		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
+			return (ret_obj);
+		reset_shape_atb(e);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
@@ -136,14 +186,20 @@ int		verifyobjecttags_closings(t_env *e, char *split) // ++
 			return (34);
 		if ((checkforopenobjecttags(e)) == -1)
 			return (38);
+		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
+			return (ret_obj);
+		reset_shape_atb(e);
 	}
-	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0) // here now !
 	{
 		open_close(&e->p_obj.cylinder);
 		if (ft_iseven(e->p_obj.cylinder) == -1)
 			return (34);
 		if ((checkforopenobjecttags(e)) == -1)
 			return (38);
+		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
+			return (ret_obj);
+		reset_shape_atb(e);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
@@ -152,10 +208,13 @@ int		verifyobjecttags_closings(t_env *e, char *split) // ++
 			return (34);
 		if ((checkforopenobjecttags(e)) == -1)
 			return (38);
+		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
+			return (ret_obj);
+		// printf("objects CLOSING int ===> sphere : [%d] cone : [%d] cyn : [%d] plane : [%d]\n", e->p_obj.sphere, e->p_obj.cone, e->p_obj.cylinder, e->p_obj.plane);		
+		reset_shape_atb(e);
 	}
 	else
 		return (20);
-	printf("objects CLOSING int ===> sphere : [%d] cone : [%d] cyn : [%d] plane : [%d]\n", e->p_obj.sphere, e->p_obj.cone, e->p_obj.cylinder, e->p_obj.plane);
 	return (0);
 }
 

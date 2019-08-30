@@ -20,44 +20,15 @@
 		</light>
 	</specs>
 	<objects>
-		<sphere status = "basic">
-			<center>80</center>
-			<radius>90</radius>
-			<ambient>100</ambient>
+		<sphere status = "extra">
+			<radius>100</radius>
+			<center>100</center>
+			<diffusion>100</diffusion>
+			<reflection>100</reflection>
+			<specpower>100</specpower>
+			<specvalue>100</specvalue>
+			<rotate>100</rotate>
+			<translate>100</translate>
 		</sphere>
-		<cylinder status = "basic">
-			<direction>110, 10, 30</direction>
-			<radius>120</radius>
-			<ambient>130</ambient>
-			<axis>140</axis>
-		</cylinder>
-		<cone status = "extra">
-			<direction>150</direction>
-			<center>160</center>
-			<angle>70</angle>
-			<ambient>180</ambient>
-		</cone>
-		<sphere status = "basic">
-			<center>80</center>
-			<radius>90</radius>
-			<ambient>100</ambient>
-		</sphere>
-		<plane status = "extra">
-			<normal>190</normal>
-			<d>200</d>
-			<mat>210</mat>
-		</plane>
-		</plane>
-		</plane>
-		<sphere status = "basic">
-			<center>80</center>
-			<radius>90</radius>
-			<ambient>100</ambient>
-		</sphere>
-		<plane status = "extra">
-			<normal>190</normal>
-			<d>200</d>
-			<mat>210</mat>
-		</plane>
 	</objects>
 </scene>

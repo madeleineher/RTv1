@@ -216,6 +216,58 @@ typedef struct		s_shape_count // count my shapes
 	int				planes;
 }					t_shape_count;
 
+typedef struct		s_sphere_atb
+{
+	int				radius;
+	int				center;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				rotate;
+	int				translate;
+}					t_sphere_atb;
+
+typedef struct		s_cone_atb
+{
+	int				radius;
+	int				center;
+	int				direction;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				angle;
+	int				rotate;
+	int				translate;
+}					t_cone_atb;
+
+typedef struct		s_cyn_atb
+{
+	int				radius;
+	int				center;
+	int				direction;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				angle;
+	int				rotate;
+	int				translate;
+}					t_cyn_atb;
+
+typedef struct		s_pla_atb
+{
+	int				normal;
+	int				d;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				rotate;
+	int				translate;
+}					t_pla_atb;
+
 typedef struct		s_env
 {
 	char			*data;
@@ -225,13 +277,18 @@ typedef struct		s_env
 	int				i;
 	int				lenfile;
 	char			*vocab_one[4];
-	char			*vocab_two[17];
+	char			*vocab_two[18];
 	char			*sphere_voc[6];
 	char			*plane_voc[6];
 	char			*cone_voc[7];
 	char			*cyn_voc[7];
 	int				voc_counter;
 	int				ret_tmp;
+	char			*s_tmp;
+	t_sphere_atb	s_atb;
+	t_cone_atb		c_atb;
+	t_cyn_atb		y_atb;
+	t_pla_atb		p_atb;
 	t_shape_count	count;
 	t_parser		p;
 	t_parseobj		p_obj;
@@ -271,7 +328,8 @@ int		verifyargs_three(t_env *e, char **split_test);
 int		verifyanglebrackets_three(t_env *e, char **split_test);
 int		verifyvocab_three(t_env *e, char **split);
 
-
+int		shapevocab_checker(t_env *e, char **split_test);
+int		shapevocab_checker_partwo(t_env *e);
 
 // add verify one to makefile and plus 
 

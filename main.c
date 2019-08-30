@@ -48,6 +48,48 @@ void		lineless_errors(int i)
 		ft_putendl("Oops ! There is a problem with the camera/amb tags.");
 	if (i == 38)
 		ft_putendl("Oops ! There are conflicting object tags.");
+	if (i == 39)
+		ft_putendl("Oops ! It looks like a 'sphere' object is missing an attribute.");
+	if (i == 40)
+		ft_putendl("Oops ! It looks like a 'sphere' object has too many attributes.");
+	if (i == 41) // basic sphere
+		ft_putendl("Oops ! It looks like a 'sphere' object's status is set to 'basic' but extra parameters were passed.");
+	if (i == 42) // extra sphere
+		ft_putendl("Oops ! It looks like a 'sphere' object's status is set to 'extra' but some parameters are missing.");
+	if (i == 43)
+		ft_putendl("Oops ! It looks like a 'cone' object is missing an attribute.");
+	if (i == 44)
+		ft_putendl("Oops ! It looks like a 'cone' object has too many attributes.");
+	if (i == 45) // basic cone
+		ft_putendl("Oops ! It looks like a 'cone' object's status is set to 'basic' but extra parameters were passed.");
+	if (i == 46) // extra cone
+		ft_putendl("Oops ! It looks like a 'cone' object's status is set to 'extra' but some parameters are missing.");
+	if (i == 47)
+		ft_putendl("Oops ! It looks like a 'cylinder' object is missing an attribute.");
+	if (i == 48)
+		ft_putendl("Oops ! It looks like a 'cylinder' object has too many attributes.");
+	if (i == 49) // basic cylinder
+		ft_putendl("Oops ! It looks like a 'cylinder' object's status is set to 'basic' but extra parameters were passed.");
+	if (i == 50) // extra cylinder
+		ft_putendl("Oops ! It looks like a 'cylinder' object's status is set to 'extra' but some parameters are missing.");
+	if (i == 51)
+		ft_putendl("Oops ! It looks like a 'plane' object is missing an attribute.");
+	if (i == 52)
+		ft_putendl("Oops ! It looks like a 'plane' object has too many attributes.");
+	if (i == 53) // basic plane
+		ft_putendl("Oops ! It looks like a 'plane' object's status is set to 'basic' but extra parameters were passed.");
+	if (i == 54) // extra plane
+		ft_putendl("Oops ! It looks like a 'plane' object's status is set to 'extra' but some parameters are missing.");
+	if (i == 55)
+		ft_putendl("Oops ! It looks like a 'sphere' object was given a wrong attribute.");
+	if (i == 56)
+		ft_putendl("Oops ! It looks like a 'cone' object was given a wrong attribute.");
+	if (i == 57)
+		ft_putendl("Oops ! It looks like a 'cylinder' object was given a wrong attribute.");
+	if (i == 58)
+		ft_putendl("Oops ! It looks like a 'plane' object was given a wrong attribute.");
+	if (i == 59)
+		ft_putendl("Oops ! It looks like not a single object was given.");
 }
 
 int			error(t_env *e, int i)
@@ -115,6 +157,7 @@ void		set_vocab(t_env *e)
 	e->vocab_one[1] = "cylinder";
 	e->vocab_one[2] = "cone";
 	e->vocab_one[3] = "plane";
+
 	e->vocab_two[0] = "position";
 	e->vocab_two[1] = "direction";
 	e->vocab_two[2] = "diffusion";
@@ -132,37 +175,7 @@ void		set_vocab(t_env *e)
 	e->vocab_two[14] = "radius";
 	e->vocab_two[15] = "ambient"; // correct name ?
 	e->vocab_two[16] = "normal";
-
-	//sphere voc
-	e->sphere_voc[0] = "radius";
-	e->sphere_voc[1] = "center";
-	e->sphere_voc[2] = "diffusion";
-	e->sphere_voc[3] = "reflection";
-	e->sphere_voc[4] = "specpower";
-	e->sphere_voc[5] = "specvalue";
-	//cone voc
-	e->cone_voc[0] = "direction";
-	e->cone_voc[1] = "angle";
-	e->cone_voc[2] = "axispoint";
-	e->cone_voc[3] = "diffusion";
-	e->cone_voc[4] = "reflection";
-	e->cone_voc[5] = "specpower";
-	e->cone_voc[6] = "specvalue";
-	//cyn voc
-	e->cyn_voc[0] = "direction";
-	e->cyn_voc[1] = "angle";
-	e->cyn_voc[2] = "axispoint";
-	e->cyn_voc[3] = "diffusion";
-	e->cyn_voc[4] = "reflection";
-	e->cyn_voc[5] = "specpower";
-	e->cyn_voc[6] = "specvalue";
-	//plane voc
-	e->plane_voc[0] = "normal";
-	e->plane_voc[1] = "d";
-	e->plane_voc[2] = "diffusion";
-	e->plane_voc[3] = "reflection";
-	e->plane_voc[4] = "specpower";
-	e->plane_voc[5] = "specvalue";
+	e->vocab_two[17] = "reflection";
 }
 
 int			main(int argc, char **argv)

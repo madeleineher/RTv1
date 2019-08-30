@@ -59,7 +59,7 @@ int		verifyvocab_one(t_env *e)
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 17) // could be seg faulting here ...
+		while (++e->p.voc_i < 18) // could be seg faulting here ...
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
 	free(e->p.strone);
