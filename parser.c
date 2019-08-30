@@ -300,7 +300,8 @@ int		last_checks(t_env *e)
 	return (0);
 }
 
-// need to add verifier for shape requirements ! i.e. it needs to fufill it's vocab neccessary for each shape
+// need to add verifier for specs requirements ! i.e. it needs to fufill it's vocab neccessary for each type of spec
+// need to accept floats ! 
 
 int		parser(t_env *e, int fd)
 {
