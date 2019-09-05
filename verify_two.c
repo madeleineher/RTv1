@@ -29,7 +29,7 @@ void	count_shapes(t_env *e, char *split)
 	e->p.tmp = NULL;
 }
 
-int		verifyobjecttags_openings(t_env *e, char **split)
+int		verifyobjecttags_openings(t_env *e, char **split) // /! string needs to be freed before returning error message /!
 {
 	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
@@ -37,31 +37,51 @@ int		verifyobjecttags_openings(t_env *e, char **split)
 		e->p_obj.sphere += 1;
 		e->p.current_shape = 1;
 		if (ft_iseven(e->p_obj.sphere) == 0)
+		{
+			free(e->p.tmp);
+			e->p.tmp = NULL;
 			return (30);
+		}
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
 		e->p_obj.cone += 1;
 		e->p.current_shape = 2;
 		if (ft_iseven(e->p_obj.cone) == 0)
+		{
+			free(e->p.tmp);
+			e->p.tmp = NULL;
 			return (31);
+		}
 	}
 	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		e->p_obj.cyn += 1;
 		e->p.current_shape = 3;
 		if (ft_iseven(e->p_obj.cyn) == 0)
+		{
+			free(e->p.tmp);
+			e->p.tmp = NULL;
 			return (32);
+		}
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
 		e->p_obj.plane += 1;
 		e->p.current_shape = 4;
 		if (ft_iseven(e->p_obj.plane) == 0)
+		{
+			free(e->p.tmp);
+			e->p.tmp = NULL;
 			return (33);
+		}
 	}
 	else
+	{
+		free(e->p.tmp);
+		e->p.tmp = NULL;
 		return (20);
+	}
 	free(e->p.tmp);
 	e->p.tmp = NULL;
 	return (0);

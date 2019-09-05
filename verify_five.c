@@ -23,7 +23,6 @@ int		open_close(int *check_me)
 
 int		two_angle_brackets(t_env *e)
 {
-	// checks that there is a pair of brackets for a line with a single tag, ex "<specs>"
 	int	brackets;
 	int	bad_brackets;
 	int	i;
@@ -51,7 +50,6 @@ int		two_angle_brackets(t_env *e)
 
 int		extract_status(t_env *e, char **strings)
 {
-	// checks the status of the spec/object
 	int	i;
 
 	i = 0;
@@ -68,3 +66,55 @@ int		extract_status(t_env *e, char **strings)
 	return (0);
 }
 
+int		verify_tag_to_argument_three(char *string)
+{
+	if (ft_strcmp("direction", string) == 0)
+		return (0);
+	else if (ft_strcmp("axis", string) == 0)
+		return (0);
+	else if (ft_strcmp("center", string) == 0)
+		return (0);
+	else if (ft_strcmp("normal", string) == 0)
+		return (0);
+	else if (ft_strcmp("diffusion", string) == 0)
+		return (0);
+	else if (ft_strcmp("rotate", string) == 0)
+		return (0);
+	else if (ft_strcmp("translate", string) == 0)
+		return (0);
+	else if (ft_strcmp("position", string) == 0)
+		return (0);
+	else if (ft_strcmp("color", string) == 0)
+		return (0);
+	else if (ft_strcmp("intensity", string) == 0)
+		return (0);	
+	else	
+		return (82);
+	return (0);
+}
+
+int		verify_tag_to_argument(t_env *e, char *string, int args)
+{
+	e->p.tmp = ft_strdup(string);
+	if (args == 1)
+	{
+		if (ft_strcmp("radius", string) == 0)
+			return (0);
+		else if (ft_strcmp("angle", string) == 0)
+			return (0);
+		else if (ft_strcmp("d", string) == 0)
+			return (0);
+		else if (ft_strcmp("specpower", string) == 0)
+			return (0);
+		else if (ft_strcmp("specvalue", string) == 0)
+			return (0);
+		else if (ft_strcmp("reflection", string) == 0)
+			return (0);
+		else
+			return (81);
+	}
+	else
+		if ((e->ret_tmp = verify_tag_to_argument_three(string)) != 0)
+			return (e->ret_tmp);
+	return (0);
+}

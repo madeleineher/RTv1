@@ -14,37 +14,37 @@
 
 // verifying three tab , one argument tags here ~~~~~~~~~~~~~~
 
-int		verifyanglebrackets_one(t_env *e) // use for specs
+int		verifyanglebrackets_one(t_env *e)
 {
-	int		endone;
-	int		endtwo;
-	int		i;
-
-	i = -1;
-	endone = 0;
-	endtwo = 0;
-	e->p.tmp = ft_strtrim(e->p.gnl_line);
-	if (e->p.tmp[0] != '<' || e->p.tmp[ft_strlen(e->p.tmp) - 1] != '>')
-		return (-1);
-	while (e->p.tmp[++i])
+	e->p.l = -1;
+	e->p.e1 = 0;
+	e->p.e2  = 0;
+	e->p.t = ft_strtrim(e->p.gnl_line);
+	if (e->p.t[0] != '<' || e->p.t[ft_strlen(e->p.t) - 1] != '>')
 	{
-		if (e->p.tmp[i] == '<' && i == 0)
-			endone++;
-		if (e->p.tmp[i] == '>' && e->p.tmp[i + 1] != '\0' && endone == 1)
-			endone++;
-		if (e->p.tmp[i] == '<' && e->p.tmp[i + 1] == '/')
-			endtwo++;
-		if (e->p.tmp[i] == '>' && e->p.tmp[i + 1] == '\0' && endtwo == 1)
-			endtwo++;
-	}
-	if (endone != 2 || endtwo != 2)
+		free(e->p.t);
+		e->p.t = NULL;
 		return (-1);
-	free(e->p.tmp);
-	e->p.tmp = NULL;
+	}
+	while (e->p.t[++e->p.l])
+	{
+		if (e->p.t[e->p.l] == '<' && e->p.l == 0)
+			e->p.e1 ++;
+		if (e->p.t[e->p.l] == '>' && e->p.t[e->p.l + 1] != '\0' && e->p.e1 == 1)
+			e->p.e1 ++;
+		if (e->p.t[e->p.l] == '<' && e->p.t[e->p.l + 1] == '/')
+			e->p.e2 ++;
+		if (e->p.t[e->p.l] == '>' && e->p.t[e->p.l + 1] == '\0' && e->p.e2 == 1)
+			e->p.e2 ++;
+	}
+	if (e->p.e1 != 2 || e->p.e2 != 2)
+		return (-1);
+	free(e->p.t);
+	e->p.t = NULL;
 	return (0);
 }
 
-int		verifyvocab_one(t_env *e) // use for specs
+int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning error message /!
 {
 	e->p.voc_i = -1;
 	e->p.voc_check = -1;
@@ -59,9 +59,12 @@ int		verifyvocab_one(t_env *e) // use for specs
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 18) // could be seg faulting here ... ! ! !
+		while (++e->p.voc_i < 16) // could be seg faulting here ... ! ! !
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
+	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 1)) != 0) // working HERE !!!!!!!!!!!!!!
+		return (e->ret_tmp);
+	// printf("one - ret : [%d]\n", e->ret_tmp);	
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);
@@ -69,7 +72,10 @@ int		verifyvocab_one(t_env *e) // use for specs
 	return (e->p.voc_check);
 }
 
-int		verifyargs_one(t_env *e) // use for specs
+// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
+// need to accept 1.0 and 1.0f ( 'f' stand for floats )
+// need to have a number check for certain arguments that take three args
+int		verifyargs_one(t_env *e)
 {
 	int		i;
 	int		num_check;
@@ -92,5 +98,37 @@ int		verifyargs_one(t_env *e) // use for specs
 		return (-1);
 	if (num_check > 0)
 		return (0);
+	return (0);
+}
+
+int		globals(t_env *e, char *gnl_line)
+{
+	int 	ret_tmp = 0;
+	int		ret_tabs = 0;
+	char	*tabless;
+
+	e->p.skip = 0;
+	ret_tabs = ft_charfreq(gnl_line, '\t');
+	tabless = ft_strtrim(gnl_line);
+	if ((ft_strcmp("<scene>", tabless) == 0) && ret_tabs == 0)
+		e->p.scene += 1;
+	if (ft_strcmp("</scene>", tabless) == 0 && ret_tabs == 0)
+		e->p.scene += 1;
+	if (ft_strcmp("<specs>", tabless) == 0 && ret_tabs == 1)
+	{
+		e->p.specs += 1;
+		e->p.skip = 1;
+	}
+	if (ft_strcmp("</specs>", tabless) == 0 && ret_tabs == 1)
+		if ((ret_tmp = open_close(&e->p.specs)) != 0)
+			return (ret_tmp);
+	if (ft_strcmp("<objects>", tabless) == 0 && ret_tabs == 1)
+	{
+		e->p.objects += 1;
+		e->p.skip = 1;
+	}
+	if (ft_strcmp("</objects>", tabless) == 0 && ret_tabs == 1)
+		if ((ret_tmp = open_close(&e->p.objects)) != 0)
+			return (ret_tmp);
 	return (0);
 }

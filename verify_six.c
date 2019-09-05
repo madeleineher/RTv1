@@ -112,7 +112,7 @@ int		shapevocab_checker_plane(t_env *e)
 	return (0);
 }
 
-int		shapevocab_checker(t_env *e, char **split_test)
+int		shapevocab_checker(t_env *e, char **split_test) // /! string needs to be freed before returning error message /!
 {
 	int	ret;
 

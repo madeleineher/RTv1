@@ -42,8 +42,8 @@ int		threetab_verifications(t_env *e, char **split_test)
 	{
 		if ((e->ret_tmp = verifyanglebrackets_three(e, split_test)) == -1)
 			return (17);
-		if ((e->ret_tmp = verifyvocab_three(e, split_test)) == -1)
-			return (14);
+		if ((e->ret_tmp = verifyvocab_three(e, split_test)) != 0)//== -1)
+			return (e->ret_tmp);
 		if ((e->ret_tmp = verifyargs_three(e, split_test)) != 0)
 			return (e->ret_tmp);
 	}
@@ -51,8 +51,8 @@ int		threetab_verifications(t_env *e, char **split_test)
 	{
 		if ((e->ret_tmp = verifyanglebrackets_one(e)) == -1)
 			return (17);
-		if ((e->ret_tmp = verifyvocab_one(e)) == -1)
-			return (14);
+		if ((e->ret_tmp = verifyvocab_one(e)) != 0)//-1)
+			return (e->ret_tmp);
 		if ((e->ret_tmp = verifyargs_one(e)) != 0)
 			return (18);
 	}
@@ -63,7 +63,6 @@ int		threetab_verifications(t_env *e, char **split_test)
 
 int		verify_line_seg_one(t_env *e, char **split_test, char *line)
 {
-	// tabless = ft_strtrim(split_test[0]);
 	if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 		return (5);
 	if (ft_charfreq(line, '\t') == 2)
@@ -158,9 +157,8 @@ int		last_checks(t_env *e)
 int		parser(t_env *e, int fd)
 {
 	t_ll	*head;
+	//t_parser *p; // create parser structure here ! and then send parser everywhere !
 
-	//1.0
-	//1.0f
 	head = NULL;
 	while ((e->ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{

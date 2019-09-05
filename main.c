@@ -24,7 +24,7 @@ int			quit(t_env *e)
 	return (0);
 }
 
-void		lineless_errors(int i)
+void		lineless_errors(t_env *e, int i)
 {
 	if (i == 26)
 		ft_putendl("Oops ! Looks like <cam>/<amb>/<light> is missing.");
@@ -112,8 +112,25 @@ void		lineless_errors(int i)
 		ft_putendl("Oops ! It looks like a 'light' spec status is set to 'basic' but extra parameters were passed.");
 	if (i == 70)
 		ft_putendl("Oops ! It looks like a 'light' spec status is set to 'extra' but some parameters are missing.");
-
-
+	if (i > 80)
+	{
+		if (i == 81)
+		{
+			ft_putstr("Oops ! It looks like [");
+			ft_putstr(e->p.tmp);
+			ft_putendl("] was given the incorrect number of arguments. This attribute takes three parameters.");
+			// e->p.tmp
+		}
+		if (i == 82)
+		{
+			ft_putstr("Oops ! It looks like [");
+			ft_putstr(e->p.tmp);
+			ft_putendl("] was given the incorrect number of arguments. This attribute takes one parameter.");
+		}
+		ft_putstr("The problem lies in line : ");
+		ft_putnbr(e->p.gnl_i);
+		ft_putchar('\n');
+	}
 }
 
 int			error(t_env *e, int i)
@@ -170,7 +187,7 @@ int			error(t_env *e, int i)
 		ft_putchar('\n');
 	}
 	if (i > 25)
-		lineless_errors(i);
+		lineless_errors(e, i);
 	quit(e);
 	return (0);
 }
@@ -182,24 +199,22 @@ void		set_vocab(t_env *e)
 	e->vocab_one[2] = "cone";
 	e->vocab_one[3] = "plane";
 
-	e->vocab_two[0] = "position";
-	e->vocab_two[1] = "direction";
-	e->vocab_two[2] = "diffusion";
-	e->vocab_two[3] = "reflection";
-	e->vocab_two[4] = "specvalue";
-	e->vocab_two[5] = "specpower";
-	e->vocab_two[6] = "intensity";
-	e->vocab_two[7] = "translate";
-	e->vocab_two[8] = "rotate";
-	e->vocab_two[9] = "angle";
-	e->vocab_two[10] = "color";
-	e->vocab_two[11] = "center";
-	e->vocab_two[12] = "d";
-	e->vocab_two[13] = "mat";
-	e->vocab_two[14] = "radius";
-	e->vocab_two[15] = "ambient"; // correct name ?
-	e->vocab_two[16] = "normal";
-	e->vocab_two[17] = "reflection";
+	e->vocab_two[0] = "position"; //
+	e->vocab_two[1] = "direction"; //
+	e->vocab_two[2] = "diffusion"; //
+	e->vocab_two[3] = "reflection"; //
+	e->vocab_two[4] = "specvalue"; 
+	e->vocab_two[5] = "specpower"; //
+	e->vocab_two[6] = "intensity"; 
+	e->vocab_two[7] = "translate"; //
+	e->vocab_two[8] = "rotate"; //
+	e->vocab_two[9] = "angle"; //
+	e->vocab_two[10] = "color"; //
+	e->vocab_two[11] = "center"; //
+	e->vocab_two[12] = "d"; //
+	e->vocab_two[13] = "radius"; //
+	e->vocab_two[14] = "ambient"; // -- correct name ? // need this ?????
+	e->vocab_two[15] = "normal"; //
 }
 
 int			main(int argc, char **argv)
@@ -215,7 +230,7 @@ int			main(int argc, char **argv)
 	if (fd < 0)
 		error(&e, 1);
 	set_vocab(&e);
-	if ((ret = parser(&e, fd)) != 0)
+	if ((ret = parser(&e, fd)) != 0) // parser
 		error(&e, ret);
 	if (!(e.w.mp = mlx_init()) \
 			|| !(e.w.wp = mlx_new_window(e.w.mp, WIDTH, HEIGHT, "RTv1")))

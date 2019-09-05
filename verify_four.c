@@ -14,12 +14,8 @@
 
 // --------------- three tabs , THREE AGRS ---------------
 
-int		verifyvocab_three(t_env *e, char **split)
+int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed before returning error message /!
 {
-	/*
-		makes sure that the vocab in a string split with three strings has matching
-		and valid vocabulary in the xml tags
-	*/
 	int		end1;
 	int		end2;
 
@@ -32,9 +28,13 @@ int		verifyvocab_three(t_env *e, char **split)
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 18)
+		while (++e->p.voc_i < 16)
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
+	// add verifiacation of correct number of arguments // needs to be done against ONE ARGS version
+	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 3)) != 0) // WOKRING HERE !!!
+		return (e->ret_tmp);
+	// printf("three - ret : [%d]\n", e->ret_tmp);
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);
@@ -69,7 +69,7 @@ int		verifyanglebrackets_three(t_env *e, char **split_test)
 	return (0);
 }
 
-int		verifyendings_three(char **split_test) 	 // used globally
+int		verifyendings_three(char **split_test)
 {
 	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
 		return (-1);
@@ -109,11 +109,6 @@ int		verifyargs_three_numbers(char *string, int letter)
 
 int		verifyargs_three(t_env *e, char **split_test)  
 {
-	/* 
-		checks the validity of arguments for those with three given characteristics
-		for example : <position>10, 30, 40</position
-		position has three values	
-	*/
 	int		comma;
 	int		len1;
 

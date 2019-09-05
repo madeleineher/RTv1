@@ -189,6 +189,7 @@ typedef struct		s_parser
 	int				gnl_i;
 	char			*gnl_line;
 	char			*tmp;
+	char			*t;
 	char			*current_tag;
 	int				skips;
 	int				scene;
@@ -208,6 +209,9 @@ typedef struct		s_parser
 	int				good_obj_brack;
 	int				bad_obj_brack;
 	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
+	int				e1;
+	int				e2;
+	int				l;
 }					t_parser;
 
 typedef struct		s_shape_count // count my shapes
@@ -274,9 +278,9 @@ typedef struct		s_pla_atb
 
 typedef struct		s_cam_atb
 {
-	int				position; // 0, 0, 0 // no rules
+	int				position;
 	int				direction; // vector, can be all negative but not all 0, 0, 0
-	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
+	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 (max)! -360 (min)
 	int				translation; // 0, 0, 0 // no rules add translation to position
 }					t_cam_atb;
 
@@ -289,7 +293,7 @@ typedef struct		s_amb_atb
 typedef struct		s_lig_atb
 {
 	int				position;
-	int				intensity;
+	int				intensity; // 0 (min) to 255 (max)
 	int				rotate; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
 	int				translate; // 0, 0, 0 // no rules add translation to position
 }					t_lig_atb;
@@ -303,7 +307,7 @@ typedef struct		s_env
 	int				i;
 	int				lenfile;
 	char			*vocab_one[4];
-	char			*vocab_two[18];
+	char			*vocab_two[16];
 	char			*sphere_voc[6];
 	char			*plane_voc[6];
 	char			*cone_voc[7];
@@ -340,30 +344,25 @@ int					key_release(int key, t_env *e);
 int					quit(t_env *e);
 void				draw_sphere(t_env *e);
 
-//parser for specs
-int				two_tabs_specs(t_env *e, char **split_test);
-int				open_close(int *check_me);
-int				extract_status(t_env *e, char **strings);
-int				two_angle_brackets(t_env *e);
-int				twotab_verifications(t_env *e, char **split_test);
-int				globals(t_env *e, char *gnl_line);
-
-
-int		verifyargs_one(t_env *e);
-int		verifyanglebrackets_one(t_env *e);
-int		verifyvocab_one(t_env *e);
-
-int		verifyargs_three(t_env *e, char **split_test);
-int		verifyanglebrackets_three(t_env *e, char **split_test);
-int		verifyvocab_three(t_env *e, char **split);
-
-int		shapevocab_checker(t_env *e, char **split_test);
-int		shapevocab_checker_partwo(t_env *e);
-
-int     verify_spec_atb(t_env *e, char **split_test);
-int		verify_spec_atb_partwo(t_env *e);
-
-// add verify one to makefile and plus 
+//function for parser
+int					two_tabs_specs(t_env *e, char **split_test);
+int					open_close(int *check_me);
+int					extract_status(t_env *e, char **strings);
+int					two_angle_brackets(t_env *e);
+int					twotab_verifications(t_env *e, char **split_test);
+int					globals(t_env *e, char *gnl_line);
+int					verifyargs_one(t_env *e);
+int					verifyanglebrackets_one(t_env *e);
+int					verifyvocab_one(t_env *e);
+int					verifyargs_three(t_env *e, char **split_test);
+int					verifyanglebrackets_three(t_env *e, char **split_test);
+int					verifyvocab_three(t_env *e, char **split);
+int					shapevocab_checker(t_env *e, char **split_test);
+int					shapevocab_checker_partwo(t_env *e);
+int					verify_spec_atb(t_env *e, char **split_test);
+int					verify_spec_atb_partwo(t_env *e);
+int					verify_tag_to_argument(t_env *e, char *string, int args); // verify_five ~*
+void				reset_spec_atb(t_env *e);
 
 int					main(int argc, char **argv);
 
