@@ -13,7 +13,7 @@
 
 #include "includes/rtv1.h"
 
-int		open_close(int *check_me)  	 // used globally
+int		open_close(int *check_me)
 {
 	if (*check_me == 0)
 		return (7);
@@ -21,7 +21,7 @@ int		open_close(int *check_me)  	 // used globally
 	return (0);
 }
 
-int		two_angle_brackets(t_env *e)  	 // used globally
+int		two_angle_brackets(t_env *e)
 {
 	// checks that there is a pair of brackets for a line with a single tag, ex "<specs>"
 	int	brackets;

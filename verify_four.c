@@ -44,10 +44,6 @@ int		verifyvocab_three(t_env *e, char **split)
 
 int		verifyanglebrackets_three(t_env *e, char **split_test)
 {
-	/*
-		makes sure that there are two pairs of brackets in 
-		a string split into three strings (0, 1, 2)
-	*/
 	int		i;
 
 	i = -1;
@@ -75,10 +71,6 @@ int		verifyanglebrackets_three(t_env *e, char **split_test)
 
 int		verifyendings_three(char **split_test) 	 // used globally
 {
-	/*
-		checks that the endings for the first two values in a characteristic with three 
-		values end with commas
-	*/
 	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
 		return (-1);
 	if ((ft_strclen(split_test[1], ',') + 1) != ft_strlen(split_test[1]))
@@ -86,6 +78,9 @@ int		verifyendings_three(char **split_test) 	 // used globally
 	return (0);
 }
 
+// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
+// need to accept 1.0 and 1.0f ( 'f' stand for floats )
+// need to have a number check for certain arguments that take three args
 int		verifyargs_three_numbers(char *string, int letter)
 {
 	/*

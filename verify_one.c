@@ -44,101 +44,114 @@ int		globals(t_env *e, char *gnl_line)
 	return (0);
 }
 
-int		verify_cam_amb(t_env *e, char **split_test, char *split_tabless)
-{
-	int	ret;
+// int		verify_cam_amb(t_env *e, char **split_test, char *split_tabless)
+// {
+// 	(void)split_test;
+// 	int	ret;
 
-	ret = 0;
-	if (e->p.spec_order == 0)
-	{
-		if (ft_strcmp("<cam", split_tabless) != 0)
-			return (10);
-		e->spcs.cam = 1;
-		if ((ret = extract_status(e, split_test)) != 0)
-			return (ret);
-		e->cam.status = e->p.status;
-		e->p.current_tag = "cam";
-	}
-	if (e->p.spec_order == 1)
-	{	
-		if (ft_strcmp("<amb", split_tabless) != 0)
-			return (11);
-		e->spcs.amb = 1;
-		if ((ret = extract_status(e, split_test)) != 0)
-			return (ret);
-		e->amb.status = e->p.status;
-		e->p.current_tag = "amb";
-	}
-	return (ret);
-}
+// 	ret = 0;
+// 	if (e->p.spec_order == 0)
+// 	{
+// 		// printf("string now : [%s]\n", split_test[0]);
+// 		// if (ft_strcmp("<cam>", split_tabless) != 0)
+// 			// return (10);
+// 		e->spcs.cam = 1;
+// 		// if ((ret = extract_status(e, split_test)) != 0)
+// 			// return (ret);
+// 		e->cam.status = e->p.status;
+// 		e->p.current_tag = "cam";
+// 	}
+// 	if (e->p.spec_order == 1)
+// 	{	
+// 		if (ft_strcmp("<amb>", split_tabless) != 0)
+// 			return (11);
+// 		e->spcs.amb = 1;
+// 		// if ((ret = extract_status(e, split_test)) != 0)
+// 			// return (ret);
+// 		e->amb.status = e->p.status;
+// 		e->p.current_tag = "amb";
+// 	}
+// 	return (ret);
+// }
 
-int		verify_light(t_env *e, char **split_test, char *split_tabless)
-{
-	int	ret;
+// int		verify_light(t_env *e, char **split_test, char *split_tabless)
+// {
+// 	int	ret;
 
-	ret = 0;
-	if (ft_strcmp("<light", split_tabless) != 0)
-		return (12);
-	e->spcs.light += 1;
-	if (ft_iseven(e->spcs.light) == 0)
-		return (12);
-	if ((ret = extract_status(e, split_test)) != 0)
-		return (ret);
-	e->p.current_tag = "light";
-	return (ret);
-}
+// 	ret = 0;
+// 	if (ft_strcmp("<light", split_tabless) != 0)
+// 		return (12);
+// 	e->spcs.light += 1;
+// 	if (ft_iseven(e->spcs.light) == 0)
+// 		return (12);
+// 	if ((ret = extract_status(e, split_test)) != 0)
+// 		return (ret);
+// 	return (ret);
+// }
 
-int		verify_closing_tags_specs(t_env *e, char *split_tabless)
-{
-	int		ret;
+// int		verify_closing_tags_specs(t_env *e, char *split_tabless)
+// {
+// 	int		ret;
 
-	ret = 0;
-	if (e->p.spec_order == 1)
-	{
-		if ((ret = ft_strcmp("</cam>", split_tabless)) != 0)
-			return (10);
-		open_close(&e->spcs.cam);
-	}
-	if (e->p.spec_order == 2)
-	{
-		if ((ret = ft_strcmp("</amb>", split_tabless)) != 0)
-			return (11);
-		open_close(&e->spcs.amb);
-	}
-	if (e->p.spec_order >= 3)
-	{
-		if ((ret = ft_strcmp("</light>", split_tabless)) != 0)
-			return (12);
-		open_close(&e->spcs.light);
-		if (ft_iseven(e->spcs.light) == -1)
-			return (29);
-	}
-	return (0);
-}
+// 	ret = 0;
+// 	if (e->p.spec_order == 1)
+// 	{
+// 		printf("string now : [%s]\n", split_tabless);
+// 		if ((ret = ft_strcmp("</cam>", split_tabless)) != 0)
+// 			return (10);
+// 		open_close(&e->spcs.cam);
+// 		// verify whether all attributes are present for each spec here !
+// 		// reset vals here ! 
+// 		//reset_spec_atb(e);
+// 	}
+// 	if (e->p.spec_order == 2)
+// 	{
+// 		if ((ret = ft_strcmp("</amb>", split_tabless)) != 0)
+// 			return (11);
+// 		open_close(&e->spcs.amb);
+// 		// verify whether all attributes are present for each spec here !
+// 		// reset vals here ! 
+// 		//reset_spec_atb(e);
+// 	}
+// 	if (e->p.spec_order >= 3)
+// 	{
+// 		if ((ret = ft_strcmp("</light>", split_tabless)) != 0)
+// 			return (12);
+// 		open_close(&e->spcs.light);
+// 		if (ft_iseven(e->spcs.light) == -1)
+// 			return (29);
+// 		// verify whether all attributes are present for each spec here !
+// 		// reset vals here ! 
+// 		//reset_spec_atb(e);
+// 	}
+// 	return (0);
+// }
 
-int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
-{
-	int	ret_tmp;
+// int		two_tabs_specs(t_env *e, char **split_test, char *split_tabless)
+// {
+// 	int	ret_tmp;
 
-	ret_tmp = 0;
-	if ((ret_tmp = two_angle_brackets(e)) != 2)
-		return (9);
-	if (e->str_count == 4)
-	{
-		if (e->p.spec_order == 0 || e->p.spec_order == 1)
-			if ((ret_tmp = verify_cam_amb(e, split_test, split_tabless)) != 0)
-				return (ret_tmp);
-		if (e->p.spec_order >= 2)
-			if ((ret_tmp = verify_light(e, split_test, split_tabless)) != 0)
-				return (ret_tmp);
-	}
-	else if (e->str_count == 1)
-	{
-		if ((ret_tmp = verify_closing_tags_specs(e, split_tabless)) != 0)
-			return (ret_tmp);
-	}			
-	else if (e->str_count != 1 || e->str_count != 4)
-		return (13);
-	e->p.spec_order += (e->str_count == 4 ? 1 : 0);
-	return (0);
-}
+// 	ret_tmp = 0;
+// 	if ((ret_tmp = two_angle_brackets(e)) != 2)
+// 		return (9);
+// 	if (ft_strclen(e->p.gnl_line, '/') == 0) // this was fucking everything
+// 	{
+// 		// printf("(1). int : [%zu] =+++ str [%s]\n", ft_strclen(e->p.gnl_line, '/'), e->p.gnl_line);
+// 		if (e->p.spec_order == 0 || e->p.spec_order == 1)
+// 			if ((ret_tmp = verify_cam_amb(e, split_test, split_tabless)) != 0)
+// 				return (ret_tmp);
+// 		if (e->p.spec_order >= 2)
+// 			if ((ret_tmp = verify_light(e, split_test, split_tabless)) != 0)
+// 				return (ret_tmp);
+// 	}
+// 	else if (ft_strclen(e->p.gnl_line, '/') > 0)
+// 	{
+// 		// printf("(2). int : [%zu] =+++ str [%s]\n", ft_strclen(e->p.gnl_line, '/'), e->p.gnl_line);
+// 		if ((ret_tmp = verify_closing_tags_specs(e, split_tabless)) != 0)
+// 			return (ret_tmp);
+// 	}			
+// 	else if (e->str_count != 1 || e->str_count != 4)
+// 		return (13);
+// 	e->p.spec_order += (e->str_count == 4 ? 1 : 0);
+// 	return (0);
+// }

@@ -14,7 +14,7 @@
 
 // verifying three tab , one argument tags here ~~~~~~~~~~~~~~
 
-int		verifyanglebrackets_one(t_env *e)
+int		verifyanglebrackets_one(t_env *e) // use for specs
 {
 	int		endone;
 	int		endtwo;
@@ -44,7 +44,7 @@ int		verifyanglebrackets_one(t_env *e)
 	return (0);
 }
 
-int		verifyvocab_one(t_env *e)
+int		verifyvocab_one(t_env *e) // use for specs
 {
 	e->p.voc_i = -1;
 	e->p.voc_check = -1;
@@ -59,7 +59,7 @@ int		verifyvocab_one(t_env *e)
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
-		while (++e->p.voc_i < 18) // could be seg faulting here ...
+		while (++e->p.voc_i < 18) // could be seg faulting here ... ! ! !
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
 	free(e->p.strone);
@@ -69,7 +69,7 @@ int		verifyvocab_one(t_env *e)
 	return (e->p.voc_check);
 }
 
-int		verifyargs_one(t_env *e)
+int		verifyargs_one(t_env *e) // use for specs
 {
 	int		i;
 	int		num_check;

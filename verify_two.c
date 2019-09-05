@@ -6,16 +6,15 @@
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 15:45:36 by mhernand          #+#    #+#             */
-/*   Updated: 2019/08/29 15:45:38 by mhernand         ###   ########.fr       */
+/*   Updated: 2019/09/03 13:29:59 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "includes/rtv1.h"
 
-// VERIFICATION OF SPHERE, CONE, CYLINDER, PLANE ++++++++++++++++++++++
+// VERIFICATION OF SPHERE, CONE, CYLINDER, PLANE
 
-void	count_shapes(t_env *e, char *split) // just to count my shapes, might not be necessary
+void	count_shapes(t_env *e, char *split)
 {
 	e->p.tmp = ft_strsub(split, 4, (ft_strlen(split) - 5));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
@@ -49,9 +48,9 @@ int		verifyobjecttags_openings(t_env *e, char **split)
 	}
 	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
-		e->p_obj.cylinder += 1;
+		e->p_obj.cyn += 1;
 		e->p.current_shape = 3;
-		if (ft_iseven(e->p_obj.cylinder) == 0)
+		if (ft_iseven(e->p_obj.cyn) == 0)
 			return (32);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
@@ -63,25 +62,27 @@ int		verifyobjecttags_openings(t_env *e, char **split)
 	}
 	else
 		return (20);
+	free(e->p.tmp);
+	e->p.tmp = NULL;
 	return (0);
 }
 
-int		verifyobjecttags_closings_brackets(t_env *e, char *split) // ++
+int		verifyobjecttags_closings_brackets(t_env *e, char *str)
 {
-	if (split[2] != '<' && split[3] != '/' && split[ft_strlen(split) - 1] != '>')
+	if (str[2] != '<' && str[3] != '/' && str[ft_strlen(str) - 1] != '>')
 		return (21);
 	e->p.close_obj_i = -1;
 	e->p.good_obj_brack = 0;
 	e->p.bad_obj_brack = 0;
-	while (split[++e->p.close_obj_i])
+	while (str[++e->p.close_obj_i])
 	{
-		if (split[e->p.close_obj_i] == '<' && split[e->p.close_obj_i + 1] == '/')
+		if (str[e->p.close_obj_i] == '<' && str[e->p.close_obj_i + 1] == '/')
 			e->p.good_obj_brack++;
-		if (split[e->p.close_obj_i] == '>' && split[e->p.close_obj_i + 1] == '\0')
+		if (str[e->p.close_obj_i] == '>' && str[e->p.close_obj_i + 1] == '\0')
 			e->p.good_obj_brack++;
-		if (split[e->p.close_obj_i] == '<' && split[e->p.close_obj_i + 1] != '/')
+		if (str[e->p.close_obj_i] == '<' && str[e->p.close_obj_i + 1] != '/')
 			e->p.bad_obj_brack++;
-		if (split[e->p.close_obj_i] == '>' && split[e->p.close_obj_i + 1] != '\0')
+		if (str[e->p.close_obj_i] == '>' && str[e->p.close_obj_i + 1] != '\0')
 			e->p.bad_obj_brack++;
 	}
 	if (e->p.good_obj_brack != 2 || e->p.bad_obj_brack > 0)
@@ -91,31 +92,53 @@ int		verifyobjecttags_closings_brackets(t_env *e, char *split) // ++
 
 int		checkforopenobjecttags(t_env *e)
 {
-	/*
-		checks to see if there is conflicting object tags
-		for example if a cone is interferring with a sylinder tag.
-	*/
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
-		if (ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.cylinder) == -1 || ft_iseven(e->p_obj.plane) == -1)
+		if (ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.cyn) == -1
+				|| ft_iseven(e->p_obj.plane) == -1)
 			return (-1);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
-		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cylinder) == -1 || ft_iseven(e->p_obj.plane) == -1)
+		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cyn) == -1
+				|| ft_iseven(e->p_obj.plane) == -1)
 			return (-1);
 	}
 	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
-		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.plane) == -1)
+		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1
+				|| ft_iseven(e->p_obj.plane) == -1)
 			return (-1);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
-		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1 || ft_iseven(e->p_obj.cylinder) == -1)
+		if (ft_iseven(e->p_obj.sphere) == -1 || ft_iseven(e->p_obj.cone) == -1
+			   || ft_iseven(e->p_obj.cyn) == -1)
 			return (-1);
 	}
 	return (0);
+}
+
+void	reset_shape_atb_part_two(t_env *e)
+{
+	e->y_atb.radius = 0;
+	e->y_atb.center = 0;
+	e->y_atb.diffusion = 0;
+	e->y_atb.reflection = 0;
+	e->y_atb.specpower = 0;
+	e->y_atb.specvalue = 0;
+	e->y_atb.angle = 0;
+	e->y_atb.rotate = 0;
+	e->y_atb.translate = 0;
+	e->y_atb.direction = 0;
+	e->p_atb.normal = 0;
+	e->p_atb.d = 0;
+	e->p_atb.diffusion = 0;
+	e->p_atb.reflection = 0;
+	e->p_atb.specpower = 0;
+	e->p_atb.specvalue = 0;
+	e->p_atb.rotate = 0;
+	e->p_atb.translate = 0;
 }
 
 void	reset_shape_atb(t_env *e)
@@ -128,7 +151,6 @@ void	reset_shape_atb(t_env *e)
 	e->s_atb.specvalue = 0;
 	e->s_atb.rotate = 0;
 	e->s_atb.translate = 0;
-
 	e->c_atb.radius = 0;
 	e->c_atb.center = 0;
 	e->c_atb.diffusion = 0;
@@ -139,27 +161,7 @@ void	reset_shape_atb(t_env *e)
 	e->c_atb.rotate = 0;
 	e->c_atb.translate = 0;
 	e->c_atb.direction = 0;
-
-	e->y_atb.radius = 0;
-	e->y_atb.center = 0;
-	e->y_atb.diffusion = 0;
-	e->y_atb.reflection = 0;
-	e->y_atb.specpower = 0;
-	e->y_atb.specvalue = 0;
-	e->y_atb.angle = 0;
-	e->y_atb.rotate = 0;
-	e->y_atb.translate = 0;
-	e->y_atb.direction = 0;
-
-	e->p_atb.normal = 0;
-	e->p_atb.d = 0;
-	e->p_atb.diffusion = 0;
-	e->p_atb.reflection = 0;
-	e->p_atb.specpower = 0;
-	e->p_atb.specvalue = 0;
-	e->p_atb.rotate = 0;
-	e->p_atb.translate = 0;
-
+	reset_shape_atb_part_two(e);
 }
 
 int		verifyobjecttags_closings(t_env *e, char *split)
@@ -190,10 +192,10 @@ int		verifyobjecttags_closings(t_env *e, char *split)
 			return (ret_obj);
 		reset_shape_atb(e);
 	}
-	else if (ft_strcmp("cylinder", e->p.tmp) == 0) // here now !
+	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
-		open_close(&e->p_obj.cylinder);
-		if (ft_iseven(e->p_obj.cylinder) == -1)
+		open_close(&e->p_obj.cyn);
+		if (ft_iseven(e->p_obj.cyn) == -1)
 			return (34);
 		if ((checkforopenobjecttags(e)) == -1)
 			return (38);
@@ -210,7 +212,6 @@ int		verifyobjecttags_closings(t_env *e, char *split)
 			return (38);
 		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
 			return (ret_obj);
-		// printf("objects CLOSING int ===> sphere : [%d] cone : [%d] cyn : [%d] plane : [%d]\n", e->p_obj.sphere, e->p_obj.cone, e->p_obj.cylinder, e->p_obj.plane);		
 		reset_shape_atb(e);
 	}
 	else
@@ -218,24 +219,24 @@ int		verifyobjecttags_closings(t_env *e, char *split)
 	return (0);
 }
 
-int		twotab_verifications(t_env *e, char **split_test) // SHAPES START VERIFIER ++
+int		twotab_verifications(t_env *e, char **split)
 {
 	if (e->str_count == 4)
 	{
-		if ((e->ret_tmp = verifyobjecttags_openings(e, split_test)) != 0) //////////// working here !!!!!!!!!!!!!!!!!!!!!!!!!!
+		if ((e->ret_tmp = verifyobjecttags_openings(e, split)) != 0)
 			return (e->ret_tmp);
 		if ((e->ret_tmp = two_angle_brackets(e)) != 2) 
 			return (9);
-		if ((e->ret_tmp = extract_status(e, split_test)) != 0)
+		if ((e->ret_tmp = extract_status(e, split)) != 0)
 			return (e->ret_tmp);
 	}
 	else if (e->str_count == 1)
 	{
-		if ((e->ret_tmp = verifyobjecttags_closings_brackets(e, split_test[0])) != 0)
+		if ((e->ret_tmp = verifyobjecttags_closings_brackets(e, split[0])) != 0)
 			return (e->ret_tmp);
-		if ((e->ret_tmp = verifyobjecttags_closings(e, split_test[0])) != 0) // here too !
+		if ((e->ret_tmp = verifyobjecttags_closings(e, split[0])) != 0)
 			return (e->ret_tmp);
-		count_shapes(e, split_test[0]);
+		count_shapes(e, split[0]);
 	}
 	else if (e->str_count != 1 || e->str_count != 4)
 		return (13);

@@ -90,6 +90,22 @@ void		lineless_errors(int i)
 		ft_putendl("Oops ! It looks like a 'plane' object was given a wrong attribute.");
 	if (i == 59)
 		ft_putendl("Oops ! It looks like not a single object was given.");
+	if (i == 60)
+		ft_putendl("Oops ! 1");
+	if (i == 61)
+		ft_putendl("Oops ! 2");
+	if (i == 62)
+		ft_putendl("Oops ! 3");
+	if (i == 63)
+		ft_putendl("Oops ! 4");
+	if (i == 64)
+		ft_putendl("Oops ! 5");
+	if (i == 65)
+		ft_putendl("Oops ! 6");
+	if (i == 66)
+		ft_putendl("Oops ! 7");
+	if (i == 67)
+		ft_putendl("Oops ! 8");
 }
 
 int			error(t_env *e, int i)
@@ -168,7 +184,7 @@ void		set_vocab(t_env *e)
 	e->vocab_two[7] = "translate";
 	e->vocab_two[8] = "rotate";
 	e->vocab_two[9] = "angle";
-	e->vocab_two[10] = "axis";
+	e->vocab_two[10] = "color";
 	e->vocab_two[11] = "center";
 	e->vocab_two[12] = "d";
 	e->vocab_two[13] = "mat";

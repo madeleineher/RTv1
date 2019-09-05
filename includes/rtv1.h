@@ -169,6 +169,8 @@ typedef struct		s_spec
 	int				cam;
 	int				amb;
 	int				light;
+	int				cam_cl;
+	int				amb_cl;
 }					t_spec;
 
 typedef struct		s_parseobj // for checking if object shapes are open/closed correctly
@@ -176,7 +178,7 @@ typedef struct		s_parseobj // for checking if object shapes are open/closed corr
 	int				sphere;
 	int				plane;
 	int				cone;
-	int				cylinder;
+	int				cyn;
 }					t_parseobj;
 
 typedef struct		s_parser
@@ -268,6 +270,30 @@ typedef struct		s_pla_atb
 	int				translate;
 }					t_pla_atb;
 
+// only light can be extra the other ones need to be basic
+
+typedef struct		s_cam_atb
+{
+	int				position; // 0, 0, 0 // no rules
+	int				direction; // vector, can be all negative but not all 0, 0, 0
+	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
+	int				translation; // 0, 0, 0 // no rules add translation to position
+}					t_cam_atb;
+
+typedef struct		s_amb_atb
+{
+	int				power;
+	int				color; // ??
+}					t_amb_atb;
+
+typedef struct		s_lig_atb
+{
+	int				position;
+	int				intensity;
+	int				rotate; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
+	int				translate; // 0, 0, 0 // no rules add translation to position
+}					t_lig_atb;
+
 typedef struct		s_env
 {
 	char			*data;
@@ -285,6 +311,9 @@ typedef struct		s_env
 	int				voc_counter;
 	int				ret_tmp;
 	char			*s_tmp;
+	t_cam_atb		ca_atb;
+	t_amb_atb		a_atb;
+	t_lig_atb		l_atb;
 	t_sphere_atb	s_atb;
 	t_cone_atb		c_atb;
 	t_cyn_atb		y_atb;
@@ -292,7 +321,7 @@ typedef struct		s_env
 	t_shape_count	count;
 	t_parser		p;
 	t_parseobj		p_obj;
-	t_spec			spcs;
+	t_spec			p_spec;
 	t_ret 			ret;
 	t_mlx			w;
 	t_ll			*ll;
@@ -312,7 +341,7 @@ int					quit(t_env *e);
 void				draw_sphere(t_env *e);
 
 //parser for specs
-int				two_tabs_specs(t_env *e, char **split_test, char *split_tabless);
+int				two_tabs_specs(t_env *e, char **split_test);
 int				open_close(int *check_me);
 int				extract_status(t_env *e, char **strings);
 int				two_angle_brackets(t_env *e);
@@ -330,6 +359,9 @@ int		verifyvocab_three(t_env *e, char **split);
 
 int		shapevocab_checker(t_env *e, char **split_test);
 int		shapevocab_checker_partwo(t_env *e);
+
+int     verify_spec_atb(t_env *e, char **split_test);
+int		verify_spec_atb_partwo(t_env *e);
 
 // add verify one to makefile and plus 
 
