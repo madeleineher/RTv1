@@ -91,21 +91,29 @@ void		lineless_errors(int i)
 	if (i == 59)
 		ft_putendl("Oops ! It looks like not a single object was given.");
 	if (i == 60)
-		ft_putendl("Oops ! 1");
+		ft_putendl("Oops ! It looks like the 'cam' spec is missng an attribute.");
 	if (i == 61)
-		ft_putendl("Oops ! 2");
+		ft_putendl("Oops ! It looks like the 'cam' spec was given too many attributes.");
 	if (i == 62)
-		ft_putendl("Oops ! 3");
+		ft_putendl("Oops ! It looks like the 'cam' spec was given an incorrect attribute.");
 	if (i == 63)
-		ft_putendl("Oops ! 4");
+		ft_putendl("Oops ! It looks like the 'amb' spec is missng an attribute.");
 	if (i == 64)
-		ft_putendl("Oops ! 5");
+		ft_putendl("Oops ! It looks like the 'amb' spec was given too many attributes.");
 	if (i == 65)
-		ft_putendl("Oops ! 6");
-	if (i == 66)
-		ft_putendl("Oops ! 7");
+		ft_putendl("Oops ! It looks like the 'amb' spec was given an incorrect attribute.");
+	if (i == 66) // hereeee
+		ft_putendl("Oops ! It looks like a 'light' spec is missng an attribute.");
 	if (i == 67)
-		ft_putendl("Oops ! 8");
+		ft_putendl("Oops ! It looks like a 'light' spec was given too many attributes.");
+	if (i == 68)
+		ft_putendl("Oops ! It looks like a 'light' spec was given an incorrect attribute.");
+	if (i == 69)
+		ft_putendl("Oops ! It looks like a 'light' spec status is set to 'basic' but extra parameters were passed.");
+	if (i == 70)
+		ft_putendl("Oops ! It looks like a 'light' spec status is set to 'extra' but some parameters are missing.");
+
+
 }
 
 int			error(t_env *e, int i)

@@ -20,7 +20,10 @@ void	reset_spec_atb(t_env *e)
 	e->ca_atb.translation = 0;
 	e->a_atb.power = 0;
 	e->a_atb.color = 0;
+	e->l_atb.position = 0;
 	e->l_atb.intensity = 0;
+	e->l_atb.rotate = 0;
+	e->l_atb.translate = 0;
 }
 
 int		verify_light(t_env *e, char **split_test)
@@ -63,7 +66,7 @@ int		verifyspectags_openings(t_env *e, char **split)
 	return (0);
 }
 
-int		verify_closing_tags_specs(t_env *e, char **split)
+int		verifyspectags_closing(t_env *e, char **split)
 {
 	int		ret;
 
@@ -74,8 +77,8 @@ int		verify_closing_tags_specs(t_env *e, char **split)
 			return (10);
 		open_close(&e->p_spec.cam);
         e->p_spec.cam_cl++;
-		// verify whether all attributes are present for each spec here !
-		// reset vals here ! 
+        if ((e->ret_tmp = verify_spec_atb_partwo(e)) != 0)
+            return(e->ret_tmp);
 		reset_spec_atb(e);
 	}
 	else if (e->p_spec.amb == 1)
@@ -85,8 +88,8 @@ int		verify_closing_tags_specs(t_env *e, char **split)
 			return (11);
 		open_close(&e->p_spec.amb);
         e->p_spec.amb_cl++;
-		// verify whether all attributes are present for each spec here !
-		// reset vals here ! 
+        if ((e->ret_tmp = verify_spec_atb_partwo(e)) != 0)
+            return(e->ret_tmp);
 		reset_spec_atb(e);
 	}
 	else if (e->p_spec.light >= 1)
@@ -96,8 +99,8 @@ int		verify_closing_tags_specs(t_env *e, char **split)
 		open_close(&e->p_spec.light);
 		if (ft_iseven(e->p_spec.light) == -1)
 			return (29);
-		// verify whether all attributes are present for each spec here !
-		// reset vals here ! 
+        if ((e->ret_tmp = verify_spec_atb_partwo(e)) != 0)
+            return(e->ret_tmp);
 		reset_spec_atb(e);
 	}
 	return (0);
@@ -117,7 +120,7 @@ int		two_tabs_specs(t_env *e, char **split_test)
 	}
 	else if (ft_strclen(e->p.gnl_line, '/') > 0)
 	{
-		if ((ret_tmp = verify_closing_tags_specs(e, split_test)) != 0)
+		if ((ret_tmp = verifyspectags_closing(e, split_test)) != 0)
 			return (ret_tmp);
 	}			
 	else if (e->str_count != 1 || e->str_count != 4)

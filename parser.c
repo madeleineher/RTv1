@@ -74,8 +74,8 @@ int		verify_line_seg_one(t_env *e, char **split_test, char *line)
 		if ((e->ret_tmp = threetab_verifications(e, split_test)) != 0)
 			return (e->ret_tmp);
 		// add verification of three tab lines here of specs - working here !
-		// if ((e->ret_tmp = verify_spec_atb(e, split_test)) != 0)
-			// return (e->ret_tmp);
+		if ((e->ret_tmp = verify_spec_atb(e, split_test)) != 0)
+			return (e->ret_tmp);
 	}
 	return (0);
 }

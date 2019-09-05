@@ -49,7 +49,7 @@ int		two_angle_brackets(t_env *e)
 	return (brackets + bad_brackets);
 }
 
-int		extract_status(t_env *e, char **strings)   	 // used globally
+int		extract_status(t_env *e, char **strings)
 {
 	// checks the status of the spec/object
 	int	i;
