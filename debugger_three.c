@@ -14,27 +14,33 @@
 
 void		line_errors(t_env *e, int i)
 {
-	if (i > 80)
+	if (i == 81)
 	{
-		if (i == 81)
-		{
-			ft_putstr("Oops ! It looks like [");
-			ft_putstr(e->p.tmp);
-			ft_putstr("] was given the incorrect number of arguments. ");
-			ft_putendl("This attribute takes three parameters.");
-			// free --> e->p.tmp 
-		}
-		if (i == 82)
-		{
-			ft_putstr("Oops ! It looks like [");
-			ft_putstr(e->p.tmp);
-			ft_putstr("] was given the incorrect number of arguments. ");
-			ft_putendl("This attribute takes one parameter.");
-		}
-		ft_putstr("The problem lies in line : ");
-		ft_putnbr(e->p.gnl_i);
-		ft_putchar('\n');
-	} //add free strings here if there is an error return value !
+		ft_putstr("Oops ! It looks like [");
+		ft_putstr(e->p.tmp);
+		ft_putstr("] was given the incorrect number of arguments. ");
+		ft_putendl("This attribute takes three parameters.");
+		ft_strfree(e->p.tmp);		
+	}
+	if (i == 82)
+	{
+		ft_putstr("Oops ! It looks like [");
+		ft_putstr(e->p.tmp);
+		ft_putstr("] was given the incorrect number of arguments. ");
+		ft_putendl("This attribute takes one parameter.");
+		ft_strfree(e->p.tmp);		
+	}
+	if (i == 83)
+	{
+		ft_putstr("Oops ! It looks like [");
+		ft_putstr(e->p.strone);
+		ft_putendl("] was given a zero/negative value. ");
+		ft_strfree(e->p.strone);
+		ft_strfree(e->p.strtwo);
+	}
+	ft_putstr("The problem lies in line : ");
+	ft_putnbr(e->p.gnl_i);
+	ft_putchar('\n'); //add free strings here if there is an error return value !
 }
 
 void		lineless_errors_eight(t_env *e, int i)

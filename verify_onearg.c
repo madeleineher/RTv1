@@ -12,8 +12,6 @@
 
 #include "includes/rtv1.h"
 
-// verifying three tab , one argument tags here ~~~~~~~~~~~~~~
-
 int		verifyanglebrackets_one(t_env *e)
 {
 	e->p.l = -1;
@@ -71,32 +69,68 @@ int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning e
 	return (e->p.voc_check);
 }
 
+int		verify_numbers_one(t_env *e, char *string, char *num) // working here !
+{
+	(void)e;
+	int	realnum;
+
+	realnum = ft_atoi(num);
+	if (ft_strcmp("radius", string) == 0)
+	{
+		if (realnum <= 0) // || realnum > LIMIT (?))
+			return (83);
+	}
+// 	else if (ft_strcmp("angle", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("d", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("specpower", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("specvalue", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("reflection", string) == 0)
+// 	{
+		
+// 	}
+	return (0);
+}
+
 // NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
-// need to accept 1.0 and 1.0f ( 'f' stand for floats )
-// need to have a number check for certain arguments that take three args
 int		verifyargs_one(t_env *e)
 {
 	int		i;
 	int		num_check;
 	int		fake_check;
 
-	i = -1;
+	i = 0;
 	num_check = 0;
 	fake_check = 0;
 	e->p.strone = ft_strsub(e->p.gnl_line, e->p.j + 1, ((e->p.k - 3) - e->p.j));
-	while (e->p.strone[++i])
+	e->p.strtwo = ft_strsub(e->p.gnl_line, 4, ft_strclen(e->p.gnl_line, '>') - 4);
+	if (e->p.strone[i] == '-')
+		i++;
+	while (e->p.strone[i])
 	{
 		if (ft_isdigit(e->p.strone[i]) == 1)
 			num_check++;
 		if (ft_isdigit(e->p.strone[i]) == 0)
 			fake_check++;
+		i++;
 	}
-	free(e->p.strone);
-	e->p.strone = NULL;
+	if ((e->ret_tmp = verify_numbers_one(e, e->p.strtwo, e->p.strone)) != 0) // working here
+		return (e->ret_tmp);
 	if (fake_check > 0 || num_check == 0)
-		return (-1);
-	if (num_check > 0)
-		return (0);
+		return (18);
+	ft_strfree(e->p.strone);
+	ft_strfree(e->p.strtwo);
 	return (0);
 }
 

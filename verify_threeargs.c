@@ -12,8 +12,6 @@
 
 #include "includes/rtv1.h"
 
-// --------------- three tabs , THREE AGRS ---------------
-
 int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed before returning error message /!
 {
 	int		end1;
@@ -76,27 +74,63 @@ int		verifyendings_three(char **split_test)
 	return (0);
 }
 
-// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
-// need to accept 1.0 and 1.0f ( 'f' stand for floats )
-// need to have a number check for certain arguments that take three args
-int		verifyargs_three_numbers(char *string, int letter)
+int		verify_numbers_three(t_env *e, char *string, char *num) // working here 
 {
-	/*
-		verifies that there is a valid number + also that there is a numbers
-	*/
+	(void)e;
+	(void)string;
+	(void)num;
+	// int	realnum;
+
+	// realnum = ft_atoi(num);
+	// change the strcmp strings !
+	// if (ft_strcmp("radius", string) == 0)
+	// {
+	// 	if (realnum <= 0) // || realnum > LIMIT (?))
+	// 		return (83);
+	// }
+// 	else if (ft_strcmp("angle", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("d", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("specpower", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("specvalue", string) == 0)
+// 	{
+		
+// 	}
+// 	else if (ft_strcmp("reflection", string) == 0)
+// 	{
+		
+// 	}
+	return (0);
+}
+
+// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
+int		verifyargs_three_numbers(char *string, int letter, t_env *e)
+{
+	(void)e;
 	int		num_check;
 	int		fake_check;
 	int		i;
 
-	i = -1;
+	i = 0;
 	num_check = 0;
 	fake_check = 0;
-	while (string[++i] != letter)
+	if (string[i] == '-')
+		i++;
+	while (string[i] != letter)
 	{
 		if (ft_isdigit(string[i]) == 1)
 			num_check++;
 		if (ft_isdigit(string[i]) == 0)
 			fake_check++;
+		i++;
 	}
 	if (fake_check > 0 || num_check == 0)
 		return (-1);
@@ -109,6 +143,9 @@ int		verifyargs_three(t_env *e, char **split_test)
 {
 	int		comma;
 	int		len1;
+	int		val1;
+	int		val2;
+	int		val3;
 
 	if (verifyendings_three(split_test) == -1)
 		return (18);
@@ -121,12 +158,21 @@ int		verifyargs_three(t_env *e, char **split_test)
 		return (19);
 	e->p.strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '>') + 1, \
 		(ft_strclen(split_test[0], ',') - ft_strclen(split_test[0], '>')));
-	if ((verifyargs_three_numbers(e->p.strone, ',') != 0))
+	e->p.strtwo = ft_strsub(e->p.gnl_line, 4, ft_strclen(e->p.gnl_line, '>') - 4);	
+	if ((verifyargs_three_numbers(e->p.strone, ',', e) != 0))
 		return (18);
-	if ((verifyargs_three_numbers(split_test[1], ',') != 0))
+	if ((verifyargs_three_numbers(split_test[1], ',', e) != 0)) 
 		return (18);
-	if ((verifyargs_three_numbers(split_test[2], '<') != 0))
+	if ((verifyargs_three_numbers(split_test[2], '<', e) != 0))
 		return (18);
+	val1 = ft_atoi(e->p.strone); // working here 
+	val2 = ft_atoi(split_test[1]); // working here 
+	val3 = ft_atoi(split_test[2]); // working here 
+	printf("[%d] [%d] [%d]\n", val1, val2, val3); // working here 
+	// if ((e->ret_tmp = verify_numbers_three(e, e->p.strtwo, e->p.strone)) != 0) // working here 
+		// return (e->ret_tmp);
+	ft_strfree(e->p.strone);
+	ft_strfree(e->p.strtwo);
 	// store_args(e);
 	return (0);
 }

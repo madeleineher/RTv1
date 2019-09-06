@@ -54,7 +54,7 @@ int		threetab_verifications(t_env *e, char **split_test)
 		if ((e->ret_tmp = verifyvocab_one(e)) != 0)//-1)
 			return (e->ret_tmp);
 		if ((e->ret_tmp = verifyargs_one(e)) != 0)
-			return (18);
+			return (e->ret_tmp);
 	}
 	else
 		return (17);

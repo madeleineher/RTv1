@@ -21,9 +21,9 @@
 	</specs>
 	<objects>
 		<sphere status = "basic">
-			<radius>100</radius>
-			<center>100, 100, 100</center>
-			<diffusion>100, 100, 100</diffusion>
+			<radius>10</radius>
+			<center>100, -100, 100</center>
+			<diffusion>100, 200, 100</diffusion>
 			<reflection>100</reflection>
 			<specpower>100</specpower>
 			<specvalue>100</specvalue>

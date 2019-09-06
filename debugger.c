@@ -69,7 +69,7 @@ void		lineless_errors(t_env *e, int i)
 		lineless_errors_two(e, i);
 }
 
-void		errors_three(int i)
+void		errors_three(int i, t_env *e)
 {
 	if (i == 14)
 		ft_putendl("Oops ! Looks like something is missing/mispelled.");
@@ -80,7 +80,10 @@ void		errors_three(int i)
 	if (i == 17)
 		ft_putendl("Oops ! Looks like this line has poor formatting.");
 	if (i == 18)
+	{
 		ft_putendl("Oops ! Looks like this line was given poor arguments.");
+		ft_strfree(e->p.strone);
+	}
 	if (i == 19)
 		ft_putendl("Oops ! Looks like there is too many/little commas.");
 	if (i == 20)
@@ -92,7 +95,7 @@ void		errors_three(int i)
 	}
 }
 
-void		errors_two(int i)
+void		errors_two(int i, t_env *e)
 {
 	if (i == 4)
 	{
@@ -118,7 +121,7 @@ void		errors_two(int i)
 	if (i == 13)
 		ft_putendl("Oops ! Looks like this tag is not properly formatted.");
 	if (i > 13)
-		errors_three(i);
+		errors_three(i, e);
 }
 
 int			error(t_env *e, int i)
@@ -133,13 +136,14 @@ int			error(t_env *e, int i)
 		ft_putendl("error: not a valid parameter.");
 	if (i > 3 && i < 26)
 	{
-		errors_two(i);
+		errors_two(i, e);
 		ft_putstr("The problem lies in line : ");
 		ft_putnbr(e->p.gnl_i);
 		ft_putchar('\n');
 	}
 	if (i > 25)
 		lineless_errors(e, i);
+	// ft_strdel(split_string);
 	quit(e);
 	return (0);
 }
