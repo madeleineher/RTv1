@@ -31,10 +31,8 @@ int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed be
 		while (++e->p.voc_i < 16)
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
-	// add verifiacation of correct number of arguments // needs to be done against ONE ARGS version
-	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 3)) != 0) // WOKRING HERE !!!
+	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 3)) != 0)
 		return (e->ret_tmp);
-	// printf("three - ret : [%d]\n", e->ret_tmp);
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);

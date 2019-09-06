@@ -62,9 +62,8 @@ int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning e
 		while (++e->p.voc_i < 16) // could be seg faulting here ... ! ! !
 			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
-	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 1)) != 0) // working HERE !!!!!!!!!!!!!!
+	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 1)) != 0)
 		return (e->ret_tmp);
-	// printf("one - ret : [%d]\n", e->ret_tmp);	
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);

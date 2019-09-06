@@ -129,7 +129,7 @@ typedef struct		s_camera
 	int				status;
 }					t_camera;
 
-typedef struct		s_obj
+typedef struct		s_obj // for gathering data
 {
 	t_dir			*dir;
 	t_cen			*cen;
@@ -332,7 +332,7 @@ typedef struct		s_env
 	t_amb			amb;
 	t_camera		cam;
 	t_light			light;
-	t_obj			obj;
+	t_obj			obj; // cleaning
 }					t_env;
 
 void				setup_rtv1(t_env *e);
@@ -362,7 +362,11 @@ int					shapevocab_checker_partwo(t_env *e);
 int					verify_spec_atb(t_env *e, char **split_test);
 int					verify_spec_atb_partwo(t_env *e);
 int					verify_tag_to_argument(t_env *e, char *string, int args); // verify_five ~*
+int					error(t_env *e, int i);
 void				reset_spec_atb(t_env *e);
+void				lineless_errors_three(t_env *e, int i);
+void				lineless_errors_eight(t_env *e, int i);
+
 
 int					main(int argc, char **argv);
 

@@ -41,7 +41,8 @@ int		two_angle_brackets(t_env *e)
 			brackets++;
 		if (e->p.gnl_line[j] == '>' && e->p.gnl_line[j + 1] == '\0')
 			brackets++;
-		if (j != i && e->p.gnl_line[j + 1] != '\0' && (e->p.gnl_line[j] == '<' || e->p.gnl_line[j] == '>'))
+		if (j != i && e->p.gnl_line[j + 1] != '\0' && (e->p.gnl_line[j] == '<'
+			|| e->p.gnl_line[j] == '>'))
 			bad_brackets++;
 		j++;
 	}
