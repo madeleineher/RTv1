@@ -53,7 +53,7 @@ int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
 			return (17);
 		if ((e->p.ret_p = verifyvocab_one(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = verifyargs_one(e)) != 0) // store data here
+		if ((e->p.ret_p = verifyargs_one(e, l_head, o_head)) != 0) // store data here
 			return (e->p.ret_p);
 	}
 	else

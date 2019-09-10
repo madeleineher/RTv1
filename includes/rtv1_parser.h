@@ -162,11 +162,11 @@ typedef struct		s_parser
 	int				e1;
 	int				e2;
 	int				l;
+	int				v;
 	int				v1;
 	int				v2;
 	int				v3;
 	int				comma;
-	int				realnum;
 	int				ret_p; // main ret
 	t_parseobj		p_obj;
 	t_spec			p_spec;

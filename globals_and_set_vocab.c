@@ -82,3 +82,48 @@ void		set_vocab(t_env *e)
 	e->p.vocab_two[14] = "ambient"; // -- correct name ? // need this ?????
 	e->p.vocab_two[15] = "normal";
 }
+
+void	reset_shape_atb_two(t_env *e)
+{
+	e->p.y_atb.radius = 0;
+	e->p.y_atb.center = 0;
+	e->p.y_atb.diffusion = 0;
+	e->p.y_atb.reflection = 0;
+	e->p.y_atb.specpower = 0;
+	e->p.y_atb.specvalue = 0;
+	e->p.y_atb.angle = 0;
+	e->p.y_atb.rotate = 0;
+	e->p.y_atb.translate = 0;
+	e->p.y_atb.direction = 0;
+	e->p.p_atb.normal = 0;
+	e->p.p_atb.d = 0;
+	e->p.p_atb.diffusion = 0;
+	e->p.p_atb.reflection = 0;
+	e->p.p_atb.specpower = 0;
+	e->p.p_atb.specvalue = 0;
+	e->p.p_atb.rotate = 0;
+	e->p.p_atb.translate = 0;
+}
+
+void	reset_shape_atb(t_env *e)
+{
+	e->p.s_atb.radius = 0;
+	e->p.s_atb.center = 0;
+	e->p.s_atb.diffusion = 0;
+	e->p.s_atb.reflection = 0;
+	e->p.s_atb.specpower = 0;
+	e->p.s_atb.specvalue = 0;
+	e->p.s_atb.rotate = 0;
+	e->p.s_atb.translate = 0;
+	e->p.c_atb.radius = 0;
+	e->p.c_atb.center = 0;
+	e->p.c_atb.diffusion = 0;
+	e->p.c_atb.reflection = 0;
+	e->p.c_atb.specpower = 0;
+	e->p.c_atb.specvalue = 0;
+	e->p.c_atb.angle = 0;
+	e->p.c_atb.rotate = 0;
+	e->p.c_atb.translate = 0;
+	e->p.c_atb.direction = 0;
+	reset_shape_atb_two(e);
+}

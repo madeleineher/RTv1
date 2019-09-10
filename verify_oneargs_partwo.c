@@ -12,12 +12,14 @@
 
 #include "includes/rtv1.h"
 
-int		verify_numbers_one(t_env *e, char *string, char *num) // working here !
+int		verify_numbers_one(t_env *e, t_ll *l_head, t_ol *o_head)// working here !
 {
-	e->p.realnum = ft_atoi(num);
-	if (ft_strcmp("radius", string) == 0)
+    (void)o_head;
+    (void)l_head;
+	e->p.v = ft_atoi(e->p.strone);
+	if (ft_strcmp("radius", e->p.strtwo) == 0)
 	{
-		if (e->p.realnum <= 0) // || e->p.realnum > LIMIT (?))
+		if (e->p.v <= 0) // || e->p.realnum > LIMIT (?))
 			return (83);
 		if (e->p.specs == 2 && e->p.objects == 1) // in the objects tag <objects> </objects>
 		{
@@ -28,25 +30,25 @@ int		verify_numbers_one(t_env *e, char *string, char *num) // working here !
 		}
 		// store value here based on object (spec/shape) ... 
 	}
-	else if (ft_strcmp("angle", string) == 0)
+	else if (ft_strcmp("angle", e->p.strtwo) == 0)
 	{
-		if (e->p.realnum > 360 || e->p.realnum < -360)
+		if (e->p.v > 360 || e->p.v < -360)
 			return (84);
 		// store value here			
 	}
-	else if (ft_strcmp("d", string) == 0)
+	else if (ft_strcmp("d", e->p.strtwo) == 0)
 	{
 		// store value here		
 	}
-	else if (ft_strcmp("specpower", string) == 0)
+	else if (ft_strcmp("specpower", e->p.strtwo) == 0)
 	{
 		// store value here		
 	}
-	else if (ft_strcmp("specvalue", string) == 0)
+	else if (ft_strcmp("specvalue", e->p.strtwo) == 0)
 	{
 		// store value here		
 	}
-	else if (ft_strcmp("reflection", string) == 0)
+	else if (ft_strcmp("reflection", e->p.strtwo) == 0)
 	{
 		// store value here		
 	}

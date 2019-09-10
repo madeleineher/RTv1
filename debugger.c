@@ -56,19 +56,20 @@ void		lineless_errors(t_env *e, int i)
 	}
 	if (i == 29)
 		ft_putendl("Oops ! Looks like there are conflicting <light> tags.");
-	if (i == 30)
-		ft_putendl("Oops ! Looks like there are conflicting <sphere> tags.");
-	if (i == 31)
-		ft_putendl("Oops ! Looks like there are conflicting <cone> tags.");
-	if (i == 32)
-		ft_putendl("Oops ! Looks like there are conflicting <cylinder> tags.");
-	if (i == 33)
-		ft_putendl("Oops ! Looks like there are conflicting <plane> tags.");
-	if (i == 34)
+	if (i > 29 && i < 34)
 	{
-		ft_putendl("Oops ! There are conflicting object closing tags.");
+		if (i == 30)
+			ft_putendl("Oops ! Looks like there are conflicting <sphere> tags.");
+		if (i == 31)
+			ft_putendl("Oops ! Looks like there are conflicting <cone> tags.");
+		if (i == 32)
+			ft_putendl("Oops ! Looks like there are conflicting <cylinder> tags.");
+		if (i == 33)
+			ft_putendl("Oops ! Looks like there are conflicting <plane> tags.");
 		ft_strfree(e->p.tmp);
 	}
+	if (i == 34)
+		ft_putendl("Oops ! There are conflicting object closing tags.");
 	if (i == 37)
 		ft_putendl("Oops ! There is a problem with the camera/amb tags.");
 	if (i > 37)

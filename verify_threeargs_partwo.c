@@ -19,10 +19,12 @@ int		verify_values(t_env *e)
     return (0);
 }
 
-int		verify_numbers_three(t_env *e, char *string) // working here 
+int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here 
 {
 	// printf("[%d] [%d] [%d]\n", e->p.v1, e->p.v2, e->p.v3); // working here
-	if (ft_strcmp("direction", string) == 0)
+    (void)o_head;
+    (void)l_head;
+	if (ft_strcmp("direction", e->p.strtwo) == 0)
 	{
 		if ((e->p.ret_p = verify_values(e)) != 0)
 			return (85);
@@ -47,32 +49,32 @@ int		verify_numbers_three(t_env *e, char *string) // working here
             }
 		}
 	}
-	else if (ft_strcmp("axis", string) == 0)
+	else if (ft_strcmp("axis", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("center", string) == 0)
+	else if (ft_strcmp("center", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("normal", string) == 0) 
+	else if (ft_strcmp("normal", e->p.strtwo) == 0) 
 	{
 		if ((e->p.ret_p = verify_values(e)) != 0)
 			return (85);
 	}
-	else if (ft_strcmp("diffusion", string) == 0)
+	else if (ft_strcmp("diffusion", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("rotate", string) == 0)
+	else if (ft_strcmp("rotate", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("translate", string) == 0)
+	else if (ft_strcmp("translate", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("position", string) == 0)
+	else if (ft_strcmp("position", e->p.strtwo) == 0)
 	{
         if (e->p.specs == 1 && e->p.objects == 0) // in the specs tag <specs> </specs>
 		{
@@ -88,11 +90,11 @@ int		verify_numbers_three(t_env *e, char *string) // working here
             }
 		}
 	}
-	else if (ft_strcmp("color", string) == 0)
+	else if (ft_strcmp("color", e->p.strtwo) == 0)
 	{
 		
 	}
-	else if (ft_strcmp("intensity", string) == 0)
+	else if (ft_strcmp("intensity", e->p.strtwo) == 0)
 	{
 		
 	}

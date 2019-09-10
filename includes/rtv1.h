@@ -198,8 +198,10 @@ int					open_close(int *check_me);
 int					extract_status(t_env *e);
 int					two_angle_brackets(t_env *e);
 int					twotab_verifications(t_env *e);
+void				count_shapes(t_env *e, char *split);
+int					verifyobjecttags_closings(t_env *e, char *split);
 int					globals(t_env *e, char *gnl_line);
-int					verifyargs_one(t_env *e);
+int					verifyargs_one(t_env *e, t_ll *l_head, t_ol *o_head);
 int					verifyanglebrackets_one(t_env *e);
 int					verifyvocab_one(t_env *e);
 int					verifyargs_three(t_env *e, t_ll *l_head, t_ol *o_head);
@@ -214,9 +216,14 @@ int					error(t_env *e, int i);
 void				reset_spec_atb(t_env *e);
 void				lineless_errors_three(t_env *e, int i);
 void				lineless_errors_eight(t_env *e, int i);
-int					verify_numbers_one(t_env *e, char *string, char *num);
+int					verify_numbers_one(t_env *e, t_ll *l_head, t_ol *o_head);
 int					verify_values(t_env *e);
-int					verify_numbers_three(t_env *e, char *string);
+int					verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head);
+void				reset_shape_atb(t_env *e);
+void				reset_shape_atb_two(t_env *e);
+int					checkforopenobjecttags(t_env *e);
+
+
 
 int					main(int argc, char **argv);
 
