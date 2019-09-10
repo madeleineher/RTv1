@@ -12,7 +12,7 @@
 
 #include "includes/rtv1.h"
 
-int		verify_light(t_env *e, char **split_test)
+int		verify_light(t_env *e)
 {
 	int	ret;
 
@@ -20,14 +20,14 @@ int		verify_light(t_env *e, char **split_test)
 	e->p.p_spec.light += 1;
 	if (ft_iseven(e->p.p_spec.light) == 0)
 		return (12);
-	if ((ret = extract_status(e, split_test)) != 0)
+	if ((ret = extract_status(e)) != 0)
 		return (ret);
 	return (ret);
 }
 
-int		verifyspectags_openings(t_env *e, char **split)
+int		verifyspectags_openings(t_env *e)
 {
-	e->p.tmp = ft_strsub(split[0], 2, (ft_strlen(split[0]) - 2));
+	e->p.tmp = ft_strsub(e->p.split[0], 2, (ft_strlen(e->p.split[0]) - 2));
 	if (ft_strcmp("<cam>", e->p.tmp) == 0)
 	{
 		if (e->p.p_spec.amb_cl > 0)
@@ -42,7 +42,7 @@ int		verifyspectags_openings(t_env *e, char **split)
 	}
 	else if (ft_strcmp("<light", e->p.tmp) == 0)
 	{
-		if ((e->p.ret_p = verify_light(e, split)) != 0)
+		if ((e->p.ret_p = verify_light(e)) != 0)
 			return (e->p.ret_p);
 	}
 	else
@@ -52,9 +52,9 @@ int		verifyspectags_openings(t_env *e, char **split)
 	return (0);
 }
 
-int		verifyspectags_closing_light(t_env *e, char **split)
+int		verifyspectags_closing_light(t_env *e)
 {
-	if ((e->p.ret_p = ft_strcmp("\t\t</light>", split[0])) != 0)
+	if ((e->p.ret_p = ft_strcmp("\t\t</light>", e->p.split[0])) != 0)
 		return (12);
 	open_close(&e->p.p_spec.light);
 	if (ft_iseven(e->p.p_spec.light) == -1)
@@ -65,11 +65,11 @@ int		verifyspectags_closing_light(t_env *e, char **split)
 	return (0);
 }
 
-int		verifyspectags_closing(t_env *e, char **split)
+int		verifyspectags_closing(t_env *e)
 {
 	if (e->p.p_spec.cam == 1)
 	{
-		if ((e->p.ret_p = ft_strcmp("\t\t</cam>", split[0]) != 0))
+		if ((e->p.ret_p = ft_strcmp("\t\t</cam>", e->p.split[0]) != 0))
 			return (10);
 		open_close(&e->p.p_spec.cam);
 		e->p.p_spec.cam_cl++;
@@ -79,7 +79,7 @@ int		verifyspectags_closing(t_env *e, char **split)
 	}
 	else if (e->p.p_spec.amb == 1)
 	{
-		if ((e->p.ret_p = ft_strcmp("\t\t</amb>", split[0])) != 0)
+		if ((e->p.ret_p = ft_strcmp("\t\t</amb>", e->p.split[0])) != 0)
 			return (11);
 		open_close(&e->p.p_spec.amb);
 		e->p.p_spec.amb_cl++;
@@ -88,24 +88,24 @@ int		verifyspectags_closing(t_env *e, char **split)
 		reset_spec_atb(e);
 	}
 	else if (e->p.p_spec.light >= 1)
-		if ((e->p.ret_p = verifyspectags_closing_light(e, split)) != 0)
+		if ((e->p.ret_p = verifyspectags_closing_light(e)) != 0)
 			return (e->p.ret_p);
 	return (0);
 }
 
-int		two_tabs_specs(t_env *e, char **split_test)
+int		two_tabs_specs(t_env *e)
 {
 	e->p.ret_p = 0; // need this ?
 	if ((e->p.ret_p = two_angle_brackets(e)) != 2)
 		return (9);
 	if (ft_strclen(e->p.gnl_line, '/') == 0)
 	{
-		if ((e->p.ret_p = verifyspectags_openings(e, split_test)) != 0)
+		if ((e->p.ret_p = verifyspectags_openings(e)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (ft_strclen(e->p.gnl_line, '/') > 0)
 	{
-		if ((e->p.ret_p = verifyspectags_closing(e, split_test)) != 0)
+		if ((e->p.ret_p = verifyspectags_closing(e)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->str_count != 1 || e->str_count != 4)

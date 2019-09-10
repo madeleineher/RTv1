@@ -41,9 +41,9 @@ int		verify_spec_atb_light(t_env *e)
 	return (0);
 }
 
-int		verify_spec_atb(t_env *e, char **split) // /! string needs to be freed before returning error message /!
+int		verify_spec_atb(t_env *e) // /! string needs to be freed before returning error message /!
 {
-	e->p.s_tmp = ft_strsub(split[0], 4, (ft_strclen(split[0], '>') - 4));
+	e->p.s_tmp = ft_strsub(e->p.split[0], 4, (ft_strclen(e->p.split[0], '>') - 4));
 	if (e->p.p_spec.cam == 1)
 	{
 		if (ft_strcmp("position", e->p.s_tmp) == 0)

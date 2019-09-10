@@ -12,17 +12,17 @@
 
 #include "includes/rtv1.h"
 
-int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed before returning error message /!
+int		verifyvocab_three(t_env *e) // /! string needs to be freed before returning error message /!
 {
 	int		end1;
 	int		end2;
 
 	e->p.voc_i = -1;
 	e->p.voc_check = -1;
-	end1 = (ft_strclen(split[0], '>') - ft_strclen(split[0], '<')) - 1;
-	end2 = (ft_strclen(split[2], '>') - ft_strclen(split[2], '/')) - 1;
-	e->p.strone = ft_strsub(split[0], ft_strclen(split[0], '<') + 1, end1);
-	e->p.strtwo = ft_strsub(split[2], ft_strclen(split[2], '/') + 1, end2);
+	end1 = (ft_strclen(e->p.split[0], '>') - ft_strclen(e->p.split[0], '<')) - 1;
+	end2 = (ft_strclen(e->p.split[2], '>') - ft_strclen(e->p.split[2], '/')) - 1;
+	e->p.strone = ft_strsub(e->p.split[0], ft_strclen(e->p.split[0], '<') + 1, end1);
+	e->p.strtwo = ft_strsub(e->p.split[2], ft_strclen(e->p.split[2], '/') + 1, end2);
 	if (ft_strcmp(e->p.strone, e->p.strtwo) != 0)
 		return (-1);
 	else
@@ -38,26 +38,26 @@ int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed be
 	return (e->p.voc_check);
 }
 
-int		verifyanglebrackets_three(t_env *e, char **split_test)
+int		verifyanglebrackets_three(t_env *e)
 {
 	int		i;
 
 	i = -1;
 	e->p.set_one = 0;
 	e->p.set_two = 0;
-	while (split_test[0][++i])
+	while (e->p.split[0][++i])
 	{
-		if (split_test[0][i] == '<')
+		if (e->p.split[0][i] == '<')
 			e->p.set_one++;
-		if (split_test[0][i] == '>')
+		if (e->p.split[0][i] == '>')
 			e->p.set_one++;
 	}
 	i = -1;
-	while (split_test[2][++i])
+	while (e->p.split[2][++i])
 	{
-		if (split_test[2][i] == '<' && split_test[2][i + 1] == '/')
+		if (e->p.split[2][i] == '<' && e->p.split[2][i + 1] == '/')
 			e->p.set_two++;
-		if (split_test[2][i] == '>')
+		if (e->p.split[2][i] == '>')
 			e->p.set_two++;
 	}
 	if (e->p.set_one != 2 || e->p.set_two != 2)
@@ -65,11 +65,11 @@ int		verifyanglebrackets_three(t_env *e, char **split_test)
 	return (0);
 }
 
-int		verifyendings_three(char **split_test)
+int		verifyendings_three(t_env *e)
 {
-	if ((ft_strclen(split_test[0], ',') + 1) != ft_strlen(split_test[0]))
+	if ((ft_strclen(e->p.split[0], ',') + 1) != ft_strlen(e->p.split[0]))
 		return (-1);
-	if ((ft_strclen(split_test[1], ',') + 1) != ft_strlen(split_test[1]))
+	if ((ft_strclen(e->p.split[1], ',') + 1) != ft_strlen(e->p.split[1]))
 		return (-1);
 	return (0);
 }
@@ -100,28 +100,30 @@ int		verifyargs_three_numbers(char *string, int letter)
 	return (0);
 }
 
-int		verifyargs_three(t_env *e, char **split_test)  
+int		verifyargs_three(t_env *e, t_ll *l_head, t_ol *o_head)
 {
-	if (verifyendings_three(split_test) == -1)
+	(void)l_head;
+	(void)o_head;
+	if (verifyendings_three(e) == -1)
 		return (18);
 	e->p.comma = 0;
-	e->p.comma += ft_charfreq(split_test[0], ',');
-	e->p.comma += ft_charfreq(split_test[1], ',');
-	e->p.comma += ft_charfreq(split_test[2], ',');
+	e->p.comma += ft_charfreq(e->p.split[0], ',');
+	e->p.comma += ft_charfreq(e->p.split[1], ',');
+	e->p.comma += ft_charfreq(e->p.split[2], ',');
 	if (e->p.comma != 2)
 		return (19);
-	e->p.strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '>') + 1, \
-		(ft_strclen(split_test[0], ',') - ft_strclen(split_test[0], '>')));
+	e->p.strone = ft_strsub(e->p.split[0], ft_strclen(e->p.split[0], '>') + 1, \
+		(ft_strclen(e->p.split[0], ',') - ft_strclen(e->p.split[0], '>')));
 	e->p.strtwo = ft_strsub(e->p.gnl_line, 4, ft_strclen(e->p.gnl_line, '>') - 4);	
 	if ((verifyargs_three_numbers(e->p.strone, ',') != 0))
 		return (18);
-	if ((verifyargs_three_numbers(split_test[1], ',') != 0)) 
+	if ((verifyargs_three_numbers(e->p.split[1], ',') != 0)) 
 		return (18);
-	if ((verifyargs_three_numbers(split_test[2], '<') != 0))
+	if ((verifyargs_three_numbers(e->p.split[2], '<') != 0))
 		return (18);
 	e->p.v1 = ft_atoi(e->p.strone); // working here 
-	e->p.v2 = ft_atoi(split_test[1]); // working here 
-	e->p.v3 = ft_atoi(split_test[2]); // working here 
+	e->p.v2 = ft_atoi(e->p.split[1]); // working here 
+	e->p.v3 = ft_atoi(e->p.split[2]); // working here 
 	if ((e->p.ret_p = verify_numbers_three(e, e->p.strtwo)) != 0) // working here 
 		return (e->p.ret_p);  // working here, last verification (store data here)!
 	ft_strfree(e->p.strone);

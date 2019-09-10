@@ -239,24 +239,24 @@ int		verifyobjecttags_closings(t_env *e, char *split)
 	return (0);
 }
 
-int		twotab_verifications(t_env *e, char **split)
+int		twotab_verifications(t_env *e)
 {
 	if (e->str_count == 4)
 	{
-		if ((e->p.ret_p = verifyobjecttags_openings(e, split)) != 0)
+		if ((e->p.ret_p = verifyobjecttags_openings(e, e->p.split)) != 0)
 			return (e->p.ret_p);
 		if ((e->p.ret_p = two_angle_brackets(e)) != 2) 
 			return (9);
-		if ((e->p.ret_p = extract_status(e, split)) != 0)
+		if ((e->p.ret_p = extract_status(e)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->str_count == 1)
 	{
-		if ((e->p.ret_p = verifyobjecttags_closings_brackets(e, split[0])) != 0)
+		if ((e->p.ret_p = verifyobjecttags_closings_brackets(e, e->p.split[0])) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = verifyobjecttags_closings(e, split[0])) != 0)
+		if ((e->p.ret_p = verifyobjecttags_closings(e, e->p.split[0])) != 0)
 			return (e->p.ret_p);
-		count_shapes(e, split[0]);
+		count_shapes(e, e->p.split[0]);
 	}
 	else if (e->str_count != 1 || e->str_count != 4)
 		return (13);

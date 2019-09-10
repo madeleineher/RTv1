@@ -112,13 +112,13 @@ int		shapevocab_checker_plane(t_env *e)
 	return (0);
 }
 
-int		shapevocab_checker(t_env *e, char **split_test) // /! string needs to be freed before returning error message /!
+int		shapevocab_checker(t_env *e) // /! string needs to be freed before returning error message /!
 {
 	int	ret;
 
 	ret = 0;
-	e->p.s_tmp = ft_strsub(split_test[0], 4,
-		(ft_strclen(split_test[0], '>') - 4));
+	e->p.s_tmp = ft_strsub(e->p.split[0], 4,
+		(ft_strclen(e->p.split[0], '>') - 4));
 	if (e->p.current_shape == 1)
 		if ((ret = shapevocab_checker_shpere(e)) != 0)
 			return (ret);

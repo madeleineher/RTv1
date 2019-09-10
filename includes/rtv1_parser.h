@@ -130,7 +130,7 @@ typedef struct		s_shape_count
 
 typedef struct		s_parser
 {
-	char			*line;
+	char			**split;
 	char			*strone;
 	char			*strtwo;
 	char			*s_tmp;

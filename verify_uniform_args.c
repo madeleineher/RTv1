@@ -49,18 +49,18 @@ int		two_angle_brackets(t_env *e)
 	return (brackets + bad_brackets);
 }
 
-int		extract_status(t_env *e, char **strings)
+int		extract_status(t_env *e)
 {
 	int	i;
 
 	i = 0;
-	if (ft_strcmp("status", strings[1]) != 0)
+	if (ft_strcmp("status", e->p.split[1]) != 0)
 		return (14);
-	if (ft_strcmp("=", strings[2]) != 0)
+	if (ft_strcmp("=", e->p.split[2]) != 0)
 		return (15);
-	if (ft_strcmp("\"basic\">", strings[3]) == 0)
+	if (ft_strcmp("\"basic\">", e->p.split[3]) == 0)
 		e->p.status = 1;
-	else if (ft_strcmp("\"extra\">", strings[3]) == 0)
+	else if (ft_strcmp("\"extra\">", e->p.split[3]) == 0)
 		e->p.status = 2;
 	else
 		return (16);

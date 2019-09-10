@@ -36,18 +36,18 @@ int		add_link(char *line, t_ll **head, t_env *e, int i) // needs to be moved to 
 	return (0);
 }
 
-int		threetab_verifications(t_env *e, char **split_test)
+int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
 {
-	if (e->str_count == 3) // THREEE ----------- in verifyfour.c
+	if (e->str_count == 3)
 	{
-		if ((e->p.ret_p = verifyanglebrackets_three(e, split_test)) == -1)
+		if ((e->p.ret_p = verifyanglebrackets_three(e)) == -1)
 			return (17);
-		if ((e->p.ret_p = verifyvocab_three(e, split_test)) != 0)
+		if ((e->p.ret_p = verifyvocab_three(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = verifyargs_three(e, split_test)) != 0) // store data here
+		if ((e->p.ret_p = verifyargs_three(e, l_head, o_head)) != 0) // store data here
 			return (e->p.ret_p);
 	}
-	else if (e->str_count == 1) // ONE ~~~~~~~~~~ in verifythree.c
+	else if (e->str_count == 1)
 	{
 		if ((e->p.ret_p = verifyanglebrackets_one(e)) == -1)
 			return (17);
@@ -61,37 +61,37 @@ int		threetab_verifications(t_env *e, char **split_test)
 	return (0);
 }
 
-int		verify_line_seg_one(t_env *e, char **split_test, char *line)
+int		verify_line_seg_one(t_env *e, t_ll *l_head, t_ol *o_head)
 {
-	if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
+	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
-	if (ft_charfreq(line, '\t') == 2)
-		if ((e->p.ret_p = two_tabs_specs(e, split_test)) != 0)
+	if (ft_charfreq(e->p.gnl_line, '\t') == 2)
+		if ((e->p.ret_p = two_tabs_specs(e)) != 0)
 			return (e->p.ret_p);
-	if (ft_charfreq(line, '\t') == 3)
+	if (ft_charfreq(e->p.gnl_line, '\t') == 3)
 	{
-		if ((e->p.ret_p = verify_spec_atb(e, split_test)) != 0)
+		if ((e->p.ret_p = verify_spec_atb(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = threetab_verifications(e, split_test)) != 0)  // will need to send main env *e here !
+		if ((e->p.ret_p = threetab_verifications(e, l_head, o_head)) != 0)  // will need to send main env *e here !
 			return (e->p.ret_p);
 	}
 	return (0);
 }
 
-int		verify_line_seg_two(t_env *e, char **split_test, char *line)
+int		verify_line_seg_two(t_env *e, t_ll *l_head, t_ol *o_head)
 {
-	if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
+	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
-	if (ft_charfreq(line, '\t') == 2)
+	if (ft_charfreq(e->p.gnl_line, '\t') == 2)
 	{
-		if ((e->p.ret_p = twotab_verifications(e, split_test)) != 0)
+		if ((e->p.ret_p = twotab_verifications(e)) != 0)
 			return (e->p.ret_p);
 	}
-	if (ft_charfreq(line, '\t') == 3)
+	if (ft_charfreq(e->p.gnl_line, '\t') == 3)
 	{
-		if ((e->p.ret_p = shapevocab_checker(e, split_test)) != 0)
+		if ((e->p.ret_p = shapevocab_checker(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = threetab_verifications(e, split_test)) != 0) // will need to send main env *e here !
+		if ((e->p.ret_p = threetab_verifications(e, l_head, o_head)) != 0) // will need to send main env *e here !
 			return (e->p.ret_p);
 	}
 	return (0);
@@ -101,25 +101,23 @@ int		verify_line(t_env *e, t_ll *l_head, t_ol *o_head)
 {
 	(void)l_head;
 	(void)o_head;
-	char	**split_test;
-
-	split_test = ft_strsplit(e->p.gnl_line, ' ');
-	e->str_count = ft_countstrings(split_test);
+	e->p.split = ft_strsplit(e->p.gnl_line, ' ');
+	e->str_count = ft_countstrings(e->p.split);
 	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
 	{
-		if ((e->p.ret_p = verify_line_seg_one(e, split_test, e->p.gnl_line)) != 0)
+		if ((e->p.ret_p = verify_line_seg_one(e, l_head, o_head)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->p.specs == 1 && (e->p.scene != 1 || e->p.objects != 0))
 		return (4);
 	if (e->p.objects == 1 && e->p.specs == 2 && e->p.scene == 1)
 	{
-		if ((e->p.ret_p = verify_line_seg_two(e, split_test, e->p.gnl_line)) != 0)
+		if ((e->p.ret_p = verify_line_seg_two(e, l_head, o_head)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
 		return (4);
-	ft_delsplit(split_test);
+	ft_delsplit(e->p.split);
 	return (0);
 }
 

@@ -143,7 +143,7 @@ int			error(t_env *e, int i)
 	}
 	if (i > 25)
 		lineless_errors(e, i);
-	// ft_strdel(split_string);
+	ft_strdel(e->p.split);
 	quit(e);
 	return (0);
 }
