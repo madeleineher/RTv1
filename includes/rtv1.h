@@ -15,6 +15,7 @@
 # include "../minilibx_macos/mlx.h"
 # include "../libft/libft.h"
 # include "../libft/get_next_line.h"
+// # include "rtv1_parser.h"
 # include <math.h>
 # include <complex.h>
 # include <unistd.h>
@@ -33,7 +34,7 @@
 # define PLANE		2
 # define SPHERE		3
 
-typedef struct		s_ll
+typedef struct		s_ll  // for storing data
 {
 	size_t			content_size;
 	char			*content;
@@ -129,7 +130,7 @@ typedef struct		s_camera
 	int				status;
 }					t_camera;
 
-typedef struct		s_obj // for gathering data
+typedef struct		s_obj // for storing data
 {
 	t_dir			*dir;
 	t_cen			*cen;
@@ -156,15 +157,14 @@ typedef struct		s_mlx
 	int				sl;
 }					t_mlx;
 
-typedef struct		s_ret
+typedef struct		s_ret // part of parser
 {
 	int				tag;
-	int				voc;
 	int				glo;
 	int				gnl;
 }					t_ret;
 
-typedef struct		s_spec
+typedef struct		s_spec //parser
 {
 	int				cam;
 	int				amb;
@@ -173,7 +173,7 @@ typedef struct		s_spec
 	int				amb_cl;
 }					t_spec;
 
-typedef struct		s_parseobj // for checking if object shapes are open/closed correctly
+typedef struct		s_parseobj  // part of parser
 {
 	int				sphere;
 	int				plane;
@@ -181,16 +181,101 @@ typedef struct		s_parseobj // for checking if object shapes are open/closed corr
 	int				cyn;
 }					t_parseobj;
 
-typedef struct		s_parser
+typedef struct		s_pla_atb // part of parser
+{
+	int				normal;
+	int				d;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				rotate;
+	int				translate;
+}					t_pla_atb;
+
+typedef struct		s_cyn_atb // part of parser
+{
+	int				radius;
+	int				center;
+	int				direction;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				angle;
+	int				rotate;
+	int				translate;
+}					t_cyn_atb;
+
+typedef struct		s_cone_atb // part of parser
+{
+	int				radius;
+	int				center;
+	int				direction;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				angle;
+	int				rotate;
+	int				translate;
+}					t_cone_atb;
+
+typedef struct		s_sphere_atb // part of parser
+{
+	int				radius;
+	int				center;
+	int				diffusion;
+	int				reflection;
+	int				specpower;
+	int				specvalue;
+	int				rotate;
+	int				translate;
+}					t_sphere_atb;
+
+typedef struct		s_cam_atb //parser
+{
+	int				position;
+	int				direction; // vector, can be all negative but not all 0, 0, 0
+	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 (max)! -360 (min)
+	int				translation; // 0, 0, 0 // no rules add translation to position
+}					t_cam_atb;
+
+typedef struct		s_amb_atb  //parser
+{
+	int				power;
+	int				color; // ??
+}					t_amb_atb;
+
+typedef struct		s_lig_atb //parser
+{
+	int				position;
+	int				intensity; // 0 (min) to 255 (max)
+	int				rotate; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
+	int				translate; // 0, 0, 0 // no rules add translation to position
+}					t_lig_atb;
+
+typedef struct		s_shape_count // parser
+{
+	int				spheres;
+	int				cones;
+	int				cylinders;
+	int				planes;
+}					t_shape_count;
+
+typedef struct		s_parser /////////////////////// STRUCT PARSER
 {
 	char			*line;
 	char			*strone;
 	char			*strtwo;
+	char			*s_tmp; // moving
 	int				gnl_i;
 	char			*gnl_line;
 	char			*tmp;
 	char			*t;
 	char			*current_tag;
+	char			*vocab_one[4];
+	char			*vocab_two[16];
 	int				skips;
 	int				scene;
 	int				specs;
@@ -212,123 +297,35 @@ typedef struct		s_parser
 	int				e1;
 	int				e2;
 	int				l;
+	int				v1;
+	int				v2;
+	int				v3;
+	int				comma;
+	int				realnum;
+	int				ret_p; // main ret
+	t_parseobj		p_obj;
+	t_spec			p_spec;
+	t_ret 			ret;
+	t_shape_count	count;
+	t_pla_atb		p_atb;
+	t_cyn_atb		y_atb;
+	t_cone_atb		c_atb;
+	t_sphere_atb	s_atb;
+	t_lig_atb		l_atb;
+	t_amb_atb		a_atb;
+	t_cam_atb		ca_atb;
 }					t_parser;
-
-typedef struct		s_shape_count // count my shapes
-{
-	int				spheres;
-	int				cones;
-	int				cylinders;
-	int				planes;
-}					t_shape_count;
-
-typedef struct		s_sphere_atb
-{
-	int				radius;
-	int				center;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				rotate;
-	int				translate;
-}					t_sphere_atb;
-
-typedef struct		s_cone_atb
-{
-	int				radius;
-	int				center;
-	int				direction;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				angle;
-	int				rotate;
-	int				translate;
-}					t_cone_atb;
-
-typedef struct		s_cyn_atb
-{
-	int				radius;
-	int				center;
-	int				direction;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				angle;
-	int				rotate;
-	int				translate;
-}					t_cyn_atb;
-
-typedef struct		s_pla_atb
-{
-	int				normal;
-	int				d;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				rotate;
-	int				translate;
-}					t_pla_atb;
-
-// only light can be extra the other ones need to be basic
-
-typedef struct		s_cam_atb
-{
-	int				position;
-	int				direction; // vector, can be all negative but not all 0, 0, 0
-	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 (max)! -360 (min)
-	int				translation; // 0, 0, 0 // no rules add translation to position
-}					t_cam_atb;
-
-typedef struct		s_amb_atb
-{
-	int				power;
-	int				color; // ??
-}					t_amb_atb;
-
-typedef struct		s_lig_atb
-{
-	int				position;
-	int				intensity; // 0 (min) to 255 (max)
-	int				rotate; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
-	int				translate; // 0, 0, 0 // no rules add translation to position
-}					t_lig_atb;
 
 typedef struct		s_env
 {
 	char			*data;
-	char			parser[5];
 	int				str_count;
 	int				k[300];
-	int				i;
 	int				lenfile;
-	char			*vocab_one[4];
-	char			*vocab_two[16];
-	char			*sphere_voc[6];
-	char			*plane_voc[6];
-	char			*cone_voc[7];
-	char			*cyn_voc[7];
-	int				voc_counter;
-	int				ret_tmp;
-	char			*s_tmp;
-	t_cam_atb		ca_atb;
-	t_amb_atb		a_atb;
-	t_lig_atb		l_atb;
-	t_sphere_atb	s_atb;
-	t_cone_atb		c_atb;
-	t_cyn_atb		y_atb;
-	t_pla_atb		p_atb;
-	t_shape_count	count;
-	t_parser		p;
-	t_parseobj		p_obj;
-	t_spec			p_spec;
-	t_ret 			ret;
-	t_mlx			w;
-	t_ll			*ll;
+	int				s_count; // need to copy t_shape_count
+	t_parser		p; // THE PARSER STRUCTURE !
+	t_mlx			w; // mlx images, window, etc. 
+	t_ll			*ll; // linked list
 	t_amb			amb;
 	t_camera		cam;
 	t_light			light;
@@ -344,7 +341,7 @@ int					key_release(int key, t_env *e);
 int					quit(t_env *e);
 void				draw_sphere(t_env *e);
 
-//function for parser
+//functions for parser
 int					two_tabs_specs(t_env *e, char **split_test);
 int					open_close(int *check_me);
 int					extract_status(t_env *e, char **strings);
@@ -361,12 +358,14 @@ int					shapevocab_checker(t_env *e, char **split_test);
 int					shapevocab_checker_partwo(t_env *e);
 int					verify_spec_atb(t_env *e, char **split_test);
 int					verify_spec_atb_partwo(t_env *e);
-int					verify_tag_to_argument(t_env *e, char *string, int args); // verify_five ~*
+int					verify_tag_to_argument(t_env *e, char *string, int args);
 int					error(t_env *e, int i);
 void				reset_spec_atb(t_env *e);
 void				lineless_errors_three(t_env *e, int i);
 void				lineless_errors_eight(t_env *e, int i);
-
+int					verify_numbers_one(t_env *e, char *string, char *num);
+int					verify_values(t_env *e);
+int					verify_numbers_three(t_env *e, char *string);
 
 int					main(int argc, char **argv);
 

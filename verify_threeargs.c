@@ -27,10 +27,10 @@ int		verifyvocab_three(t_env *e, char **split) // /! string needs to be freed be
 		return (-1);
 	else
 		while (++e->p.voc_i < 16)
-			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
+			if (ft_strcmp(e->p.strone, e->p.vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
-	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 3)) != 0)
-		return (e->ret_tmp);
+	if ((e->p.ret_p = verify_tag_to_argument(e, e->p.strone, 3)) != 0)
+		return (e->p.ret_p);
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);
@@ -74,47 +74,8 @@ int		verifyendings_three(char **split_test)
 	return (0);
 }
 
-int		verify_numbers_three(t_env *e, char *string, char *num) // working here 
+int		verifyargs_three_numbers(char *string, int letter)
 {
-	(void)e;
-	(void)string;
-	(void)num;
-	// int	realnum;
-
-	// realnum = ft_atoi(num);
-	// change the strcmp strings !
-	// if (ft_strcmp("radius", string) == 0)
-	// {
-	// 	if (realnum <= 0) // || realnum > LIMIT (?))
-	// 		return (83);
-	// }
-// 	else if (ft_strcmp("angle", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("d", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("specpower", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("specvalue", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("reflection", string) == 0)
-// 	{
-		
-// 	}
-	return (0);
-}
-
-// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
-int		verifyargs_three_numbers(char *string, int letter, t_env *e)
-{
-	(void)e;
 	int		num_check;
 	int		fake_check;
 	int		i;
@@ -141,38 +102,29 @@ int		verifyargs_three_numbers(char *string, int letter, t_env *e)
 
 int		verifyargs_three(t_env *e, char **split_test)  
 {
-	int		comma;
-	int		len1;
-	int		val1;
-	int		val2;
-	int		val3;
-
 	if (verifyendings_three(split_test) == -1)
 		return (18);
-	len1 = ft_strclen(split_test[0], '>') + 1;
-	comma = 0;
-	comma += ft_charfreq(split_test[0], ',');
-	comma += ft_charfreq(split_test[1], ',');
-	comma += ft_charfreq(split_test[2], ',');
-	if (comma != 2)
+	e->p.comma = 0;
+	e->p.comma += ft_charfreq(split_test[0], ',');
+	e->p.comma += ft_charfreq(split_test[1], ',');
+	e->p.comma += ft_charfreq(split_test[2], ',');
+	if (e->p.comma != 2)
 		return (19);
 	e->p.strone = ft_strsub(split_test[0], ft_strclen(split_test[0], '>') + 1, \
 		(ft_strclen(split_test[0], ',') - ft_strclen(split_test[0], '>')));
 	e->p.strtwo = ft_strsub(e->p.gnl_line, 4, ft_strclen(e->p.gnl_line, '>') - 4);	
-	if ((verifyargs_three_numbers(e->p.strone, ',', e) != 0))
+	if ((verifyargs_three_numbers(e->p.strone, ',') != 0))
 		return (18);
-	if ((verifyargs_three_numbers(split_test[1], ',', e) != 0)) 
+	if ((verifyargs_three_numbers(split_test[1], ',') != 0)) 
 		return (18);
-	if ((verifyargs_three_numbers(split_test[2], '<', e) != 0))
+	if ((verifyargs_three_numbers(split_test[2], '<') != 0))
 		return (18);
-	val1 = ft_atoi(e->p.strone); // working here 
-	val2 = ft_atoi(split_test[1]); // working here 
-	val3 = ft_atoi(split_test[2]); // working here 
-	printf("[%d] [%d] [%d]\n", val1, val2, val3); // working here 
-	// if ((e->ret_tmp = verify_numbers_three(e, e->p.strtwo, e->p.strone)) != 0) // working here 
-		// return (e->ret_tmp);
+	e->p.v1 = ft_atoi(e->p.strone); // working here 
+	e->p.v2 = ft_atoi(split_test[1]); // working here 
+	e->p.v3 = ft_atoi(split_test[2]); // working here 
+	if ((e->p.ret_p = verify_numbers_three(e, e->p.strtwo)) != 0) // working here 
+		return (e->p.ret_p);  // working here, last verification (store data here)!
 	ft_strfree(e->p.strone);
 	ft_strfree(e->p.strtwo);
-	// store_args(e);
 	return (0);
 }

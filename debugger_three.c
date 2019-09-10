@@ -38,6 +38,22 @@ void		line_errors(t_env *e, int i)
 		ft_strfree(e->p.strone);
 		ft_strfree(e->p.strtwo);
 	}
+	if (i == 84)
+	{
+		ft_putstr("Oops ! It looks like [");
+		ft_putstr(e->p.strone);
+		ft_putendl("] was given a value greater/less than 360. ");
+		ft_strfree(e->p.strone);
+		ft_strfree(e->p.strtwo);
+	}
+	if (i == 85)
+	{
+		ft_putstr("Oops ! It looks like [");
+		ft_putstr(e->p.strone);
+		ft_putendl("] was given all zero value, at least one value must be greater/less than zero. ");
+		ft_strfree(e->p.strone);
+		ft_strfree(e->p.strtwo);
+	}
 	ft_putstr("The problem lies in line : ");
 	ft_putnbr(e->p.gnl_i);
 	ft_putchar('\n'); //add free strings here if there is an error return value !

@@ -58,10 +58,10 @@ int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning e
 		return (-1);
 	else
 		while (++e->p.voc_i < 16) // could be seg faulting here ... ! ! !
-			if (ft_strcmp(e->p.strone, e->vocab_two[e->p.voc_i]) == 0)
+			if (ft_strcmp(e->p.strone, e->p.vocab_two[e->p.voc_i]) == 0)
 				e->p.voc_check++;
-	if ((e->ret_tmp = verify_tag_to_argument(e, e->p.strone, 1)) != 0)
-		return (e->ret_tmp);
+	if ((e->p.ret_p = verify_tag_to_argument(e, e->p.strone, 1)) != 0)
+		return (e->p.ret_p);
 	free(e->p.strone);
 	e->p.strone = NULL;
 	free(e->p.strtwo);
@@ -69,41 +69,6 @@ int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning e
 	return (e->p.voc_check);
 }
 
-int		verify_numbers_one(t_env *e, char *string, char *num) // working here !
-{
-	(void)e;
-	int	realnum;
-
-	realnum = ft_atoi(num);
-	if (ft_strcmp("radius", string) == 0)
-	{
-		if (realnum <= 0) // || realnum > LIMIT (?))
-			return (83);
-	}
-// 	else if (ft_strcmp("angle", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("d", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("specpower", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("specvalue", string) == 0)
-// 	{
-		
-// 	}
-// 	else if (ft_strcmp("reflection", string) == 0)
-// 	{
-		
-// 	}
-	return (0);
-}
-
-// NEED TO COME BACK HERE AND EDIT THE WAY I VERIFY STRING INPUT
 int		verifyargs_one(t_env *e)
 {
 	int		i;
@@ -125,8 +90,8 @@ int		verifyargs_one(t_env *e)
 			fake_check++;
 		i++;
 	}
-	if ((e->ret_tmp = verify_numbers_one(e, e->p.strtwo, e->p.strone)) != 0) // working here
-		return (e->ret_tmp);
+	if ((e->p.ret_p = verify_numbers_one(e, e->p.strtwo, e->p.strone)) != 0)
+		return (e->p.ret_p); // working here, last verification (store data here)!
 	if (fake_check > 0 || num_check == 0)
 		return (18);
 	ft_strfree(e->p.strone);
@@ -136,11 +101,11 @@ int		verifyargs_one(t_env *e)
 
 int		globals(t_env *e, char *gnl_line)
 {
-	int 	ret_tmp = 0;
 	int		ret_tabs = 0;
 	char	*tabless;
 
 	e->p.skip = 0;
+	e->p.ret_p = 0; // need this ?
 	ret_tabs = ft_charfreq(gnl_line, '\t');
 	tabless = ft_strtrim(gnl_line);
 	if ((ft_strcmp("<scene>", tabless) == 0) && ret_tabs == 0)
@@ -153,15 +118,15 @@ int		globals(t_env *e, char *gnl_line)
 		e->p.skip = 1;
 	}
 	if (ft_strcmp("</specs>", tabless) == 0 && ret_tabs == 1)
-		if ((ret_tmp = open_close(&e->p.specs)) != 0)
-			return (ret_tmp);
+		if ((e->p.ret_p = open_close(&e->p.specs)) != 0)
+			return (e->p.ret_p);
 	if (ft_strcmp("<objects>", tabless) == 0 && ret_tabs == 1)
 	{
 		e->p.objects += 1;
 		e->p.skip = 1;
 	}
 	if (ft_strcmp("</objects>", tabless) == 0 && ret_tabs == 1)
-		if ((ret_tmp = open_close(&e->p.objects)) != 0)
-			return (ret_tmp);
+		if ((e->p.ret_p = open_close(&e->p.objects)) != 0)
+			return (e->p.ret_p);
 	return (0);
 }

@@ -115,7 +115,7 @@ int		verify_tag_to_argument(t_env *e, char *string, int args)
 			return (81);
 	}
 	else
-		if ((e->ret_tmp = verify_tag_to_argument_three(string)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verify_tag_to_argument_three(string)) != 0)
+			return (e->p.ret_p);
 	return (0);
 }

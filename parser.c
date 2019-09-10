@@ -40,21 +40,21 @@ int		threetab_verifications(t_env *e, char **split_test)
 {
 	if (e->str_count == 3) // THREEE ----------- in verifyfour.c
 	{
-		if ((e->ret_tmp = verifyanglebrackets_three(e, split_test)) == -1)
+		if ((e->p.ret_p = verifyanglebrackets_three(e, split_test)) == -1)
 			return (17);
-		if ((e->ret_tmp = verifyvocab_three(e, split_test)) != 0)//== -1)
-			return (e->ret_tmp);
-		if ((e->ret_tmp = verifyargs_three(e, split_test)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verifyvocab_three(e, split_test)) != 0)
+			return (e->p.ret_p);
+		if ((e->p.ret_p = verifyargs_three(e, split_test)) != 0) // store data here
+			return (e->p.ret_p);
 	}
 	else if (e->str_count == 1) // ONE ~~~~~~~~~~ in verifythree.c
 	{
-		if ((e->ret_tmp = verifyanglebrackets_one(e)) == -1)
+		if ((e->p.ret_p = verifyanglebrackets_one(e)) == -1)
 			return (17);
-		if ((e->ret_tmp = verifyvocab_one(e)) != 0)//-1)
-			return (e->ret_tmp);
-		if ((e->ret_tmp = verifyargs_one(e)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verifyvocab_one(e)) != 0)
+			return (e->p.ret_p);
+		if ((e->p.ret_p = verifyargs_one(e)) != 0) // store data here
+			return (e->p.ret_p);
 	}
 	else
 		return (17);
@@ -66,15 +66,14 @@ int		verify_line_seg_one(t_env *e, char **split_test, char *line)
 	if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 		return (5);
 	if (ft_charfreq(line, '\t') == 2)
-		if ((e->ret_tmp = two_tabs_specs(e, split_test)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = two_tabs_specs(e, split_test)) != 0)
+			return (e->p.ret_p);
 	if (ft_charfreq(line, '\t') == 3)
 	{
-		if ((e->ret_tmp = threetab_verifications(e, split_test)) != 0)
-			return (e->ret_tmp);
-		// add verification of three tab lines here of specs - working here !
-		if ((e->ret_tmp = verify_spec_atb(e, split_test)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verify_spec_atb(e, split_test)) != 0)
+			return (e->p.ret_p);
+		if ((e->p.ret_p = threetab_verifications(e, split_test)) != 0)  // will need to send main env *e here !
+			return (e->p.ret_p);
 	}
 	return (0);
 }
@@ -86,15 +85,15 @@ int		verify_line_seg_two(t_env *e, char **split_test, char *line)
 		return (5);
 	if (ft_charfreq(line, '\t') == 2)
 	{
-		if ((e->ret_tmp = twotab_verifications(e, split_test)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = twotab_verifications(e, split_test)) != 0)
+			return (e->p.ret_p);
 	}
 	if (ft_charfreq(line, '\t') == 3)
 	{
-		if ((e->ret_tmp = threetab_verifications(e, split_test)) != 0)
-			return (e->ret_tmp);
-		if ((e->ret_tmp = shapevocab_checker(e, split_test)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = shapevocab_checker(e, split_test)) != 0)
+			return (e->p.ret_p);
+		if ((e->p.ret_p = threetab_verifications(e, split_test)) != 0) // will need to send main env *e here !
+			return (e->p.ret_p);
 	}
 	return (0);
 }
@@ -107,15 +106,15 @@ int		verify_line(t_env *e, char *line)
 	e->str_count = ft_countstrings(split_test);
 	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
 	{
-		if ((e->ret_tmp = verify_line_seg_one(e, split_test, line)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verify_line_seg_one(e, split_test, line)) != 0)
+			return (e->p.ret_p);
 	}
 	else if (e->p.specs == 1 && (e->p.scene != 1 || e->p.objects != 0))
 		return (4);
 	if (e->p.objects == 1 && e->p.specs == 2 && e->p.scene == 1)
 	{
-		if ((e->ret_tmp = verify_line_seg_two(e, split_test, line)) != 0)
-			return (e->ret_tmp);
+		if ((e->p.ret_p = verify_line_seg_two(e, split_test, line)) != 0)
+			return (e->p.ret_p);
 	}
 	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
 		return (4);
@@ -127,25 +126,25 @@ int		last_checks(t_env *e)
 {
 	if (e->p.objects != 2 || e->p.specs != 2) // change the error number
 		return (8); // change error message
-	if (e->p_spec.cam_cl != 1 || e->p_spec.amb_cl != 1)
-		return (26); // mxl error , change message !
+	if (e->p.p_spec.cam_cl != 1 || e->p.p_spec.amb_cl != 1)
+		return (26);
 	if (e->p.scene != 2)
 		return (6);
-	if ((e->count.spheres + e->count.planes + e->count.cones + e->count.cylinders) == 0)
+	if ((e->p.count.spheres + e->p.count.planes + e->p.count.cones + e->p.count.cylinders) == 0)
 		return(59);
-	if ((ft_iseven(e->p_spec.light)) == -1)
+	if ((ft_iseven(e->p.p_spec.light)) == -1)
 		return(27);
-	if ((ft_iseven(e->p_obj.sphere)) == -1)
+	if ((ft_iseven(e->p.p_obj.sphere)) == -1)
 		return(34);
-	if ((ft_iseven(e->p_obj.cone)) == -1)
+	if ((ft_iseven(e->p.p_obj.cone)) == -1)
 		return(34);
-	if ((ft_iseven(e->p_obj.cyn)) == -1)
+	if ((ft_iseven(e->p.p_obj.cyn)) == -1)
 		return(34);
-	if ((ft_iseven(e->p_obj.plane)) == -1)
+	if ((ft_iseven(e->p.p_obj.plane)) == -1)
 		return(34);
-	if (e->p_spec.cam != 2 || e->p_spec.amb != 2)
+	if (e->p.p_spec.cam != 2 || e->p.p_spec.amb != 2)
 		return (37);
-	if (e->ret.gnl == -1)
+	if (e->p.ret.gnl == -1)
 		return (1);
 	printf("VALID!\n");
 	return (0);
@@ -160,13 +159,13 @@ int		parser(t_env *e, int fd)
 	//t_parser *p; // create parser structure here ! and then send parser everywhere !
 
 	head = NULL;
-	while ((e->ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
+	while ((e->p.ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{
 		e->p.gnl_i++;
-		if ((e->ret.glo = globals(e, e->p.gnl_line)) != 0)
-			return (e->ret.glo);
-		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->ret.tag = verify_line(e, e->p.gnl_line)) != 0))
-			return (e->ret.tag);
+		if ((e->p.ret.glo = globals(e, e->p.gnl_line)) != 0)
+			return (e->p.ret.glo);
+		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->p.ret.tag = verify_line(e, e->p.gnl_line)) != 0))
+			return (e->p.ret.tag);
 		if (e->p.gnl_line)
 		{
 			free(e->p.gnl_line);

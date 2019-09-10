@@ -23,7 +23,7 @@ CC = gcc
 SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c verify_specs_setup.c\
 	verify_shapes.c verify_onearg.c verify_threeargs.c verify_uniform_args.c\
 	verify_obj_voc.c verify_obj_voc_checker.c verify_spec_voc.c debugger.c\
-	debugger_two.c debugger_three.c
+	debugger_two.c debugger_three.c verify_oneargs_partwo.c verify_threeargs_partwo.c
 
 OBJS = $(SRCS:.c=.o)
 

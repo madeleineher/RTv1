@@ -26,26 +26,26 @@ int			quit(t_env *e)
 
 void		set_vocab(t_env *e)
 {
-	e->vocab_one[0] = "sphere";
-	e->vocab_one[1] = "cylinder";
-	e->vocab_one[2] = "cone";
-	e->vocab_one[3] = "plane";
-	e->vocab_two[0] = "position";
-	e->vocab_two[1] = "direction";
-	e->vocab_two[2] = "diffusion";
-	e->vocab_two[3] = "reflection";
-	e->vocab_two[4] = "specvalue"; 
-	e->vocab_two[5] = "specpower";
-	e->vocab_two[6] = "intensity"; 
-	e->vocab_two[7] = "translate";
-	e->vocab_two[8] = "rotate";
-	e->vocab_two[9] = "angle";
-	e->vocab_two[10] = "color";
-	e->vocab_two[11] = "center";
-	e->vocab_two[12] = "d";
-	e->vocab_two[13] = "radius";
-	e->vocab_two[14] = "ambient"; // -- correct name ? // need this ?????
-	e->vocab_two[15] = "normal";
+	e->p.vocab_one[0] = "sphere";
+	e->p.vocab_one[1] = "cylinder";
+	e->p.vocab_one[2] = "cone";
+	e->p.vocab_one[3] = "plane";
+	e->p.vocab_two[0] = "position";
+	e->p.vocab_two[1] = "direction";
+	e->p.vocab_two[2] = "diffusion";
+	e->p.vocab_two[3] = "reflection";
+	e->p.vocab_two[4] = "specvalue"; 
+	e->p.vocab_two[5] = "specpower";
+	e->p.vocab_two[6] = "intensity"; 
+	e->p.vocab_two[7] = "translate";
+	e->p.vocab_two[8] = "rotate";
+	e->p.vocab_two[9] = "angle";
+	e->p.vocab_two[10] = "color";
+	e->p.vocab_two[11] = "center";
+	e->p.vocab_two[12] = "d";
+	e->p.vocab_two[13] = "radius";
+	e->p.vocab_two[14] = "ambient"; // -- correct name ? // need this ?????
+	e->p.vocab_two[15] = "normal";
 }
 
 int			main(int argc, char **argv)
