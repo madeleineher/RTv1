@@ -15,7 +15,7 @@
 # include "../minilibx_macos/mlx.h"
 # include "../libft/libft.h"
 # include "../libft/get_next_line.h"
-// # include "rtv1_parser.h"
+# include "rtv1_parser.h"
 # include <math.h>
 # include <complex.h>
 # include <unistd.h>
@@ -33,13 +33,6 @@
 # define CYLINDER	1
 # define PLANE		2
 # define SPHERE		3
-
-typedef struct		s_ll  // for storing data
-{
-	size_t			content_size;
-	char			*content;
-	struct s_ll		*next;
-}					t_ll;
 
 typedef struct		s_pos
 {
@@ -69,12 +62,12 @@ typedef struct		s_cen
 	int				z;
 }					t_cen; // center
 
-typedef struct		s_diff
+typedef struct		s_dif
 {
 	int				x;
 	int				y;
 	int				z;
-}					t_diff; // diffusion
+}					t_dif; // diffusion
 
 typedef struct		s_ref
 {
@@ -104,48 +97,60 @@ typedef struct		s_tra
 	int				z;
 }					t_tra; // translate
 
-typedef struct		s_amb
+typedef struct		s_camera // struct for camera data
 {
-	t_diff			*diff;
-	t_ref			*ref;
+	t_pos			campos;
+	t_dir			camdir;
 	t_tra			*tra;
 	t_rot			*rot;
-	int				status;
+}					t_camera;
+
+typedef struct		s_amb // struct for amb data
+{
+	t_dif			*diff;
+	t_ref			*ref;
 	int				specvalue;
 	int				specpower;
 }					t_amb;
 
-typedef struct		s_light
+typedef struct		s_light // struct for light data
 {
 	t_pos			*lipos;
 	t_int			*inten;
 }					t_light;
 
-typedef struct		s_camera
+typedef struct		s_ll  // linked list for storing LIGHT data
 {
-	t_pos			*campos;
-	t_dir			*camdir;
-	t_tra			*tra;
-	t_rot			*rot;
-	int				status;
-}					t_camera;
+	size_t			content_size;
+	char			*content;
+	t_light			light;
+	struct s_ll		*next;
+}					t_ll;
 
-typedef struct		s_obj // for storing data
+typedef struct		s_obj // struct for storing object data
 {
+	int				status; // 0 == basic , 1 == extra
+	int				d;
+	int				angle;
+	int				axis;
+	int				radius;
+	int				s_pow;
+	int				s_val;
+	t_dif			*dif;
 	t_dir			*dir;
 	t_cen			*cen;
 	t_normal		*nor;
 	t_rot			*rot;
 	t_tra			*tra;
-	int				sta;
-	int				mat;
-	int				d;
-	int				type;
-	int				angle;
-	int				axis;
-	int				radius;
-	int				ambient;
 }					t_obj;
+
+typedef struct		s_ol  // linked list for storing OBJECT data
+{
+	size_t			content_size;
+	char			*content;
+	t_obj			obj;
+	struct s_ll		*next;
+}					t_ol;
 
 typedef struct		s_mlx
 {
@@ -157,179 +162,24 @@ typedef struct		s_mlx
 	int				sl;
 }					t_mlx;
 
-typedef struct		s_ret // part of parser
-{
-	int				tag;
-	int				glo;
-	int				gnl;
-}					t_ret;
-
-typedef struct		s_spec //parser
-{
-	int				cam;
-	int				amb;
-	int				light;
-	int				cam_cl;
-	int				amb_cl;
-}					t_spec;
-
-typedef struct		s_parseobj  // part of parser
-{
-	int				sphere;
-	int				plane;
-	int				cone;
-	int				cyn;
-}					t_parseobj;
-
-typedef struct		s_pla_atb // part of parser
-{
-	int				normal;
-	int				d;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				rotate;
-	int				translate;
-}					t_pla_atb;
-
-typedef struct		s_cyn_atb // part of parser
-{
-	int				radius;
-	int				center;
-	int				direction;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				angle;
-	int				rotate;
-	int				translate;
-}					t_cyn_atb;
-
-typedef struct		s_cone_atb // part of parser
-{
-	int				radius;
-	int				center;
-	int				direction;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				angle;
-	int				rotate;
-	int				translate;
-}					t_cone_atb;
-
-typedef struct		s_sphere_atb // part of parser
-{
-	int				radius;
-	int				center;
-	int				diffusion;
-	int				reflection;
-	int				specpower;
-	int				specvalue;
-	int				rotate;
-	int				translate;
-}					t_sphere_atb;
-
-typedef struct		s_cam_atb //parser
-{
-	int				position;
-	int				direction; // vector, can be all negative but not all 0, 0, 0
-	int				rotation; // can be all 0, 0, 0 and negative // no rules but limit is 360 (max)! -360 (min)
-	int				translation; // 0, 0, 0 // no rules add translation to position
-}					t_cam_atb;
-
-typedef struct		s_amb_atb  //parser
-{
-	int				power;
-	int				color; // ??
-}					t_amb_atb;
-
-typedef struct		s_lig_atb //parser
-{
-	int				position;
-	int				intensity; // 0 (min) to 255 (max)
-	int				rotate; // can be all 0, 0, 0 and negative // no rules but limit is 360 !
-	int				translate; // 0, 0, 0 // no rules add translation to position
-}					t_lig_atb;
-
-typedef struct		s_shape_count // parser
-{
-	int				spheres;
-	int				cones;
-	int				cylinders;
-	int				planes;
-}					t_shape_count;
-
-typedef struct		s_parser /////////////////////// STRUCT PARSER
-{
-	char			*line;
-	char			*strone;
-	char			*strtwo;
-	char			*s_tmp; // moving
-	int				gnl_i;
-	char			*gnl_line;
-	char			*tmp;
-	char			*t;
-	char			*current_tag;
-	char			*vocab_one[4];
-	char			*vocab_two[16];
-	int				skips;
-	int				scene;
-	int				specs;
-	int				spec_order;
-	int				skip;
-	int				objects;
-	int 			voc_i;
-	int 			voc_check;
-	int				status;
-	int				set_one;
-	int				set_two;
-	int				i;
-	int				j;
-	int				k;
-	int				close_obj_i;
-	int				good_obj_brack;
-	int				bad_obj_brack;
-	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
-	int				e1;
-	int				e2;
-	int				l;
-	int				v1;
-	int				v2;
-	int				v3;
-	int				comma;
-	int				realnum;
-	int				ret_p; // main ret
-	t_parseobj		p_obj;
-	t_spec			p_spec;
-	t_ret 			ret;
-	t_shape_count	count;
-	t_pla_atb		p_atb;
-	t_cyn_atb		y_atb;
-	t_cone_atb		c_atb;
-	t_sphere_atb	s_atb;
-	t_lig_atb		l_atb;
-	t_amb_atb		a_atb;
-	t_cam_atb		ca_atb;
-}					t_parser;
-
 typedef struct		s_env
 {
 	char			*data;
 	int				str_count;
 	int				k[300];
 	int				lenfile;
-	int				s_count; // need to copy t_shape_count
+	int				s_count;
 	t_parser		p; // THE PARSER STRUCTURE !
-	t_mlx			w; // mlx images, window, etc. 
-	t_ll			*ll; // linked list
-	t_amb			amb;
-	t_camera		cam;
-	t_light			light;
-	t_obj			obj; // cleaning
+	t_mlx			w; // mlx images, window, etc.
+
+	t_amb			amb; // store amb
+	t_camera		cam; // store cam
+
+	t_light			light; // store light
+	t_obj			obj; // store objs
+
+	t_ll			*ll_lit; // linked list
+	t_ol			*ll_obj; // linked list
 }					t_env;
 
 void				setup_rtv1(t_env *e);

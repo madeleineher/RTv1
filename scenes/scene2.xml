@@ -1,8 +1,8 @@
 <scene>
 	<specs>
 		<cam>
-			<position>100, 100, 100</position>
-			<direction>100, 100, 100</direction>
+			<position>100, 200, 300</position>
+			<direction>500, 700, 900</direction>
 		</cam>
 		<amb>
 			<specpower>80</specpower>

@@ -91,42 +91,10 @@ int		verifyargs_one(t_env *e)
 		i++;
 	}
 	if ((e->p.ret_p = verify_numbers_one(e, e->p.strtwo, e->p.strone)) != 0)
-		return (e->p.ret_p); // working here, last verification (store data here)!
+		return (e->p.ret_p); // working here, last verification ( & store data here ) !
 	if (fake_check > 0 || num_check == 0)
 		return (18);
 	ft_strfree(e->p.strone);
 	ft_strfree(e->p.strtwo);
-	return (0);
-}
-
-int		globals(t_env *e, char *gnl_line)
-{
-	int		ret_tabs = 0;
-	char	*tabless;
-
-	e->p.skip = 0;
-	e->p.ret_p = 0; // need this ?
-	ret_tabs = ft_charfreq(gnl_line, '\t');
-	tabless = ft_strtrim(gnl_line);
-	if ((ft_strcmp("<scene>", tabless) == 0) && ret_tabs == 0)
-		e->p.scene += 1;
-	if (ft_strcmp("</scene>", tabless) == 0 && ret_tabs == 0)
-		e->p.scene += 1;
-	if (ft_strcmp("<specs>", tabless) == 0 && ret_tabs == 1)
-	{
-		e->p.specs += 1;
-		e->p.skip = 1;
-	}
-	if (ft_strcmp("</specs>", tabless) == 0 && ret_tabs == 1)
-		if ((e->p.ret_p = open_close(&e->p.specs)) != 0)
-			return (e->p.ret_p);
-	if (ft_strcmp("<objects>", tabless) == 0 && ret_tabs == 1)
-	{
-		e->p.objects += 1;
-		e->p.skip = 1;
-	}
-	if (ft_strcmp("</objects>", tabless) == 0 && ret_tabs == 1)
-		if ((e->p.ret_p = open_close(&e->p.objects)) != 0)
-			return (e->p.ret_p);
 	return (0);
 }

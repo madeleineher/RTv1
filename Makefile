@@ -12,7 +12,9 @@
 
 NAME = RTv1
 
-INC = includes/rtv1.h
+INC1 = includes/rtv1_parser.h
+
+INC2 = includes/rtv1.h
 
 CFLAGS = -Wall -Werror -Wextra -g3 # remove g3 flag
 
@@ -24,7 +26,7 @@ SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c verify_specs_setup.c\
 	verify_shapes.c verify_onearg.c verify_threeargs.c verify_uniform_args.c\
 	verify_obj_voc.c verify_obj_voc_checker.c verify_spec_voc.c debugger.c\
 	debugger_two.c debugger_three.c verify_oneargs_partwo.c\
-	verify_threeargs_partwo.c set_vocab.c
+	verify_threeargs_partwo.c globals_and_set_vocab.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -48,7 +50,7 @@ $(NAME):$(OBJS) | $(L_TARG)
 	@echo "*.o" > .gitignore
 	@echo "*.a" >> .gitignore
 
-%.o: %.c $(INC)
+%.o: %.c $(INC1) $(INC2) 
 	$(CC) $(CFLAGS) $< -c
 
 $(L_TARG):

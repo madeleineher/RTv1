@@ -19,13 +19,12 @@ int		verify_numbers_one(t_env *e, char *string, char *num) // working here !
 	{
 		if (e->p.realnum <= 0) // || e->p.realnum > LIMIT (?))
 			return (83);
-		if (e->p.specs == 1 && e->p.objects == 0) // in the specs tag <specs> </specs>
-		{
-			
-		}
 		if (e->p.specs == 2 && e->p.objects == 1) // in the objects tag <objects> </objects>
 		{
-
+            if (e->p.current_shape == 0 || e->p.current_shape == 1 || e->p.current_shape == 2)
+            {
+                
+            }
 		}
 		// store value here based on object (spec/shape) ... 
 	}

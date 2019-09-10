@@ -80,7 +80,6 @@ int		verify_line_seg_one(t_env *e, char **split_test, char *line)
 
 int		verify_line_seg_two(t_env *e, char **split_test, char *line)
 {
-	// tabless = ft_strtrim(split_test[0]);
 	if (ft_charfreq(line, '\t') < 2 || ft_charfreq(line, '\t') > 3)
 		return (5);
 	if (ft_charfreq(line, '\t') == 2)
@@ -98,22 +97,24 @@ int		verify_line_seg_two(t_env *e, char **split_test, char *line)
 	return (0);
 }
 
-int		verify_line(t_env *e, char *line)
+int		verify_line(t_env *e, t_ll *l_head, t_ol *o_head)
 {
+	(void)l_head;
+	(void)o_head;
 	char	**split_test;
 
-	split_test = ft_strsplit(line, ' ');
+	split_test = ft_strsplit(e->p.gnl_line, ' ');
 	e->str_count = ft_countstrings(split_test);
 	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
 	{
-		if ((e->p.ret_p = verify_line_seg_one(e, split_test, line)) != 0)
+		if ((e->p.ret_p = verify_line_seg_one(e, split_test, e->p.gnl_line)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->p.specs == 1 && (e->p.scene != 1 || e->p.objects != 0))
 		return (4);
 	if (e->p.objects == 1 && e->p.specs == 2 && e->p.scene == 1)
 	{
-		if ((e->p.ret_p = verify_line_seg_two(e, split_test, line)) != 0)
+		if ((e->p.ret_p = verify_line_seg_two(e, split_test, e->p.gnl_line)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (e->p.objects == 1 && (e->p.scene != 1 || e->p.specs != 2))
@@ -124,8 +125,8 @@ int		verify_line(t_env *e, char *line)
 
 int		last_checks(t_env *e)
 {
-	if (e->p.objects != 2 || e->p.specs != 2) // change the error number
-		return (8); // change error message
+	if (e->p.objects != 2 || e->p.specs != 2)
+		return (4);
 	if (e->p.p_spec.cam_cl != 1 || e->p.p_spec.amb_cl != 1)
 		return (26);
 	if (e->p.scene != 2)
@@ -150,22 +151,22 @@ int		last_checks(t_env *e)
 	return (0);
 }
 
-// need to add verifier for specs requirements ! 
-// i.e. it needs to fufill it's vocab neccessary for each type of spec
-
 int		parser(t_env *e, int fd)
 {
-	t_ll	*head;
-	//t_parser *p; // create parser structure here ! and then send parser everywhere !
+	t_ll	*l_head;
+	t_ol	*o_head;
+	// t_parser		*p; // parser struct ! TO send parser everywhere ! --> (&p)
 
-	head = NULL;
+	l_head = NULL;
+	o_head = NULL;
 	set_vocab(e);
 	while ((e->p.ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{
 		e->p.gnl_i++;
 		if ((e->p.ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->p.ret.glo);
-		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip && ((e->p.ret.tag = verify_line(e, e->p.gnl_line)) != 0))
+		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip 
+			&& ((e->p.ret.tag = verify_line(e, l_head, o_head)) != 0))
 			return (e->p.ret.tag);
 		if (e->p.gnl_line)
 		{
@@ -173,7 +174,10 @@ int		parser(t_env *e, int fd)
 			e->p.gnl_line = NULL;
 		}
 	}
-	e->ll = head;
+	e->s_count = e->p.count.spheres + e->p.count.planes + e->p.count.cones
+		+ e->p.count.cylinders;
+	e->ll_lit = l_head;
+	e->ll_obj = o_head;
 	return (last_checks(e));
 }
 //	if ((add_link(gnl_line, &head, e, i)) == -1)
