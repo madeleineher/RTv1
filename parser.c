@@ -159,6 +159,7 @@ int		parser(t_env *e, int fd)
 	//t_parser *p; // create parser structure here ! and then send parser everywhere !
 
 	head = NULL;
+	set_vocab(e);
 	while ((e->p.ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{
 		e->p.gnl_i++;

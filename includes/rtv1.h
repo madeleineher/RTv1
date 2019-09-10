@@ -342,6 +342,7 @@ int					quit(t_env *e);
 void				draw_sphere(t_env *e);
 
 //functions for parser
+void				set_vocab(t_env *e);
 int					two_tabs_specs(t_env *e, char **split_test);
 int					open_close(int *check_me);
 int					extract_status(t_env *e, char **strings);

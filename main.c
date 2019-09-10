@@ -24,30 +24,6 @@ int			quit(t_env *e)
 	return (0);
 }
 
-void		set_vocab(t_env *e)
-{
-	e->p.vocab_one[0] = "sphere";
-	e->p.vocab_one[1] = "cylinder";
-	e->p.vocab_one[2] = "cone";
-	e->p.vocab_one[3] = "plane";
-	e->p.vocab_two[0] = "position";
-	e->p.vocab_two[1] = "direction";
-	e->p.vocab_two[2] = "diffusion";
-	e->p.vocab_two[3] = "reflection";
-	e->p.vocab_two[4] = "specvalue"; 
-	e->p.vocab_two[5] = "specpower";
-	e->p.vocab_two[6] = "intensity"; 
-	e->p.vocab_two[7] = "translate";
-	e->p.vocab_two[8] = "rotate";
-	e->p.vocab_two[9] = "angle";
-	e->p.vocab_two[10] = "color";
-	e->p.vocab_two[11] = "center";
-	e->p.vocab_two[12] = "d";
-	e->p.vocab_two[13] = "radius";
-	e->p.vocab_two[14] = "ambient"; // -- correct name ? // need this ?????
-	e->p.vocab_two[15] = "normal";
-}
-
 int			main(int argc, char **argv)
 {
 	t_env		e;
@@ -60,7 +36,6 @@ int			main(int argc, char **argv)
 	fd = open(argv[1], O_RDWR);
 	if (fd < 0)
 		error(&e, 1);
-	set_vocab(&e);
 	if ((ret = parser(&e, fd)) != 0) // parser
 		error(&e, ret);
 	if (!(e.w.mp = mlx_init()) \
