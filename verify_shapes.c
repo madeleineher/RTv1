@@ -38,6 +38,7 @@ int		verifyobjecttags_openings_two(t_env *e)
 
 int		verifyobjecttags_openings(t_env *e, char **split)
 {
+	// add add_link_obj here !!!
 	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{

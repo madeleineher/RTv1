@@ -12,30 +12,6 @@
 
 #include "includes/rtv1.h"
 
-int		add_link(char *line, t_ll **head, t_env *e, int i) // needs to be moved to "storing file.c"
-{
-	(void)i;
-	t_ll	*new;
-	t_ll	*last;
-
-	last = *head;
-	new = NULL;
-	if (!(new = (t_ll*)malloc(sizeof(t_ll))))
-		return (-1);
-	new->content = line;
-	new->next = NULL;
-	if (*head == NULL)
-		*head = new;
-	else
-	{
-		while (last->next != NULL)
-			last = last->next;
-		last->next = new;
-	}
-	e->lenfile++;
-	return (0);
-}
-
 int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
 {
 	if (e->str_count == 3)
@@ -160,6 +136,7 @@ int		parser(t_env *e, int fd)
 	set_vocab(e);
 	while ((e->p.ret.gnl = get_next_line(fd, &e->p.gnl_line)) > 0)
 	{
+
 		e->p.gnl_i++;
 		if ((e->p.ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->p.ret.glo);
@@ -174,6 +151,7 @@ int		parser(t_env *e, int fd)
 	}
 	e->s_count = e->p.count.spheres + e->p.count.planes + e->p.count.cones
 		+ e->p.count.cylinders;
+	
 	e->ll_lit = l_head;
 	e->ll_obj = o_head;
 	return (last_checks(e));

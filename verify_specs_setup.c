@@ -54,6 +54,7 @@ int		verifyspectags_openings(t_env *e)
 
 int		verifyspectags_closing_light(t_env *e)
 {
+	// add add_link_light here !!!
 	if ((e->p.ret_p = ft_strcmp("\t\t</light>", e->p.split[0])) != 0)
 		return (12);
 	open_close(&e->p.p_spec.light);

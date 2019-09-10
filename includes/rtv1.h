@@ -122,7 +122,6 @@ typedef struct		s_light // struct for light data
 typedef struct		s_ll  // linked list for storing LIGHT data
 {
 	size_t			content_size;
-	char			*content;
 	t_light			light;
 	struct s_ll		*next;
 }					t_ll;
@@ -147,9 +146,8 @@ typedef struct		s_obj // struct for storing object data
 typedef struct		s_ol  // linked list for storing OBJECT data
 {
 	size_t			content_size;
-	char			*content;
 	t_obj			obj;
-	struct s_ll		*next;
+	struct s_ol		*next;
 }					t_ol;
 
 typedef struct		s_mlx
@@ -167,7 +165,6 @@ typedef struct		s_env
 	char			*data;
 	int				str_count;
 	int				k[300];
-	int				lenfile;
 	int				s_count;
 	t_parser		p; // THE PARSER STRUCTURE !
 	t_mlx			w; // mlx images, window, etc.
@@ -222,7 +219,8 @@ int					verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head);
 void				reset_shape_atb(t_env *e);
 void				reset_shape_atb_two(t_env *e);
 int					checkforopenobjecttags(t_env *e);
-
+int					add_link_light(t_env *e, t_ll **head, int i);
+int					add_link_obj(t_env *e, t_ol **head, int i);
 
 
 int					main(int argc, char **argv);

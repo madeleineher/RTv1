@@ -24,6 +24,7 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
 	// printf("[%d] [%d] [%d]\n", e->p.v1, e->p.v2, e->p.v3); // working here
     (void)o_head;
     (void)l_head;
+    //add_link
 	if (ft_strcmp("direction", e->p.strtwo) == 0)
 	{
 		if ((e->p.ret_p = verify_values(e)) != 0)
@@ -38,7 +39,8 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
             }
             else if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1) // light position
             {
-                
+                //in light
+
             }
 		}
         if (e->p.specs == 2 && e->p.objects == 1) // in the objects tag <objects> </objects>
