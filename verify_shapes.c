@@ -29,39 +29,15 @@ void	count_shapes(t_env *e, char *split)
 	e->p.tmp = NULL;
 }
 
-int		verifyobjecttags_openings(t_env *e, char **split) // /! string needs to be freed before returning error message /!
+int		verifyobjecttags_openings_two(t_env *e)
 {
-	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
-	if (ft_strcmp("sphere", e->p.tmp) == 0)
-	{
-		e->p.p_obj.sphere += 1;
-		e->p.current_shape = 1;
-		if (ft_iseven(e->p.p_obj.sphere) == 0)
-		{
-			free(e->p.tmp);
-			e->p.tmp = NULL;
-			return (30);
-		}
-	}
-	else if (ft_strcmp("cone", e->p.tmp) == 0)
-	{
-		e->p.p_obj.cone += 1;
-		e->p.current_shape = 2;
-		if (ft_iseven(e->p.p_obj.cone) == 0)
-		{
-			free(e->p.tmp);
-			e->p.tmp = NULL;
-			return (31);
-		}
-	}
-	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
+	if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		e->p.p_obj.cyn += 1;
 		e->p.current_shape = 3;
 		if (ft_iseven(e->p.p_obj.cyn) == 0)
 		{
-			free(e->p.tmp);
-			e->p.tmp = NULL;
+			ft_strfree(e->p.tmp);
 			return (32);
 		}
 	}
@@ -71,19 +47,45 @@ int		verifyobjecttags_openings(t_env *e, char **split) // /! string needs to be 
 		e->p.current_shape = 4;
 		if (ft_iseven(e->p.p_obj.plane) == 0)
 		{
-			free(e->p.tmp);
-			e->p.tmp = NULL;
+			ft_strfree(e->p.tmp);
 			return (33);
 		}
 	}
 	else
 	{
-		free(e->p.tmp);
-		e->p.tmp = NULL;
+		ft_strfree(e->p.tmp);
 		return (20);
 	}
-	free(e->p.tmp);
-	e->p.tmp = NULL;
+	return (0);
+}
+
+int		verifyobjecttags_openings(t_env *e, char **split)
+{
+	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
+	if (ft_strcmp("sphere", e->p.tmp) == 0)
+	{
+		e->p.p_obj.sphere += 1;
+		e->p.current_shape = 1;
+		if (ft_iseven(e->p.p_obj.sphere) == 0)
+		{
+			ft_strfree(e->p.tmp);
+			return (30);
+		}
+	}
+	else if (ft_strcmp("cone", e->p.tmp) == 0)
+	{
+		e->p.p_obj.cone += 1;
+		e->p.current_shape = 2;
+		if (ft_iseven(e->p.p_obj.cone) == 0)
+		{
+			ft_strfree(e->p.tmp);
+			return (31);
+		}
+	}
+	else
+		if ((e->p.ret_p = verifyobjecttags_openings_two(e)) != 0)
+			return (e->p.ret_p);
+	ft_strfree(e->p.tmp);
 	return (0);
 }
 
@@ -186,52 +188,49 @@ void	reset_shape_atb(t_env *e)
 
 int		verifyobjecttags_closings(t_env *e, char *split)
 {
-	int	ret_obj;
-
-	ret_obj = 0;
 	e->p.tmp = ft_strsub(split, 4, (ft_strlen(split) - 5));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
 		open_close(&e->p.p_obj.sphere);
-		if (ft_iseven(e->p.p_obj.sphere) == -1)
+		if (ft_iseven(e->p.p_obj.sphere) != 0)
 			return (34);
-		if ((checkforopenobjecttags(e)) == -1)
+		if ((checkforopenobjecttags(e)) != 0)
 			return (38);
-		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
-			return (ret_obj);
+		if ((e->p.ret_p = shapevocab_checker_partwo(e)) != 0)
+			return (e->p.ret_p);
 		reset_shape_atb(e);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
 		open_close(&e->p.p_obj.cone);
-		if (ft_iseven(e->p.p_obj.cone) == -1)
+		if (ft_iseven(e->p.p_obj.cone) != 0)
 			return (34);
-		if ((checkforopenobjecttags(e)) == -1)
+		if ((checkforopenobjecttags(e)) != 0)
 			return (38);
-		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
-			return (ret_obj);
+		if ((e->p.ret_p = shapevocab_checker_partwo(e)) != 0)
+			return (e->p.ret_p);
 		reset_shape_atb(e);
 	}
 	else if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		open_close(&e->p.p_obj.cyn);
-		if (ft_iseven(e->p.p_obj.cyn) == -1)
+		if (ft_iseven(e->p.p_obj.cyn) != 0)
 			return (34);
-		if ((checkforopenobjecttags(e)) == -1)
+		if ((checkforopenobjecttags(e)) != 0)
 			return (38);
-		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
-			return (ret_obj);
+		if ((e->p.ret_p = shapevocab_checker_partwo(e)) != 0)
+			return (e->p.ret_p);
 		reset_shape_atb(e);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
 		open_close(&e->p.p_obj.plane);
-		if (ft_iseven(e->p.p_obj.plane) == -1)
+		if (ft_iseven(e->p.p_obj.plane) != 0)
 			return (34);
-		if ((checkforopenobjecttags(e)) == -1)
+		if ((checkforopenobjecttags(e)) != 0)
 			return (38);
-		if ((ret_obj = shapevocab_checker_partwo(e)) != 0)
-			return (ret_obj);
+		if ((e->p.ret_p = shapevocab_checker_partwo(e)) != 0)
+			return (e->p.ret_p);
 		reset_shape_atb(e);
 	}
 	else
