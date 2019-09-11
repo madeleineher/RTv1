@@ -100,7 +100,7 @@ int		verifyargs_three_numbers(char *string, int letter)
 	return (0);
 }
 
-int		verifyargs_three(t_env *e, t_ll **l_head, t_ol *o_head)
+int		verifyargs_three(t_env *e, t_ll **l_head, t_ol **o_head)
 {
 	(void)l_head;
 	(void)o_head;
@@ -124,7 +124,7 @@ int		verifyargs_three(t_env *e, t_ll **l_head, t_ol *o_head)
 	e->p.v1 = ft_atoi(e->p.strone);
 	e->p.v2 = ft_atoi(e->p.split[1]); 
 	e->p.v3 = ft_atoi(e->p.split[2]); 
-	if ((e->p.ret_p = verify_numbers_three(e, *l_head, o_head)) != 0) // working here 
+	if ((e->p.ret_p = verify_numbers_three(e, *l_head, *o_head)) != 0) // working here 
 		return (e->p.ret_p);  // working here, last verification (store data here)!
 	ft_strfree(e->p.strone);
 	ft_strfree(e->p.strtwo);

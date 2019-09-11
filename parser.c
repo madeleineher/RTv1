@@ -12,7 +12,7 @@
 
 #include "includes/rtv1.h"
 
-int		threetab_verifications(t_env *e, t_ll **l_head, t_ol *o_head)
+int		threetab_verifications(t_env *e, t_ll **l_head, t_ol **o_head)
 {
 	if (e->str_count == 3)
 	{
@@ -29,7 +29,7 @@ int		threetab_verifications(t_env *e, t_ll **l_head, t_ol *o_head)
 			return (17);
 		if ((e->p.ret_p = verifyvocab_one(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = verifyargs_one(e, *l_head, o_head)) != 0) // store data here
+		if ((e->p.ret_p = verifyargs_one(e, l_head, o_head)) != 0) // store data here
 			return (e->p.ret_p);
 	}
 	else
@@ -37,7 +37,7 @@ int		threetab_verifications(t_env *e, t_ll **l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line_seg_one(t_env *e, t_ll **l_head, t_ol *o_head)
+int		verify_line_seg_one(t_env *e, t_ll **l_head, t_ol **o_head)
 {
 	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
@@ -54,13 +54,13 @@ int		verify_line_seg_one(t_env *e, t_ll **l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line_seg_two(t_env *e, t_ll **l_head, t_ol *o_head)
+int		verify_line_seg_two(t_env *e, t_ll **l_head, t_ol **o_head)
 {
 	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
 	if (ft_charfreq(e->p.gnl_line, '\t') == 2)
 	{
-		if ((e->p.ret_p = twotab_verifications(e)) != 0)
+		if ((e->p.ret_p = twotab_verifications(e, o_head)) != 0)
 			return (e->p.ret_p);
 	}
 	if (ft_charfreq(e->p.gnl_line, '\t') == 3)
@@ -73,10 +73,8 @@ int		verify_line_seg_two(t_env *e, t_ll **l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line(t_env *e, t_ll **l_head, t_ol *o_head)
+int		verify_line(t_env *e, t_ll **l_head, t_ol **o_head)
 {
-	(void)l_head;
-	(void)o_head;
 	e->p.split = ft_strsplit(e->p.gnl_line, ' ');
 	e->str_count = ft_countstrings(e->p.split);
 	if (e->p.specs == 1 && e->p.scene == 1 && e->p.objects == 0)
@@ -141,7 +139,7 @@ int		parser(t_env *e, int fd)
 		if ((e->p.ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->p.ret.glo);
 		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip 
-			&& ((e->p.ret.tag = verify_line(e, &l_head, o_head)) != 0))
+			&& ((e->p.ret.tag = verify_line(e, &l_head, &o_head)) != 0))
 			return (e->p.ret.tag);
 		if (e->p.gnl_line)
 		{
@@ -151,10 +149,7 @@ int		parser(t_env *e, int fd)
 	}
 	e->s_count = e->p.count.spheres + e->p.count.planes + e->p.count.cones
 		+ e->p.count.cylinders;
-	
 	e->ll_lit = l_head;
 	e->ll_obj = o_head;
 	return (last_checks(e));
 }
-//	if ((add_link(gnl_line, &head, e, i)) == -1)
-//		return (-1);

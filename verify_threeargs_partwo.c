@@ -21,9 +21,10 @@ int		verify_values(t_env *e)
 
 int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here 
 {
-	// printf("[%d] [%d] [%d]\n", e->p.v1, e->p.v2, e->p.v3); // working here
     (void)o_head;
-    // (void)l_head;
+	t_ll	*l_tmp;
+
+	l_tmp = l_head;
 	if (ft_strcmp("direction", e->p.strtwo) == 0)
 	{
 		if ((e->p.ret_p = verify_values(e)) != 0)
@@ -39,7 +40,7 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
 		}
         if (e->p.specs == 2 && e->p.objects == 1) // in the objects tag <objects> </objects>
 		{
-            if (e->obj.current_shape == 0 || e->obj.current_shape == 1 || e->obj.current_shape == 2)
+            if (e->cs == 0 || e->cs == 1 || e->cs == 2)
             {
                 
             }
@@ -64,11 +65,25 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
 	}
 	else if (ft_strcmp("rotate", e->p.strtwo) == 0)
 	{
-		
+    	if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1 && e->p.status == 2 && e->p.objects == 0) // light position
+		{
+			while (l_tmp->next != NULL)
+				l_tmp = l_tmp->next;
+			l_tmp->rot.x = e->p.v1;
+			l_tmp->rot.y = e->p.v2;
+			l_tmp->rot.z = e->p.v3;
+		}
 	}
 	else if (ft_strcmp("translate", e->p.strtwo) == 0)
 	{
-		
+		if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1 && e->p.status == 2 && e->p.objects == 0) // light position
+		{
+			while (l_tmp->next != NULL)
+				l_tmp = l_tmp->next;
+			l_tmp->tra.x = e->p.v1;
+			l_tmp->tra.y = e->p.v2;
+			l_tmp->tra.z = e->p.v3;
+		}
 	}
 	else if (ft_strcmp("position", e->p.strtwo) == 0)
 	{
@@ -82,16 +97,11 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
             }
             else if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1) // light position
             {
-				t_ll	*tmp = l_head;
-				while (tmp->next != NULL)
-				{
-					tmp = tmp->next;
-				}
-				printf("hello I AM HERE --> [%p]\n", &l_head->pos.x);
-				// printf("hello int --> [%p]\n", &(*l_head)->its);
-				tmp->pos.x = e->p.v1;
-				tmp->pos.y = e->p.v2;
-				tmp->pos.z = e->p.v3;
+				while (l_tmp->next != NULL)
+					l_tmp = l_tmp->next;
+				l_tmp->pos.x = e->p.v1;
+				l_tmp->pos.y = e->p.v2;
+				l_tmp->pos.z = e->p.v3;
             }
 		}
 	}
@@ -101,11 +111,13 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
 	}
 	else if (ft_strcmp("intensity", e->p.strtwo) == 0)
 	{
-		if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1) // light position
+		if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1 && e->p.objects == 0) // light position
 		{
-			// l_head->light.inten->x = e->p.v1;
-			// l_head->light.inten->y = e->p.v2;
-			// l_head->light.inten->z = e->p.v3;
+			while (l_tmp->next != NULL)
+				l_tmp = l_tmp->next;
+			l_tmp->its.x = e->p.v1;
+			l_tmp->its.y = e->p.v2;
+			l_tmp->its.z = e->p.v3;
 		}
 	}
 	return (0);

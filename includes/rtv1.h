@@ -118,11 +118,33 @@ typedef struct		s_ll  // linked list for storing LIGHT data
 	size_t			content_size;
 	t_pos			pos;
 	t_int			its;
+	t_tra			tra;
+	t_rot			rot;
 	struct s_ll		*next;
 }					t_ll;
 
-typedef struct		s_obj // struct for storing object data
+// typedef struct		s_obj // struct for storing object data
+// {
+// 	int				status; // 0 == basic , 1 == extra
+// 	int				d;
+// 	int				angle;
+// 	int				axis;
+// 	int				radius;
+// 	int				s_pow;
+// 	int				s_val;
+// 	t_dif			dif;
+// 	t_dir			dir;
+// 	t_cen			cen;
+// 	t_normal		nor;
+// 	t_rot			rot;
+// 	t_tra			tra;
+// 	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
+// }					t_obj;
+
+typedef struct		s_ol  // linked list for storing OBJECT data
 {
+	// t_obj			obj;
+	size_t			content_size;
 	int				status; // 0 == basic , 1 == extra
 	int				d;
 	int				angle;
@@ -130,19 +152,13 @@ typedef struct		s_obj // struct for storing object data
 	int				radius;
 	int				s_pow;
 	int				s_val;
-	t_dif			*dif;
-	t_dir			*dir;
-	t_cen			*cen;
-	t_normal		*nor;
-	t_rot			*rot;
-	t_tra			*tra;
-	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
-}					t_obj;
-
-typedef struct		s_ol  // linked list for storing OBJECT data
-{
-	size_t			content_size;
-	t_obj			obj;
+	int				cur_shape; 
+	t_dif			dif;
+	t_dir			dir;
+	t_cen			cen;
+	t_normal		nor;
+	t_rot			rot;
+	t_tra			tra;
 	struct s_ol		*next;
 }					t_ol;
 
@@ -168,8 +184,7 @@ typedef struct		s_env
 	t_amb			amb; // store amb
 	t_camera		cam; // store cam
 
-	// t_light			light; // store light
-	t_obj			obj; // store objs
+	int				cs;
 
 	t_ll			*ll_lit; // linked list
 	t_ol			*ll_obj; // linked list
@@ -191,14 +206,14 @@ int					two_tabs_specs(t_env *e, t_ll **l_head);
 int					open_close(int *check_me);
 int					extract_status(t_env *e);
 int					two_angle_brackets(t_env *e);
-int					twotab_verifications(t_env *e);
+int					twotab_verifications(t_env *e, t_ol **o_head);
 void				count_shapes(t_env *e, char *split);
 int					verifyobjecttags_closings(t_env *e, char *split);
 int					globals(t_env *e, char *gnl_line);
-int					verifyargs_one(t_env *e, t_ll *l_head, t_ol *o_head);
+int					verifyargs_one(t_env *e, t_ll **l_head, t_ol **o_head);
 int					verifyanglebrackets_one(t_env *e);
 int					verifyvocab_one(t_env *e);
-int					verifyargs_three(t_env *e, t_ll **l_head, t_ol *o_head);
+int					verifyargs_three(t_env *e, t_ll **l_head, t_ol **o_head);
 int					verifyanglebrackets_three(t_env *e);
 int					verifyvocab_three(t_env *e);
 int					shapevocab_checker(t_env *e);
@@ -216,7 +231,7 @@ int					verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head);
 void				reset_shape_atb(t_env *e);
 void				reset_shape_atb_two(t_env *e);
 int					checkforopenobjecttags(t_env *e);
-int					add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead);
+int					add_link_light(t_env *e, t_ll **head);
 int					add_link_obj(t_env *e, t_ol **head);
 
 

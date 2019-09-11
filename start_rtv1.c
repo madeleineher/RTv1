@@ -20,14 +20,16 @@ void	temp_function_print_data(t_env *e)
 	tmp = NULL;
 	tmp = e->ll_lit;
 	printf("CAMERA :\n");
-	printf("position -> x : [%d] - y : [%d] - z : [%d] \n", e->cam.campos.x, e->cam.campos.y, e->cam.campos.z );
+	printf("position -> x : [%d] - y : [%d] - z : [%d] === ", e->cam.campos.x, e->cam.campos.y, e->cam.campos.z );
 	printf("direction -> x : [%d] - y : [%d] - z : [%d] \n", e->cam.camdir.x, e->cam.camdir.y, e->cam.camdir.z );
 
 	printf("LIGHT: \n");
 	while (tmp)
 	{
-		printf("HOWDY ! i : [%d] -- position -> x : [%d] - y : [%d] - z : [%d] \n", i, tmp->pos.x, tmp->pos.y, tmp->pos.z);
-		// printf("intensity -> x : [%d] - y : [%d] - z : [%d] \n", tmp->light.inten.x, tmp->light.inten.y, tmp->light.inten.z);
+		printf("i : [%d] -- pos -> x : [%d] - y : [%d] - z : [%d] === ", i, tmp->pos.x, tmp->pos.y, tmp->pos.z);
+		printf("ints -> x : [%d] - y : [%d] - z : [%d] === ", tmp->its.x, tmp->its.y, tmp->its.z);
+		printf("rot -> x : [%d] - y : [%d] - z : [%d] === ", tmp->rot.x, tmp->rot.y, tmp->rot.z);
+		printf("tra -> x : [%d] - y : [%d] - z : [%d] \n", tmp->tra.x, tmp->tra.y, tmp->tra.z);
 		tmp = tmp->next;
 		i++;
 	}

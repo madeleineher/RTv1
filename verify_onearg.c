@@ -69,7 +69,7 @@ int		verifyvocab_one(t_env *e) // /! string needs to be freed before returning e
 	return (e->p.voc_check);
 }
 
-int		verifyargs_one(t_env *e, t_ll *l_head, t_ol *o_head)
+int		verifyargs_one(t_env *e, t_ll **l_head, t_ol **o_head)
 {
 	int		i;
 	int		num_check;
@@ -90,7 +90,7 @@ int		verifyargs_one(t_env *e, t_ll *l_head, t_ol *o_head)
 			fake_check++;
 		i++;
 	}
-	if ((e->p.ret_p = verify_numbers_one(e, l_head, o_head)) != 0)
+	if ((e->p.ret_p = verify_numbers_one(e, *l_head, *o_head)) != 0)
 		return (e->p.ret_p); // working here, last verification ( & store data here ) !
 	if (fake_check > 0 || num_check == 0)
 		return (18);

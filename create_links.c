@@ -12,7 +12,7 @@
 
 #include "includes/rtv1.h"
 
-int		add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead)
+int		add_link_light(t_env *e, t_ll **head)
 {
 	// printf("printing pos X --> [%d]\n", &(*head)->pos.x);
 	(void)e;
@@ -23,19 +23,13 @@ int		add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead)
 	new = NULL;
 	if (!(new = (t_ll*)malloc(sizeof(t_ll))))
 		return (-1);
-	// new->content = line;
 	ft_bzero(&new->pos, sizeof(new->pos));
 	ft_bzero(&new->its, sizeof(new->its));
-	
-	// printf("creating pos X --> [%d]\n", new->pos.x);
-	// printf("int --> [%p]\n", &new->its);
+	ft_bzero(&new->rot, sizeof(new->rot));
+	ft_bzero(&new->tra, sizeof(new->tra));
 	new->next = NULL;
 	if (*head == NULL)
-	{
 		*head = new;
-		ll_savehead = *head;
-		e->save_light = ll_savehead;
-	}
 	else
 	{
 		while (last->next != NULL)
@@ -45,6 +39,23 @@ int		add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead)
 		last->next = new;
 	}
 	return (0);
+}
+
+void	clean_link(t_ol *new)
+{
+	new->d = 0;
+	new->angle = 0;
+	new->axis = 0;
+	new->radius = 0;
+	new->s_pow = 0;
+	new->s_val = 0;
+	new->cur_shape = 0;
+	ft_bzero(&new->dif, sizeof(new->dif));
+	ft_bzero(&new->dir, sizeof(new->dir));
+	ft_bzero(&new->cen, sizeof(new->cen));
+	ft_bzero(&new->nor, sizeof(new->nor));
+	ft_bzero(&new->rot, sizeof(new->rot));
+	ft_bzero(&new->tra, sizeof(new->tra));
 }
 
 int		add_link_obj(t_env *e, t_ol **head)
@@ -57,7 +68,7 @@ int		add_link_obj(t_env *e, t_ol **head)
 	new = NULL;
 	if (!(new = (t_ol*)malloc(sizeof(t_ol))))
 		return (-1);
-	// new->content = line;
+	clean_link(new);
 	new->next = NULL;
 	if (*head == NULL)
 		*head = new;

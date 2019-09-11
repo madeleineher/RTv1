@@ -17,14 +17,14 @@ int		verifyobjecttags_openings_two(t_env *e)
 	if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		e->p.p_obj.cyn += 1;
-		e->obj.current_shape = 3;
+		e->cs = 3;
 		if (ft_iseven(e->p.p_obj.cyn) == 0)
 			return (32);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
 		e->p.p_obj.plane += 1;
-		e->obj.current_shape = 4;
+		e->cs = 4;
 		if (ft_iseven(e->p.p_obj.plane) == 0)
 			return (33);
 	}
@@ -36,21 +36,23 @@ int		verifyobjecttags_openings_two(t_env *e)
 	return (0);
 }
 
-int		verifyobjecttags_openings(t_env *e, char **split)
+int		verifyobjecttags_openings(t_env *e, char **split, t_ol **o_head)
 {
 	// add add_link_obj here !!!
+	if (add_link_obj(e, o_head) != 0)
+		return (71);
 	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
 		e->p.p_obj.sphere += 1;
-		e->obj.current_shape = 1;
+		e->cs = 1;
 		if (ft_iseven(e->p.p_obj.sphere) == 0)
 			return (30);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
 		e->p.p_obj.cone += 1;
-		e->obj.current_shape = 2;
+		e->cs = 2;
 		if (ft_iseven(e->p.p_obj.cone) == 0)
 			return (31);
 	}
@@ -115,11 +117,11 @@ int		checkforopenobjecttags(t_env *e)
 	return (0);
 }
 
-int		twotab_verifications(t_env *e)
+int		twotab_verifications(t_env *e, t_ol **o_head)
 {
 	if (e->str_count == 4)
 	{
-		if ((e->p.ret_p = verifyobjecttags_openings(e, e->p.split)) != 0)
+		if ((e->p.ret_p = verifyobjecttags_openings(e, e->p.split, o_head)) != 0)
 			return (e->p.ret_p);
 		if ((e->p.ret_p = two_angle_brackets(e)) != 2)
 			return (9);

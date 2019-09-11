@@ -15,13 +15,11 @@
 int		verify_light(t_env *e, t_ll **l_head)
 {
 	int		ret;
-	t_ll	*ll_savehead;
 
 	ret = 0;
-	ll_savehead = NULL;
 	e->p.p_spec.light += 1;
 	// add add_link_light here !!! 
-	if ((add_link_light(e, l_head, ll_savehead)) == -1)
+	if ((add_link_light(e, l_head)) == -1)
 		return (71);
 	if (ft_iseven(e->p.p_spec.light) == 0)
 		return (12);
