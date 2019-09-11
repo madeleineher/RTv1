@@ -15,13 +15,20 @@
 void	temp_function_print_data(t_env *e)	
 {
 	t_ll 	*tmp;
+	t_ol 	*omp;
 	int		i = 1;
 
 	tmp = NULL;
 	tmp = e->ll_lit;
-	printf("CAMERA :\n");
+	omp = NULL;
+	omp = e->ll_obj;
+	printf("\nCAMERA :\n");
 	printf("position -> x : [%d] - y : [%d] - z : [%d] === ", e->cam.campos.x, e->cam.campos.y, e->cam.campos.z );
-	printf("direction -> x : [%d] - y : [%d] - z : [%d] \n", e->cam.camdir.x, e->cam.camdir.y, e->cam.camdir.z );
+	printf("direction -> x : [%d] - y : [%d] - z : [%d] \n\n", e->cam.camdir.x, e->cam.camdir.y, e->cam.camdir.z );
+
+	printf("AMBIANCE :\n");
+	printf("specpower -> value [%d]] === ", e->amb.specpower);
+	printf("color -> x : [%d] - y : [%d] - z : [%d] \n\n", e->amb.col.x, e->amb.col.y, e->amb.col.z );
 
 	printf("LIGHT: \n");
 	while (tmp)
@@ -31,6 +38,35 @@ void	temp_function_print_data(t_env *e)
 		printf("rot -> x : [%d] - y : [%d] - z : [%d] === ", tmp->rot.x, tmp->rot.y, tmp->rot.z);
 		printf("tra -> x : [%d] - y : [%d] - z : [%d] \n", tmp->tra.x, tmp->tra.y, tmp->tra.z);
 		tmp = tmp->next;
+		i++;
+	}
+	printf("\n\n");
+	i = 1;
+	while (omp)
+	{
+		printf("ind : [%d] ---> ", i);
+		if (omp->cur_shape == 1)
+			printf("SPHERE !\n");
+		if (omp->cur_shape == 2)
+			printf("CONE !\n");
+		if (omp->cur_shape == 3)
+			printf("CYLINDER !\n");
+		if (omp->cur_shape == 4)
+			printf("PLANE !\n");
+		printf("CENTER    ---> x : [%d] - y : [%d] - z : [%d]\n", omp->cen.x, omp->cen.y, omp->cen.z);
+		printf("DIRECTION ---> x : [%d] - y : [%d] - z : [%d]\n", omp->dir.x, omp->dir.y, omp->dir.z);
+		printf("DIFFUSION ---> x : [%d] - y : [%d] - z : [%d]\n", omp->dif.x, omp->dif.y, omp->dif.z);
+		printf("ROTATION  ---> x : [%d] - y : [%d] - z : [%d]\n", omp->rot.x, omp->rot.y, omp->rot.z);
+		printf("NORMAL 	  ---> x : [%d] - y : [%d] - z : [%d]\n", omp->nor.x, omp->nor.y, omp->nor.z);
+		printf("TRANSLATE ---> x : [%d] - y : [%d] - z : [%d]\n", omp->tra.x, omp->tra.y, omp->tra.z);
+		printf("RADIUS    ---> [%d]\n", omp->radius);
+		printf("ANGLE     ---> [%d]\n", omp->angle);
+		printf("SPECVALUE ---> [%d]\n", omp->specvalue);
+		printf("REFLECT   ---> [%d]\n", omp->ref);
+		printf("SPECPOWER ---> [%d]\n", omp->specpower);
+		printf("D-plane   ---> [%d]\n", omp->d);
+		printf("STATUS    ---> [%d]\n\n", omp->status);
+		omp = omp->next;
 		i++;
 	}
 }

@@ -38,7 +38,6 @@ int		verifyobjecttags_openings_two(t_env *e)
 
 int		verifyobjecttags_openings(t_env *e, char **split, t_ol **o_head)
 {
-	// add add_link_obj here !!!
 	if (add_link_obj(e, o_head) != 0)
 		return (71);
 	e->p.tmp = ft_strsub(split[0], 3, (ft_strlen(split[0]) - 3));

@@ -32,5 +32,33 @@
 			<specpower>100</specpower>
 			<specvalue>100</specvalue>
 		</sphere>
+		<cone status = "basic">
+			<angle>10</angle>
+			<radius>10</radius>
+			<direction>10, 20, 30</direction>
+			<center>100, -100, 100</center>
+			<diffusion>100, 200, 100</diffusion>
+			<reflection>100</reflection>
+			<specpower>100</specpower>
+			<specvalue>100</specvalue>
+		</cone>
+		<cylinder status = "basic">
+			<angle>10</angle>
+			<radius>10</radius>
+			<direction>10, 20, 30</direction>
+			<center>100, -100, 100</center>
+			<diffusion>100, 200, 100</diffusion>
+			<reflection>100</reflection>
+			<specpower>100</specpower>
+			<specvalue>100</specvalue>
+		</cylinder>
+		<plane status = "basic">
+			<normal>10, 20, 30</normal>
+			<d>100</d>
+			<diffusion>100, 200, 100</diffusion>
+			<reflection>100</reflection>
+			<specpower>100</specpower>
+			<specvalue>100</specvalue>
+		</plane>
 	</objects>
 </scene>

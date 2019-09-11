@@ -33,7 +33,7 @@ void		line_errors(t_env *e, int i)
 	if (i == 83)
 	{
 		ft_putstr("Oops ! It looks like [");
-		ft_putstr(e->p.strone);
+		ft_putstr(e->p.strtwo);
 		ft_putendl("] was given a zero/negative value. ");
 		ft_strfree(e->p.strone);
 		ft_strfree(e->p.strtwo);
@@ -41,16 +41,24 @@ void		line_errors(t_env *e, int i)
 	if (i == 84)
 	{
 		ft_putstr("Oops ! It looks like [");
-		ft_putstr(e->p.strone);
-		ft_putendl("] was given a value greater/less than 360. ");
+		ft_putstr(e->p.strtwo);
+		ft_putendl("] was given a value greater than 360 or less than 0. ");
 		ft_strfree(e->p.strone);
 		ft_strfree(e->p.strtwo);
 	}
 	if (i == 85)
 	{
 		ft_putstr("Oops ! It looks like [");
-		ft_putstr(e->p.strone);
+		ft_putstr(e->p.strtwo);
 		ft_putendl("] was given all zero value, at least one value must be greater/less than zero. ");
+		ft_strfree(e->p.strone);
+		ft_strfree(e->p.strtwo);
+	}
+	if (i == 86)
+	{
+		ft_putstr("Oops ! This object tag [");
+		ft_putstr(e->p.strtwo);
+		ft_putendl("] has a range between 0 and 255. ");
 		ft_strfree(e->p.strone);
 		ft_strfree(e->p.strtwo);
 	}

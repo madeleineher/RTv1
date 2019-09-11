@@ -71,8 +71,6 @@ int		verify_tag_to_argument_three(char *string)
 {
 	if (ft_strcmp("direction", string) == 0)
 		return (0);
-	else if (ft_strcmp("axis", string) == 0)
-		return (0);
 	else if (ft_strcmp("center", string) == 0)
 		return (0);
 	else if (ft_strcmp("normal", string) == 0)

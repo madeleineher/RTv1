@@ -97,6 +97,13 @@ typedef struct		s_tra
 	int				z;
 }					t_tra; // translate
 
+typedef struct		s_col
+{
+	int				x;
+	int				y;
+	int				z;
+}					t_col; // color amb
+
 typedef struct		s_camera // struct for camera data
 {
 	t_pos			campos;
@@ -107,9 +114,7 @@ typedef struct		s_camera // struct for camera data
 
 typedef struct		s_amb // struct for amb data
 {
-	t_dif			*diff;
-	t_ref			*ref;
-	int				specvalue;
+	t_col			col;
 	int				specpower;
 }					t_amb;
 
@@ -123,36 +128,19 @@ typedef struct		s_ll  // linked list for storing LIGHT data
 	struct s_ll		*next;
 }					t_ll;
 
-// typedef struct		s_obj // struct for storing object data
-// {
-// 	int				status; // 0 == basic , 1 == extra
-// 	int				d;
-// 	int				angle;
-// 	int				axis;
-// 	int				radius;
-// 	int				s_pow;
-// 	int				s_val;
-// 	t_dif			dif;
-// 	t_dir			dir;
-// 	t_cen			cen;
-// 	t_normal		nor;
-// 	t_rot			rot;
-// 	t_tra			tra;
-// 	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
-// }					t_obj;
-
 typedef struct		s_ol  // linked list for storing OBJECT data
 {
-	// t_obj			obj;
 	size_t			content_size;
 	int				status; // 0 == basic , 1 == extra
 	int				d;
 	int				angle;
-	int				axis;
 	int				radius;
 	int				s_pow;
 	int				s_val;
-	int				cur_shape; 
+	int				cur_shape;
+	int				specpower;
+	int				specvalue;
+	int				ref;
 	t_dif			dif;
 	t_dir			dir;
 	t_cen			cen;

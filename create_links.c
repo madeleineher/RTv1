@@ -45,14 +45,16 @@ void	clean_link(t_ol *new)
 {
 	new->d = 0;
 	new->angle = 0;
-	new->axis = 0;
 	new->radius = 0;
 	new->s_pow = 0;
 	new->s_val = 0;
 	new->cur_shape = 0;
+	new->s_pow = 0;
+	new->s_val = 0;
+	new->ref = 0;
 	ft_bzero(&new->dif, sizeof(new->dif));
 	ft_bzero(&new->dir, sizeof(new->dir));
-	ft_bzero(&new->cen, sizeof(new->cen));
+	ft_bzero(&new->cen, sizeof(new->cen)); // axis
 	ft_bzero(&new->nor, sizeof(new->nor));
 	ft_bzero(&new->rot, sizeof(new->rot));
 	ft_bzero(&new->tra, sizeof(new->tra));
