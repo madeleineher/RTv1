@@ -6,7 +6,7 @@
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 11:10:15 by mhernand          #+#    #+#             */
-/*   Updated: 2019/09/10 11:10:16 by mhernand         ###   ########.fr       */
+/*   Updated: 2019/09/11 15:31:28 by sabonifa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,16 @@ int		verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head) // working here
             }
             else if (e->p.p_spec.cam_cl == 1 && e->p.p_spec.amb_cl == 1) // light position
             {
+				t_ll	*tmp = l_head;
+				while (tmp->next != NULL)
+				{
+					tmp = tmp->next;
+				}
 				printf("hello I AM HERE --> [%p]\n", &l_head->pos.x);
 				// printf("hello int --> [%p]\n", &(*l_head)->its);
-				l_head->pos.x = e->p.v1;
-				l_head->pos.y = e->p.v2;
-				l_head->pos.z = e->p.v3;
+				tmp->pos.x = e->p.v1;
+				tmp->pos.y = e->p.v2;
+				tmp->pos.z = e->p.v3;
             }
 		}
 	}
