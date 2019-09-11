@@ -12,7 +12,7 @@
 
 #include "includes/rtv1.h"
 
-int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
+int		threetab_verifications(t_env *e, t_ll **l_head, t_ol *o_head)
 {
 	if (e->str_count == 3)
 	{
@@ -29,7 +29,7 @@ int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
 			return (17);
 		if ((e->p.ret_p = verifyvocab_one(e)) != 0)
 			return (e->p.ret_p);
-		if ((e->p.ret_p = verifyargs_one(e, l_head, o_head)) != 0) // store data here
+		if ((e->p.ret_p = verifyargs_one(e, *l_head, o_head)) != 0) // store data here
 			return (e->p.ret_p);
 	}
 	else
@@ -37,12 +37,12 @@ int		threetab_verifications(t_env *e, t_ll *l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line_seg_one(t_env *e, t_ll *l_head, t_ol *o_head)
+int		verify_line_seg_one(t_env *e, t_ll **l_head, t_ol *o_head)
 {
 	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
 	if (ft_charfreq(e->p.gnl_line, '\t') == 2)
-		if ((e->p.ret_p = two_tabs_specs(e)) != 0)
+		if ((e->p.ret_p = two_tabs_specs(e, l_head)) != 0)
 			return (e->p.ret_p);
 	if (ft_charfreq(e->p.gnl_line, '\t') == 3)
 	{
@@ -54,7 +54,7 @@ int		verify_line_seg_one(t_env *e, t_ll *l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line_seg_two(t_env *e, t_ll *l_head, t_ol *o_head)
+int		verify_line_seg_two(t_env *e, t_ll **l_head, t_ol *o_head)
 {
 	if (ft_charfreq(e->p.gnl_line, '\t') < 2 || ft_charfreq(e->p.gnl_line, '\t') > 3)
 		return (5);
@@ -73,7 +73,7 @@ int		verify_line_seg_two(t_env *e, t_ll *l_head, t_ol *o_head)
 	return (0);
 }
 
-int		verify_line(t_env *e, t_ll *l_head, t_ol *o_head)
+int		verify_line(t_env *e, t_ll **l_head, t_ol *o_head)
 {
 	(void)l_head;
 	(void)o_head;
@@ -141,7 +141,7 @@ int		parser(t_env *e, int fd)
 		if ((e->p.ret.glo = globals(e, e->p.gnl_line)) != 0)
 			return (e->p.ret.glo);
 		if ((e->p.objects == 1 || e->p.specs == 1) && !e->p.skip 
-			&& ((e->p.ret.tag = verify_line(e, l_head, o_head)) != 0))
+			&& ((e->p.ret.tag = verify_line(e, &l_head, o_head)) != 0))
 			return (e->p.ret.tag);
 		if (e->p.gnl_line)
 		{

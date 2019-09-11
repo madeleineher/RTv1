@@ -119,16 +119,16 @@ int		shapevocab_checker(t_env *e) // /! string needs to be freed before returnin
 	ret = 0;
 	e->p.s_tmp = ft_strsub(e->p.split[0], 4,
 		(ft_strclen(e->p.split[0], '>') - 4));
-	if (e->p.current_shape == 1)
+	if (e->obj.current_shape == 1)
 		if ((ret = shapevocab_checker_shpere(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 2)
+	if (e->obj.current_shape == 2)
 		if ((ret = shapevocab_checker_cone(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 3)
+	if (e->obj.current_shape == 3)
 		if ((ret = shapevocab_checker_cyn(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 4)
+	if (e->obj.current_shape == 4)
 		if ((ret = shapevocab_checker_plane(e)) != 0)
 			return (ret);
 	free(e->p.s_tmp);

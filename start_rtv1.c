@@ -14,9 +14,23 @@
 
 void	temp_function_print_data(t_env *e)	
 {
+	t_ll 	*tmp;
+	int		i = 1;
+
+	tmp = NULL;
+	tmp = e->ll_lit;
 	printf("CAMERA :\n");
 	printf("position -> x : [%d] - y : [%d] - z : [%d] \n", e->cam.campos.x, e->cam.campos.y, e->cam.campos.z );
 	printf("direction -> x : [%d] - y : [%d] - z : [%d] \n", e->cam.camdir.x, e->cam.camdir.y, e->cam.camdir.z );
+
+	printf("LIGHT: \n");
+	while (tmp)
+	{
+		printf("HOWDY ! i : [%d] -- position -> x : [%d] - y : [%d] - z : [%d] \n", i, tmp->pos.x, tmp->pos.y, tmp->pos.z);
+		// printf("intensity -> x : [%d] - y : [%d] - z : [%d] \n", tmp->light.inten.x, tmp->light.inten.y, tmp->light.inten.z);
+		tmp = tmp->next;
+		i++;
+	}
 }
 
 void    start_rtv1(t_env *e)

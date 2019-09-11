@@ -83,6 +83,8 @@ void		lineless_errors_eight(t_env *e, int i)
 		ft_putstr("Oops ! It looks like a 'light' spec status is ");
 		ft_putendl("set to 'extra' but some parameters are missing.");
 	}
+	if (i == 71)
+		ft_putstr("Oops ! Bad malloc.");
     if (i > 80)
         line_errors(e, i);
 }

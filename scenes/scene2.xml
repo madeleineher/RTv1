@@ -15,7 +15,11 @@
 			<translate>70, 75, 80</translate>
 		</light>
 		<light status = "basic">
-			<position>60, 52, 55</position>
+			<position>26, 22, 25</position>
+			<intensity>70, 75, 80</intensity>
+		</light>
+		<light status = "basic">
+			<position>16, 12, 15</position>
 			<intensity>70, 75, 80</intensity>
 		</light>
 	</specs>

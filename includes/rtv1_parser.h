@@ -138,7 +138,6 @@ typedef struct		s_parser
 	char			*gnl_line;
 	char			*tmp;
 	char			*t;
-	char			*current_tag;
 	char			*vocab_one[4];
 	char			*vocab_two[16];
 	int				skips;
@@ -158,7 +157,6 @@ typedef struct		s_parser
 	int				close_obj_i;
 	int				good_obj_brack;
 	int				bad_obj_brack;
-	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
 	int				e1;
 	int				e2;
 	int				l;

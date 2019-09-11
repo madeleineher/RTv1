@@ -113,16 +113,11 @@ typedef struct		s_amb // struct for amb data
 	int				specpower;
 }					t_amb;
 
-typedef struct		s_light // struct for light data
-{
-	t_pos			*lipos;
-	t_int			*inten;
-}					t_light;
-
 typedef struct		s_ll  // linked list for storing LIGHT data
 {
 	size_t			content_size;
-	t_light			light;
+	t_pos			pos;
+	t_int			its;
 	struct s_ll		*next;
 }					t_ll;
 
@@ -141,6 +136,7 @@ typedef struct		s_obj // struct for storing object data
 	t_normal		*nor;
 	t_rot			*rot;
 	t_tra			*tra;
+	int				current_shape; // sphere == 0 ; cone == 1 ; cylinder == 2 ; plane == 3
 }					t_obj;
 
 typedef struct		s_ol  // linked list for storing OBJECT data
@@ -172,11 +168,12 @@ typedef struct		s_env
 	t_amb			amb; // store amb
 	t_camera		cam; // store cam
 
-	t_light			light; // store light
+	// t_light			light; // store light
 	t_obj			obj; // store objs
 
 	t_ll			*ll_lit; // linked list
 	t_ol			*ll_obj; // linked list
+	t_ll			*save_light;
 }					t_env;
 
 void				setup_rtv1(t_env *e);
@@ -190,7 +187,7 @@ void				draw_sphere(t_env *e);
 
 //functions for parser
 void				set_vocab(t_env *e);
-int					two_tabs_specs(t_env *e);
+int					two_tabs_specs(t_env *e, t_ll **l_head);
 int					open_close(int *check_me);
 int					extract_status(t_env *e);
 int					two_angle_brackets(t_env *e);
@@ -201,7 +198,7 @@ int					globals(t_env *e, char *gnl_line);
 int					verifyargs_one(t_env *e, t_ll *l_head, t_ol *o_head);
 int					verifyanglebrackets_one(t_env *e);
 int					verifyvocab_one(t_env *e);
-int					verifyargs_three(t_env *e, t_ll *l_head, t_ol *o_head);
+int					verifyargs_three(t_env *e, t_ll **l_head, t_ol *o_head);
 int					verifyanglebrackets_three(t_env *e);
 int					verifyvocab_three(t_env *e);
 int					shapevocab_checker(t_env *e);
@@ -219,8 +216,8 @@ int					verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head);
 void				reset_shape_atb(t_env *e);
 void				reset_shape_atb_two(t_env *e);
 int					checkforopenobjecttags(t_env *e);
-int					add_link_light(t_env *e, t_ll **head, int i);
-int					add_link_obj(t_env *e, t_ol **head, int i);
+int					add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead);
+int					add_link_obj(t_env *e, t_ol **head);
 
 
 int					main(int argc, char **argv);

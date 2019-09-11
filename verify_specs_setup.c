@@ -12,12 +12,17 @@
 
 #include "includes/rtv1.h"
 
-int		verify_light(t_env *e)
+int		verify_light(t_env *e, t_ll **l_head)
 {
-	int	ret;
+	int		ret;
+	t_ll	*ll_savehead;
 
 	ret = 0;
+	ll_savehead = NULL;
 	e->p.p_spec.light += 1;
+	// add add_link_light here !!! 
+	if ((add_link_light(e, l_head, ll_savehead)) == -1)
+		return (71);
 	if (ft_iseven(e->p.p_spec.light) == 0)
 		return (12);
 	if ((ret = extract_status(e)) != 0)
@@ -25,7 +30,7 @@ int		verify_light(t_env *e)
 	return (ret);
 }
 
-int		verifyspectags_openings(t_env *e)
+int		verifyspectags_openings(t_env *e, t_ll **l_head)
 {
 	e->p.tmp = ft_strsub(e->p.split[0], 2, (ft_strlen(e->p.split[0]) - 2));
 	if (ft_strcmp("<cam>", e->p.tmp) == 0)
@@ -42,7 +47,7 @@ int		verifyspectags_openings(t_env *e)
 	}
 	else if (ft_strcmp("<light", e->p.tmp) == 0)
 	{
-		if ((e->p.ret_p = verify_light(e)) != 0)
+		if ((e->p.ret_p = verify_light(e, l_head)) != 0)
 			return (e->p.ret_p);
 	}
 	else
@@ -54,7 +59,6 @@ int		verifyspectags_openings(t_env *e)
 
 int		verifyspectags_closing_light(t_env *e)
 {
-	// add add_link_light here !!!
 	if ((e->p.ret_p = ft_strcmp("\t\t</light>", e->p.split[0])) != 0)
 		return (12);
 	open_close(&e->p.p_spec.light);
@@ -63,6 +67,7 @@ int		verifyspectags_closing_light(t_env *e)
 	if ((e->p.ret_p = verify_spec_atb_partwo(e)) != 0)
 		return (e->p.ret_p);
 	reset_spec_atb(e);
+
 	return (0);
 }
 
@@ -94,14 +99,14 @@ int		verifyspectags_closing(t_env *e)
 	return (0);
 }
 
-int		two_tabs_specs(t_env *e)
+int		two_tabs_specs(t_env *e, t_ll **l_head)
 {
 	e->p.ret_p = 0; // need this ?
 	if ((e->p.ret_p = two_angle_brackets(e)) != 2)
 		return (9);
 	if (ft_strclen(e->p.gnl_line, '/') == 0)
 	{
-		if ((e->p.ret_p = verifyspectags_openings(e)) != 0)
+		if ((e->p.ret_p = verifyspectags_openings(e, l_head)) != 0)
 			return (e->p.ret_p);
 	}
 	else if (ft_strclen(e->p.gnl_line, '/') > 0)

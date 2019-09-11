@@ -12,9 +12,9 @@
 
 #include "includes/rtv1.h"
 
-int		add_link_light(t_env *e, t_ll **head, int i)
+int		add_link_light(t_env *e, t_ll **head, t_ll *ll_savehead)
 {
-	(void)i;
+	// printf("printing pos X --> [%d]\n", &(*head)->pos.x);
 	(void)e;
 	t_ll	*new;
 	t_ll	*last;
@@ -24,21 +24,31 @@ int		add_link_light(t_env *e, t_ll **head, int i)
 	if (!(new = (t_ll*)malloc(sizeof(t_ll))))
 		return (-1);
 	// new->content = line;
+	ft_bzero(&new->pos, sizeof(new->pos));
+	ft_bzero(&new->its, sizeof(new->its));
+	
+	// printf("creating pos X --> [%d]\n", new->pos.x);
+	// printf("int --> [%p]\n", &new->its);
 	new->next = NULL;
 	if (*head == NULL)
+	{
 		*head = new;
+		ll_savehead = *head;
+		e->save_light = ll_savehead;
+	}
 	else
 	{
 		while (last->next != NULL)
+		{
 			last = last->next;
+		}
 		last->next = new;
 	}
 	return (0);
 }
 
-int		add_link_obj(t_env *e, t_ol **head, int i)
+int		add_link_obj(t_env *e, t_ol **head)
 {
-	(void)i;
 	(void)e;
 	t_ol	*new;
 	t_ol	*last;

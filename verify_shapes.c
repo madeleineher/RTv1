@@ -17,14 +17,14 @@ int		verifyobjecttags_openings_two(t_env *e)
 	if (ft_strcmp("cylinder", e->p.tmp) == 0)
 	{
 		e->p.p_obj.cyn += 1;
-		e->p.current_shape = 3;
+		e->obj.current_shape = 3;
 		if (ft_iseven(e->p.p_obj.cyn) == 0)
 			return (32);
 	}
 	else if (ft_strcmp("plane", e->p.tmp) == 0)
 	{
 		e->p.p_obj.plane += 1;
-		e->p.current_shape = 4;
+		e->obj.current_shape = 4;
 		if (ft_iseven(e->p.p_obj.plane) == 0)
 			return (33);
 	}
@@ -43,14 +43,14 @@ int		verifyobjecttags_openings(t_env *e, char **split)
 	if (ft_strcmp("sphere", e->p.tmp) == 0)
 	{
 		e->p.p_obj.sphere += 1;
-		e->p.current_shape = 1;
+		e->obj.current_shape = 1;
 		if (ft_iseven(e->p.p_obj.sphere) == 0)
 			return (30);
 	}
 	else if (ft_strcmp("cone", e->p.tmp) == 0)
 	{
 		e->p.p_obj.cone += 1;
-		e->p.current_shape = 2;
+		e->obj.current_shape = 2;
 		if (ft_iseven(e->p.p_obj.cone) == 0)
 			return (31);
 	}

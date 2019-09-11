@@ -97,16 +97,16 @@ int		shapevocab_checker_partwo(t_env *e)
 	int ret;
 
 	ret = 0;
-	if (e->p.current_shape == 1)
+	if (e->obj.current_shape == 1)
 		if ((ret = shapevocab_checker_partwo_sphere(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 2)
+	if (e->obj.current_shape == 2)
 		if ((ret = shapevocab_checker_partwo_cone(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 3)
+	if (e->obj.current_shape == 3)
 		if ((ret = shapevocab_checker_partwo_cyn(e)) != 0)
 			return (ret);
-	if (e->p.current_shape == 4)
+	if (e->obj.current_shape == 4)
 		if ((ret = shapevocab_checker_partwo_plane(e)) != 0)
 			return (ret);
 	return (0);

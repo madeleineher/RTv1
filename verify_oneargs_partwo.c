@@ -23,7 +23,7 @@ int		verify_numbers_one(t_env *e, t_ll *l_head, t_ol *o_head)// working here !
 			return (83);
 		if (e->p.specs == 2 && e->p.objects == 1) // in the objects tag <objects> </objects>
 		{
-            if (e->p.current_shape == 0 || e->p.current_shape == 1 || e->p.current_shape == 2)
+            if (e->obj.current_shape == 0 || e->obj.current_shape == 1 || e->obj.current_shape == 2)
             {
                 
             }
