@@ -71,6 +71,29 @@ void	temp_function_print_data(t_env *e)
 	}
 }
 
+int		normalize_vector(t_env *e, int x, int y) // i think ?
+{
+	(void)e;
+	int	magnitude;
+	int	normalize;
+
+	magnitude = sqrt(x * x + y * y);
+	normalize = sqrt(pow((double)x/magnitude, 2) + pow((double)y/magnitude, 2)); // need to cast as doubles here !
+	printf("magnitude : [%d] == normalize : [%d]\n", magnitude, normalize);
+	return (normalize);
+}
+
+void	camera(t_env *e)
+{
+	(void)e;
+	// int	nor_forward;
+	// int	
+
+	// nor_forward = normalize_vector(e, e->cam.campos.x, e->cam.campos.y);
+
+
+}
+
 void    start_rtv1(t_env *e)
 {
 	mlx_put_image_to_window(e->w.mp, e->w.wp, e->w.ip, 0, 0);
@@ -82,4 +105,5 @@ void    start_rtv1(t_env *e)
 	mlx_hook(e->w.wp, 17, 1L << 17, quit, e);
 	mlx_loop_hook(e->w.mp, touch, e);
 	temp_function_print_data(e);
+	// camera(e);
 }

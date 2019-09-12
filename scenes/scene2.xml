@@ -1,8 +1,8 @@
 <scene>
 	<specs>
 		<cam>
-			<position>100, 200, 300</position>
-			<direction>500, 700, 900</direction>
+			<position>0, 1, 0</position>
+			<direction>0, -10, 0</direction>
 		</cam>
 		<amb>
 			<specpower>80</specpower>
@@ -36,7 +36,7 @@
 			<angle>10</angle>
 			<radius>10</radius>
 			<direction>10, 20, 30</direction>
-			<center>100, -100, 100</center>
+			<center>100, 100, 100</center>
 			<diffusion>100, 200, 100</diffusion>
 			<reflection>100</reflection>
 			<specpower>100</specpower>
@@ -54,7 +54,7 @@
 		</cylinder>
 		<plane status = "basic">
 			<normal>10, 20, 30</normal>
-			<d>100</d>
+			<d>009</d>
 			<diffusion>100, 200, 100</diffusion>
 			<reflection>100</reflection>
 			<specpower>100</specpower>
