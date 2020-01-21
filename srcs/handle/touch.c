@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_delsplit.c                                      :+:      :+:    :+:   */
+/*   touch.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 20:01:43 by mhernand          #+#    #+#             */
-/*   Updated: 2019/04/23 17:42:04 by mhernand         ###   ########.fr       */
+/*   Created: 2019/07/25 15:58:55 by mhernand          #+#    #+#             */
+/*   Updated: 2019/10/09 11:33:19 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "rtv1.h"
 
-void		ft_delsplit(char **tab)
+int		key_press(int key, t_env *e)
 {
-	int		i;
+	e->k[key] = 1;
+	return (0);
+}
 
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i] != NULL)
-	{
-		if (tab[i])
-		{
-			free(tab[i]);
-			tab[i] = NULL;
-		}
-		i++;
-	}
-	free(tab[i]);
-	tab[i] = NULL;
-	free(tab);
-	tab = NULL;
+int		key_release(int key, t_env *e)
+{
+	e->k[key] = 0;
+	return (0);
+}
+
+int		touch(t_env *e)
+{
+	if (e->k[ESC] == 1)
+		quit(e);
+	return (0);
 }

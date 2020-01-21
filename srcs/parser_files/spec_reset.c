@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_delsplit.c                                      :+:      :+:    :+:   */
+/*   spec_reset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 20:01:43 by mhernand          #+#    #+#             */
-/*   Updated: 2019/04/23 17:42:04 by mhernand         ###   ########.fr       */
+/*   Created: 2019/11/06 12:12:13 by mhernand          #+#    #+#             */
+/*   Updated: 2019/11/06 12:12:20 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "rtv1.h"
 
-void		ft_delsplit(char **tab)
+void	reset_spec_atb(t_parser *p)
 {
-	int		i;
-
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i] != NULL)
-	{
-		if (tab[i])
-		{
-			free(tab[i]);
-			tab[i] = NULL;
-		}
-		i++;
-	}
-	free(tab[i]);
-	tab[i] = NULL;
-	free(tab);
-	tab = NULL;
+	p->ca_atb.position = 0;
+	p->ca_atb.direction = 0;
+	p->ca_atb.rotate = 0;
+	p->ca_atb.translate = 0;
+	p->a_atb.power = 0;
+	p->a_atb.color = 0;
+	p->l_atb.position = 0;
+	p->l_atb.intensity = 0;
+	p->l_atb.rotate = 0;
+	p->l_atb.translate = 0;
 }

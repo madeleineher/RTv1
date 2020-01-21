@@ -6,28 +6,65 @@
 #    By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/06/05 07:58:15 by mhernand          #+#    #+#              #
-#    Updated: 2019/07/25 15:34:11 by mhernand         ###   ########.fr        #
+#    Updated: 2019/11/08 11:47:36 by sabonifa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = RTv1
+NAME = rtv1
 
-INC1 = includes/rtv1_parser.h
+CFLAGS = -Wall -Werror -Wextra -Ofast
 
-INC2 = includes/rtv1.h
-
-CFLAGS = -Wall -Werror -Wextra -g3 # remove g3 flag
-
-#  -fsanitize=address
+INC = -I includes/
 
 CC = gcc
 
-SRCS = main.c parser.c start_rtv1.c touch.c draw_sphere.c verify_specs_setup.c\
-	verify_shapes.c verify_onearg.c verify_threeargs.c verify_uniform_args.c\
-	verify_obj_voc.c verify_obj_voc_checker.c verify_spec_voc.c debugger.c\
-	debugger_two.c debugger_three.c verify_oneargs_partwo.c\
-	verify_threeargs_partwo.c globals_and_set_vocab.c verify_shapes_two.c\
-	create_links.c
+SRC_DIR = srcs
+
+OBJ_DIR = objects
+
+SRCS = main.c\
+	handle/touch.c\
+	parser_files/parser.c\
+	parser_files/verify_specs_setup.c\
+	parser_files/spec_reset.c\
+	parser_files/verify_shapes.c\
+	parser_files/verify_onearg.c\
+	parser_files/verify_threeargs.c\
+	parser_files/verify_uniform_args.c\
+	parser_files/verify_obj_voc.c\
+	parser_files/verify_obj_voc_checker.c\
+	parser_files/verify_spec_voc.c\
+	parser_files/debugger.c\
+	parser_files/debugger_two.c\
+	parser_files/debugger_three.c\
+	parser_files/verify_oneargs_partwo.c\
+	parser_files/verify_threeargs_partwo.c\
+	parser_files/verify_threeargs_parthree.c\
+	parser_files/verify_threeargs_partfour.c\
+	parser_files/verify_threeargs_partfive.c\
+	parser_files/globals_and_set_vocab.c\
+	parser_files/verify_shapes_two.c\
+	parser_files/create_links.c\
+	parser_files/last_checks.c\
+	raycasting_files/color_op.c\
+	raycasting_files/get_normal.c\
+	raycasting_files/intersec_functions.c\
+	raycasting_files/intersec_functions_2.c\
+	raycasting_files/raycast.c\
+	raycasting_files/shading.c\
+	raycasting_files/vector_op.c\
+	raycasting_files/vector_op_2.c\
+	raycasting_files/object_manipulation.c\
+	raycasting_files/start_rtv1.c\
+	raycasting_files/matrix_check.c
+
+SUB_FOLD = parser_files handle raycasting_files
+
+BUILD_DIR = $(addprefix $(OBJ_DIR)/, $(SUB_FOLD))
+
+SRC = $(addprefix $(SRC_DIR)/,$(SRCS))
+
+OBJ = $(addprefix $(OBJ_DIR)/, $(OBJS))
 
 OBJS = $(SRCS:.c=.o)
 
@@ -42,17 +79,22 @@ LIBMLX = -L ./minilibx_macos/ -lmlx -framework OpenGL -framework Appkit
 superfast:
 	@make -j8 all
 
-all: 
+all: objects
 	@make $(NAME)
 
-$(NAME):$(OBJS) | $(L_TARG)
-	$(CC) $(CFLAGS) $(OBJS) libft/libft.a $(LIBMLX) -fsanitize=address -o $(NAME)
-	@touch .gitignore
-	@echo "*.o" > .gitignore
-	@echo "*.a" >> .gitignore
+objects : 
+	@mkdir -p $(BUILD_DIR)
 
-%.o: %.c $(INC1) $(INC2) 
-	$(CC) $(CFLAGS) $< -c
+$(NAME):$(OBJ) | $(L_TARG)
+	@$(CC) $(CFLAGS) $(INC) libft/libft.a $(LIBMLX) $(OBJ) -o $(NAME)
+	@touch .gitignore
+	@printf "\033[32m[ ✔ ] $(NAME)\n\033[0m"
+	@echo $(OBJ) > .gitignore
+	@echo $(NAME) >> .gitignore
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	@printf "\033[32m[ ✔ ] %s\n\033[0m" "$<"
 
 $(L_TARG):
 	@make -C $(L_FOLD) all
@@ -61,13 +103,14 @@ $(L_TARG):
 clean:
 	@make -C $(L_TARG) clean
 	@make -C $(M_FOLD) clean
-	@rm -rf $(OBJS)
-	@echo "RTv1 is clean !"
+	@rm -rf $(OBJ)
+	@rm -rf $(OBJ_DIR) 2> /dev/null || true
+	@printf '\033[31m[ ✔ ] %s\n\033[0m' "RTv1 is clean !"
 
 fclean: clean
+	@printf '\033[31m[ ✔ ] %s\n\033[0m' "... and fclean too !"
 	@make -C $(L_TARG) fclean
 	@rm -rf $(NAME)
-	@echo "... and fclean too !"
 
 re: fclean all
 

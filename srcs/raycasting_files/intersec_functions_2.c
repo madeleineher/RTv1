@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_delsplit.c                                      :+:      :+:    :+:   */
+/*   intersec_functions_2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 20:01:43 by mhernand          #+#    #+#             */
-/*   Updated: 2019/04/23 17:42:04 by mhernand         ###   ########.fr       */
+/*   Created: 2019/10/09 10:44:27 by mhernand          #+#    #+#             */
+/*   Updated: 2019/10/09 10:45:34 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "raycast.h"
 
-void		ft_delsplit(char **tab)
+double	find_closest_intersection(double a, double b, double c)
 {
-	int		i;
+	double	delta;
+	double	t1;
+	double	t2;
 
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i] != NULL)
+	delta = b * b - 4 * a * c;
+	if (delta < 0)
+		return (FAR);
+	else
 	{
-		if (tab[i])
-		{
-			free(tab[i]);
-			tab[i] = NULL;
-		}
-		i++;
+		t1 = (-b + sqrt(delta)) / (2 * a);
+		t2 = (-b - sqrt(delta)) / (2 * a);
+		if (t1 <= 0 && t2 <= 0)
+			return (0);
+		t1 = t1 > 0 ? t1 : t2;
+		t1 = t2 < t1 && t2 > 0 ? t2 : t1;
 	}
-	free(tab[i]);
-	tab[i] = NULL;
-	free(tab);
-	tab = NULL;
+	return (t1);
 }

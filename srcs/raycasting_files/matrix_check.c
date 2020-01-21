@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_delsplit.c                                      :+:      :+:    :+:   */
+/*   matrix_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sabonifa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/19 20:01:43 by mhernand          #+#    #+#             */
-/*   Updated: 2019/04/23 17:42:04 by mhernand         ###   ########.fr       */
+/*   Created: 2019/11/07 15:47:57 by sabonifa          #+#    #+#             */
+/*   Updated: 2019/11/07 15:48:01 by sabonifa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "raycast.h"
 
-void		ft_delsplit(char **tab)
+float	m3_det(t_vec3 x, t_vec3 y, t_vec3 z)
 {
-	int		i;
+	float	det;
 
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i] != NULL)
-	{
-		if (tab[i])
-		{
-			free(tab[i]);
-			tab[i] = NULL;
-		}
-		i++;
-	}
-	free(tab[i]);
-	tab[i] = NULL;
-	free(tab);
-	tab = NULL;
+	det = x.x * (y.y * z.z - y.z * z.y) \
+		+ x.y * (z.x * y.z - y.x * z.z) \
+		+ x.z * (y.x * z.y - z.x * y.y);
+	return (det);
 }

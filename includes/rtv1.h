@@ -6,7 +6,7 @@
 /*   By: mhernand <mhernand@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 12:13:39 by mhernand          #+#    #+#             */
-/*   Updated: 2019/09/11 15:26:28 by sabonifa         ###   ########.fr       */
+/*   Updated: 2019/10/09 11:50:23 by mhernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,140 +22,85 @@
 # include <string.h>
 # include <fcntl.h>
 # include <assert.h>
-# include <stdio.h> // remove
-
 # define WIDTH		800
 # define HEIGHT 	800
-
+# define FAR		2000000.0
 # define ESC		53
-
 # define CONE		0
 # define CYLINDER	1
 # define PLANE		2
 # define SPHERE		3
 
-// typedef struct		s_forward
-// {
-// 	int				x;
-// 	int				y;
-// 	int				z;
-// 	int				w;
-// }					t_foward; // forward
-// typedef struct		s_right
-// {
-// 	int				x;
-// 	int				y;
-// 	int				z;
-// 	int				w;
-// }					t_right; // right
-// typedef struct		s_up
-// {
-// 	int				x;
-// 	int				y;
-// 	int				z;
-// 	int				w;
-// }					t_up; // up
-
-typedef struct		s_pos
+typedef struct		s_point
 {
-	int				x;
-	int				y;
-	int				z;
-}					t_pos; // position
+	double			x;
+	double			y;
+	double			z;
+}					t_point;
 
-typedef struct		s_int
+typedef struct		s_vec3
 {
-	int				x;
-	int				y;
-	int				z;
-}					t_int; // intesity
+	double			x;
+	double			y;
+	double			z;
+}					t_vec3;
 
-typedef struct		s_dir
+typedef struct		s_ray
 {
-	int				x;
-	int				y;
-	int				z;
-}					t_dir; // direction
-
-typedef struct		s_cen
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_cen; // center
-
-typedef struct		s_dif
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_dif; // diffusion
-
-typedef struct		s_ref
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_ref; // refraction
-
-typedef struct		s_normal
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_normal; // normal
-
-typedef struct		s_rot
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_rot; // rotate
-
-typedef struct		s_tra
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_tra; // translate
+	t_point			ori;
+	t_vec3			dir;
+	double			t;
+}					t_ray;
 
 typedef struct		s_col
 {
-	int				x;
-	int				y;
-	int				z;
-}					t_col; // color amb
+	int				r;
+	int				g;
+	int				b;
+}					t_col;
 
-typedef struct		s_camera // struct for camera data
+typedef struct		s_shader
 {
-	t_pos			campos;
-	t_dir			camdir;
-	t_tra			*tra;
-	t_rot			*rot;
+	t_col			diff;
+	t_col			spec;
+}					t_shader;
+
+typedef struct		s_camera
+{
+	t_point			campos;
+	t_vec3			camdir;
+	t_vec3			*tra;
+	t_vec3			*rot;
+	t_vec3			left;
+	t_vec3			up;
+	t_vec3			forw;
+	double			focal_length;
+	double			f_wdth;
+	double			f_hght;
 }					t_camera;
 
-typedef struct		s_amb // struct for amb data
+typedef struct		s_amb
 {
 	t_col			col;
 	int				specpower;
 }					t_amb;
 
-typedef struct		s_ll  // linked list for storing LIGHT data
+typedef struct		s_ll
 {
 	size_t			content_size;
-	t_pos			pos;
-	t_int			its;
-	t_tra			tra;
-	t_rot			rot;
+	t_point			pos;
+	t_point			its;
+	t_vec3			tra;
+	t_vec3			rot;
 	struct s_ll		*next;
 }					t_ll;
 
-typedef struct		s_ol  // linked list for storing OBJECT data
+typedef struct		s_ol
 {
 	size_t			content_size;
-	int				status; // 0 == basic , 1 == extra
+	int				status;
 	int				d;
-	int				angle;
+	double			angle;
 	int				radius;
 	int				s_pow;
 	int				s_val;
@@ -163,12 +108,16 @@ typedef struct		s_ol  // linked list for storing OBJECT data
 	int				specpower;
 	int				specvalue;
 	int				ref;
-	t_dif			dif;
-	t_dir			dir;
-	t_cen			cen;
-	t_normal		nor;
-	t_rot			rot;
-	t_tra			tra;
+	t_point			dif;
+	t_vec3			dir;
+	t_point			cen;
+	t_vec3			nor;
+	t_vec3			rot;
+	t_vec3			rot_x;
+	t_vec3			rot_y;
+	t_vec3			rot_z;
+	t_vec3			tra;
+	t_vec3			pla_po;
 	struct s_ol		*next;
 }					t_ol;
 
@@ -182,14 +131,6 @@ typedef struct		s_mlx
 	int				sl;
 }					t_mlx;
 
-typedef struct		s_creecam
-{
-	int				x[4];
-	int				y[4];
-	int				z[4];
-	int				t[4];
-}					t_creecam;
-
 typedef struct		s_vec4
 {
 	int				x;
@@ -198,71 +139,65 @@ typedef struct		s_vec4
 	int				w;
 }					t_vec4;
 
+typedef struct		s_creecam
+{
+	t_vec4			v1;
+	t_vec4			v2;
+	t_vec4			v3;
+}					t_creecam;
+
 typedef struct		s_env
 {
 	char			*data;
-	int				str_count;
 	int				k[300];
 	int				s_count;
 	int				cs;
-	t_parser		p; // THE PARSER STRUCTURE !
-	t_mlx			w; // mlx images, window, etc.
-	t_amb			amb; // store amb
-	t_camera		cam; // store cam
-	t_ll			*ll_lit; // linked list
-	t_ol			*ll_obj; // linked list
-
-	//testing camera
-	// t_foward		fo;
-	// t_up			up;
-	// t_right			ri;
+	int				x;
+	int				y;
+	t_parser		p;
+	t_mlx			w;
+	t_amb			amb;
+	t_camera		cam;
+	t_ll			*ll_lit;
+	t_ol			*ll_obj;
+	t_ll			*tp_l;
+	t_ol			*tp_o;
+	double			r;
 	t_creecam		cc;
 }					t_env;
 
 void				setup_rtv1(t_env *e);
-int					parser(t_env *e, int fd);
+int					parser(t_env *e, t_parser *p, int fd);
 void				start_rtv1(t_env *e);
 int					touch(t_env *e);
 int					key_press(int key, t_env *e);
 int					key_release(int key, t_env *e);
 int					quit(t_env *e);
 void				draw_sphere(t_env *e);
-
-//functions for parser
-void				set_vocab(t_env *e);
-int					two_tabs_specs(t_env *e, t_ll **l_head);
-int					open_close(int *check_me);
-int					extract_status(t_env *e);
-int					two_angle_brackets(t_env *e);
-int					twotab_verifications(t_env *e, t_ol **o_head);
-void				count_shapes(t_env *e, char *split);
-int					verifyobjecttags_closings(t_env *e, char *split);
-int					globals(t_env *e, char *gnl_line);
-int					verifyargs_one(t_env *e, t_ll **l_head, t_ol **o_head);
-int					verifyanglebrackets_one(t_env *e);
-int					verifyvocab_one(t_env *e);
-int					verifyargs_three(t_env *e, t_ll **l_head, t_ol **o_head);
-int					verifyanglebrackets_three(t_env *e);
-int					verifyvocab_three(t_env *e);
-int					shapevocab_checker(t_env *e);
-int					shapevocab_checker_partwo(t_env *e);
-int					verify_spec_atb(t_env *e);
-int					verify_spec_atb_partwo(t_env *e);
-int					verify_tag_to_argument(t_env *e, char *string, int args);
-int					error(t_env *e, int i);
-void				reset_spec_atb(t_env *e);
-void				lineless_errors_three(t_env *e, int i);
-void				lineless_errors_eight(t_env *e, int i);
-int					verify_numbers_one(t_env *e, t_ll *l_head, t_ol *o_head);
-int					verify_values(t_env *e);
-int					verify_numbers_three(t_env *e, t_ll *l_head, t_ol *o_head);
-void				reset_shape_atb(t_env *e);
-void				reset_shape_atb_two(t_env *e);
-int					checkforopenobjecttags(t_env *e);
+int					two_tabs_specs(t_env *e, t_parser *p, t_ll **l_head);
+int					twotab_verifications(t_env *e, t_parser *p, t_ol **o_head);
+int					verifyobjecttags_closings(t_env *e, t_parser *p,
+						char *split);
+int					verifyargs_one(t_env *e, t_parser *p, t_ll **l_head,
+						t_ol **o_head);
+int					verifyargs_three(t_env *e, t_parser *p, t_ll **l_head,
+						t_ol **o_head);
+int					shapevocab_checker(t_env *e, t_parser *p);
+int					shapevocab_checker_partwo(t_env *e, t_parser *p);
+int					error(t_env *e, t_parser *p, int i);
+int					verify_numbers_one(t_env *e, t_parser *p, t_ll *l_head,
+						t_ol *o_head);
+int					verify_numbers_three(t_env *e, t_parser *p, t_ll *l_head,
+						t_ol *o_head);
 int					add_link_light(t_env *e, t_ll **head);
 int					add_link_obj(t_env *e, t_ol **head);
-
-
+int					storing_three(t_env *e, t_parser *p, t_ll *l_tmp,
+						t_ol *o_tmp);
+int					storing_three_3(t_env *e, t_parser *p, t_ll *l_tmp,
+						t_ol *o_tmp);
+void				store_lit_tra(t_parser *p, t_ll *l_tmp);
+void				store_translate(t_parser *p, t_ll *l_tmp, t_ol *o_tmp);
+int					raycast(t_env *e, t_ol *ol, t_ll *ll);
 int					main(int argc, char **argv);
 
 #endif
